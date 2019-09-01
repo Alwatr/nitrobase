@@ -1,7 +1,8 @@
 {
   "name": "1db",
-  "version": "1.0.0",
+  "version": "1.0.0-beta2",
   "description": "Supper Fast and Simple NoSQL JSON Based Database with Memory Cache",
+  "main": "1db.js",
   "scripts": {
     "start": "npm run build && npm run serve",
     "build": "npm run build-ts && npm run tslint",
@@ -27,5 +28,6 @@
     "nodemon": "^1.13.0",
     "tslint": "^5.19.0",
     "typescript": "^3.5.3"
-  }
+  },
+  "license": "MIT"
 }
