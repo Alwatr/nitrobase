@@ -1,0 +1,33 @@
+{
+  "name": "1db",
+  "version": "1.0.0-rc",
+  "description": "Supper Fast and Simple NoSQL JSON Based Database with Memory Cache",
+  "main": "1db.js",
+  "scripts": {
+    "start": "npm run build && npm run serve",
+    "build": "npm run build-ts && npm run tslint",
+    "serve": "echo no demo yet",
+    "watch-node": "nodemon --watch dist dist/index.js",
+    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
+    "build-ts": "rm -rf *.js && tsc",
+    "watch-ts": "tsc -w",
+    "tslint": "tslint -c tslint.json -p tsconfig.json",
+    "debug": "npm run build && npm run watch-debug",
+    "serve-debug": "nodemon --inspect dist/index.js",
+    "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\""
+  },
+  "dependencies": {
+    "@types/debug": "^4.1.5",
+    "@types/lodash": "^4.14.136",
+    "lodash": "^4.17.15",
+    "debug": "^4.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^12.7.1",
+    "concurrently": "^4.1.1",
+    "nodemon": "^1.13.0",
+    "tslint": "^5.19.0",
+    "typescript": "^3.5.3"
+  },
+  "license": "MIT"
+}
