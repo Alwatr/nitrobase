@@ -49,6 +49,15 @@ export default class OneDB {
   }
 
   /**
+   * Get all items
+   */
+  async getAll() {
+    log('getAll');
+    await this.loading;
+    return this.data;
+  }
+
+  /**
    * Find single item
    */
   async find(predicate: Function): Promise<string> {
@@ -91,7 +100,7 @@ export default class OneDB {
   save = debounce((): void => {
     log('Save db');
     OneDB.writeJsonFile(this.dbPath, this.data);
-  }, 1000);
+  }, 500);
 
   static async readJsonFile(dbPath: string): Promise<any> {
     log(`readJsonFile ${dbPath}`);
