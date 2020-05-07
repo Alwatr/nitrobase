@@ -1,60 +1,104 @@
-import fs from 'fs';
-import path from 'path';
-import debounce from 'lodash/debounce';
+import { existsSync, promises as fs } from 'fs';
+import { resolve, dirname } from 'path';
+import { debounce } from 'lodash';
 import { debug } from 'debug';
 const log = debug('1db');
 
+export interface StorageInterface {
+  [key: string]: StorageItemInterface;
+}
+
+export interface StorageItemInterface {
+  _id: string;
+  [key: string]: unknown;
+}
+
+export const readJsonFile = async <T>(path: string): Promise<T | undefined> => {
+  log(`readJsonFile ${path}`);
+  path = resolve(path);
+
+  if (!existsSync(path)) {
+    return undefined;
+  }
+
+  const fileContent = await fs.readFile(path, {encoding: 'utf-8'});
+  log(`${fileContent.length} characters loaded`);
+
+  return JSON.parse(fileContent) as T;
+};
+
+export const writeJsonFile = async (path: string, data: any): Promise<void> => {
+  log(`writeJsonFile ${path}`);
+  path = resolve(path);
+  if (!existsSync(path)) {
+    await fs.mkdir(dirname(path), {recursive: true});
+  }
+  const json = JSON.stringify(data, undefined, 2);
+  await fs.writeFile(path, json, {encoding: 'utf-8'});
+  log(`${json.length} characters saved`);
+};
+
 export default class OneDB {
-  private dbPath: string;
-  private data: {};
-  private loading: Promise<any>;
-  private dataKeyArr: string[];
+
+
+  private storagePath!: string;
+  private data: StorageInterface = {};
+  private loadingPromise: Promise<void> | undefined;
+  private dataKeyArr: string[] | undefined;
 
   /**
    * Open JSON file
    */
-  async open(dbPath: string): Promise<void> {
-    log(`open ${dbPath}`);
-    if (!dbPath) throw 'dbPath not defined';
-    this.dbPath = dbPath;
-    this.loading = OneDB.readJsonFile(this.dbPath);
-    this.data = await this.loading || {};
-    this.dataKeyArr = Object.keys(this.data);
-    return;
+  constructor (storagePath: string) {
+    log(`open ${storagePath}`);
+    this.storagePath = storagePath;
+    this.loadingPromise = new Promise(async resolve => {
+      this.data = await readJsonFile(this.storagePath!) || {};
+      this.dataKeyArr = Object.keys(this.data);
+      resolve();
+    });
   }
 
   /**
    * Insert new item
    */
-  async update(id: string, obj: any): Promise<void> {
-    log(`update ${id}`);
-    await this.loading;
+  async set(id: string, data: StorageItemInterface): Promise<void> {
+    log(`set ${id}`);
+    await this.loadingPromise;
     if (!this.data[id]) {
-      this.dataKeyArr.push(id);
+      this.dataKeyArr!.push(id);
     }
-    this.data[id] = obj;
-    this.data[id]._id = id;
-    this.save();
-    return;
+    data._id = id;
+    this.data[id] = data;
+    this.saveRequest();
   }
 
   /**
    * Get single item base on id
    */
-  async get(id: string): Promise<any> {
+  async get<T extends StorageItemInterface>(id: string): Promise<T | undefined> {
     log(`get ${id}`);
     if (!id) return undefined;
-    await this.loading;
-    return this.data[id] || undefined;
+    await this.loadingPromise;
+    return this.data[id] as T || undefined;
+  }
+
+  /**
+   * Get all items
+   */
+  async getAll<T extends StorageInterface>(): Promise<T> {
+    log('getAll');
+    await this.loadingPromise;
+    return this.data as T;
   }
 
   /**
    * Find single item
    */
-  async find(predicate: Function): Promise<string> {
+  async find(predicate: (dataItem: StorageItemInterface) => boolean): Promise<string | undefined> {
     log('find');
-    await this.loading;
-    for (const key of this.dataKeyArr) {
+    await this.loadingPromise;
+    for (const key of this.dataKeyArr!) {
       if (predicate(this.data[key])) {
         return key;
       }
@@ -65,16 +109,16 @@ export default class OneDB {
   /**
    * Find all item
    */
-  async findAll(predicate: Function): Promise<string[]> {
-    log('find');
-    await this.loading;
-    const result = [];
-    for (const key of this.dataKeyArr) {
+  async findAll(predicate: (dataItem: StorageItemInterface) => boolean): Promise<string[]> {
+    log('findAll');
+    await this.loadingPromise;
+    const result: string[] = [];
+    for (const key of this.dataKeyArr!) {
       if (predicate(this.data[key])) {
         result.push(key);
       }
     }
-    return result.length ? result : undefined;
+    return result;
   }
 
   /**
@@ -82,39 +126,18 @@ export default class OneDB {
    */
   async delete(id: string): Promise<void> {
     log('delete', id);
-    await this.loading;
+    await this.loadingPromise;
     delete this.data[id];
     this.dataKeyArr = Object.keys(this.data);
-    this.save();
+    this.saveRequest();
   }
 
-  save = debounce((): void => {
+  saveRequest = debounce((): void => {
     log('Save db');
-    OneDB.writeJsonFile(this.dbPath, this.data);
-  }, 1000);
-
-  static async readJsonFile(dbPath: string): Promise<any> {
-    log(`readJsonFile ${dbPath}`);
-    dbPath = path.resolve(dbPath);
-
-    if (!fs.existsSync(dbPath)) {
-      return undefined;
-    }
-
-    const fileContent = await fs.promises.readFile(dbPath, {encoding: 'utf-8'});
-    log(`${fileContent.length} characters loaded`);
-
-    return JSON.parse(fileContent);
-  }
-
-  static async writeJsonFile(dbPath: string, data: any): Promise<void> {
-    log(`writeJsonFile ${dbPath}`);
-    dbPath = path.resolve(dbPath);
-    if (!fs.existsSync(dbPath)) {
-      await fs.promises.mkdir(path.dirname(dbPath), {recursive: true});
-    }
-    const json = JSON.stringify(data, undefined, 2);
-    await fs.promises.writeFile(dbPath, json, {encoding: 'utf-8'});
-    log(`${json.length} characters saved`);
-  }
+    writeJsonFile(this.storagePath, this.data);
+  }, 100, {
+    leading: false,
+    trailing: true,
+    maxWait: 1000,
+  });
 }
