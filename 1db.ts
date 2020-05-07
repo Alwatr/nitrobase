@@ -25,7 +25,7 @@ export const readJsonFile = async <T>(path: string): Promise<T | undefined> => {
   log(`${fileContent.length} characters loaded`);
 
   return JSON.parse(fileContent) as T;
-}
+};
 
 export const writeJsonFile = async (path: string, data: any): Promise<void> => {
   log(`writeJsonFile ${path}`);
@@ -36,7 +36,7 @@ export const writeJsonFile = async (path: string, data: any): Promise<void> => {
   const json = JSON.stringify(data, undefined, 2);
   await fs.writeFile(path, json, {encoding: 'utf-8'});
   log(`${json.length} characters saved`);
-}
+};
 
 export default class OneDB {
 
