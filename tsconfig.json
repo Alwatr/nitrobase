@@ -1,21 +1,27 @@
 {
   "compilerOptions": {
+    "target": "ES2017",
     "module": "commonjs",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "target": "es2017",
-    "noImplicitAny": false,
     "moduleResolution": "node",
-    "sourceMap": false,
-    "baseUrl": ".",
-    "typeRoots": ["node_modules/@types"],
-    "paths": {
-      "*": [
-        "node_modules/*"
-      ]
-    }
+    "lib": ["es2017", "dom"],
+    "declaration": false,
+    "sourceMap": true,
+    "strict": true,
+    "removeComments": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "importHelpers": true,
+    "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo",
+    "outDir": "dist"
   },
   "include": [
-    "*.ts"
-  ]
+    "**/*.ts"
+  ],
+  "exclude": []
 }

@@ -7,6 +7,7 @@ lib-cov
 *.pid
 *.gz
 *.swp
+.tsbuildinfo
 
 pids
 logs
@@ -31,5 +32,5 @@ bower_components
 .DS_Store
 Thumbs.db
 
-# Ignore built ts files
-*.js
+# Ignore built
+dist
