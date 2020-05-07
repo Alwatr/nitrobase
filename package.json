@@ -1,9 +1,11 @@
 {
-  "name": "1db",
-  "version": "1.0.0-rc",
+  "name": "@alimd/1db",
+  "version": "2.0.0-beta.1",
   "description": "Supper Fast and Simple NoSQL JSON Based Database with Memory Cache",
-  "main": "1db.js",
+  "author": "Ali Mihandoost <alimihandoost@gmail.com>",
+  "main": "dist/1db.js",
   "license": "MIT",
+  "keywords": "database, db, nodejs, backend, alimd",
   "scripts": {
     "c": "yarn clean",
     "clean": "del-cli .tsbuildinfo dist",
@@ -30,5 +32,16 @@
     "npm-run-all": "^4.1.5",
     "tslint": "^6.1.2",
     "typescript": "^3.8.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AliMD/1db.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AliMD/1db/issues"
+  },
+  "homepage": "https://github.com/AliMD/1db",
+  "publishConfig": {
+    "access": "public"
   }
 }
