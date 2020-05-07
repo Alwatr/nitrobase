@@ -4,7 +4,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "lib": ["es2017", "dom"],
-    "declaration": false,
+    "declaration": true,
     "sourceMap": true,
     "strict": true,
     "removeComments": false,
