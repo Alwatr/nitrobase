@@ -1,6 +1,6 @@
 {
   "name": "@alimd/1db",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-beta.2",
   "description": "Supper Fast and Simple NoSQL JSON Based Database with Memory Cache",
   "author": "Ali Mihandoost <alimihandoost@gmail.com>",
   "main": "dist/1db.js",
