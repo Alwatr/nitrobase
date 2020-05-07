@@ -4,17 +4,17 @@
   "description": "Supper Fast and Simple NoSQL JSON Based Database with Memory Cache",
   "main": "1db.js",
   "scripts": {
-    "start": "npm run build && npm run serve",
-    "build": "npm run build-ts && npm run tslint",
-    "serve": "echo no demo yet",
-    "watch-node": "nodemon --watch dist dist/index.js",
-    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
-    "build-ts": "rm -rf *.js && tsc",
-    "watch-ts": "tsc -w",
-    "tslint": "tslint -c tslint.json -p tsconfig.json",
-    "debug": "npm run build && npm run watch-debug",
-    "serve-debug": "nodemon --inspect dist/index.js",
-    "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\""
+    "c": "yarn clean",
+    "clean": "del-cli .tsbuildinfo dist",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "b": "yarn build",
+    "build": "npm-run-all --serial clean build:ts lint",
+    "build:ts": "tsc --build",
+    "s": "yarn serve",
+    "serve": "nodemon --inspect dist/index.js",
+    "w": "yarn watch",
+    "watch": "npm-run-all --parallel serve \"build:ts --watch --preserveWatchOutput\"",
+    "deploy": "yarn build && ./deploy.sh"
   },
   "dependencies": {
     "@types/debug": "^4.1.5",
