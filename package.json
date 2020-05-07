@@ -1,8 +1,8 @@
 {
-  "name": "1db",
-  "version": "1.0.0-rc",
+  "name": "@alimd/1db",
+  "version": "2.0.0-beta",
   "description": "Supper Fast and Simple NoSQL JSON Based Database with Memory Cache",
-  "main": "1db.js",
+  "main": "dist/1db.js",
   "license": "MIT",
   "scripts": {
     "c": "yarn clean",
