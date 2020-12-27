@@ -1,105 +1,92 @@
-import { existsSync, promises as fs } from 'fs';
-import { resolve, dirname } from 'path';
 import { debounce } from 'lodash';
-import { debug } from 'debug';
-const log = debug('1db');
+import { log, readJsonFile, writeJsonFile } from './util';
 
-export interface StorageInterface {
-  [key: string]: StorageItemInterface;
+export interface DocumentList extends Record<string, DocumentItem | string | undefined> {
+  _latest?: string,
 }
 
-export interface StorageItemInterface {
+export interface DocumentItem extends Record<string, unknown> {
   _id: string;
-  [key: string]: unknown;
+  _created: number;
+  _modified: number;
 }
 
-export const readJsonFile = async <T>(path: string): Promise<T | undefined> => {
-  log(`readJsonFile ${path}`);
-  path = resolve(path);
-
-  if (!existsSync(path)) {
-    return undefined;
-  }
-
-  const fileContent = await fs.readFile(path, {encoding: 'utf-8'});
-  log(`${fileContent.length} characters loaded`);
-
-  return JSON.parse(fileContent) as T;
-};
-
-export const writeJsonFile = async (path: string, data: any): Promise<void> => {
-  log(`writeJsonFile ${path}`);
-  path = resolve(path);
-  if (!existsSync(path)) {
-    await fs.mkdir(dirname(path), {recursive: true});
-  }
-  const json = JSON.stringify(data, undefined, 2);
-  await fs.writeFile(path, json, {encoding: 'utf-8'});
-  log(`${json.length} characters saved`);
-};
-
-export default class OneDB {
-
-
-  private storagePath!: string;
-  private data: StorageInterface = {};
-  private loadingPromise: Promise<void> | undefined;
-  private dataKeyArr: string[] | undefined;
+export class OneDB {
+  private path: string;
+  private storage?: DocumentList;
+  private storageKeyList?: string[];
+  private loadingPromise: Promise<void>;
 
   /**
    * Open JSON file
    */
   constructor (storagePath: string) {
     log(`open ${storagePath}`);
-    this.storagePath = storagePath;
+    this.path = storagePath;
     this.loadingPromise = new Promise(async resolve => {
-      this.data = await readJsonFile(this.storagePath!) || {};
-      this.dataKeyArr = Object.keys(this.data);
+      this.storage = await readJsonFile<DocumentList>(this.path!);
       resolve();
     });
   }
 
   /**
-   * Insert new item
+   * Insert/Update special record
    */
-  async set(id: string, data: StorageItemInterface): Promise<void> {
+  async set(id: string, data: DocumentItem, replace: boolean = false): Promise<DocumentItem> {
     log(`set ${id}`);
     await this.loadingPromise;
-    if (!this.data[id]) {
-      this.dataKeyArr!.push(id);
+
+    
+    let oldData = this.storage![id];
+    if (oldData !== undefined && typeof oldData !== 'object') {
+      oldData = undefined;
     }
     data._id = id;
-    this.data[id] = data;
+    data._created = oldData?._created ?? Date.UTC();
+
+
+    if (id in this.storage!) {
+      if (this.storageKeyList == undefined) {
+        
+      }
+      this.storageKeyList!.push(id);
+    }
+    else {
+
+    }
+
+    
+    this.storage[id] = data;
     this.saveRequest();
   }
 
   /**
    * Get single item base on id
    */
-  async get<T extends StorageItemInterface>(id: string): Promise<T | undefined> {
+  async get<T extends DocumentItem>(id: string): Promise<T | undefined> {
     log(`get ${id}`);
     if (!id) return undefined;
     await this.loadingPromise;
-    return this.data[id] as T || undefined;
+    return this.storage[id] as T || undefined;
   }
 
   /**
    * Get all items
    */
-  async getAll<T extends StorageInterface>(): Promise<T> {
+  async getAll<T extends DocumentList>(): Promise<T> {
     log('getAll');
     await this.loadingPromise;
-    return this.data as T;
+    return this.storage as T;
   }
 
   /**
    * Find single item
    */
-  async find(predicate: (dataItem: StorageItemInterface) => boolean): Promise<string | undefined> {
+  async find(predicate: (dataItem: DocumentItem) => boolean): Promise<string | undefined> {
     log('find');
     await this.loadingPromise;
-    for (const key of this.dataKeyArr!) {
-      if (predicate(this.data[key])) {
+    for (const key of this.storageKeyList!) {
+      if (predicate(this.storage[key])) {
         return key;
       }
     }
@@ -109,12 +96,12 @@ export default class OneDB {
   /**
    * Find all item
    */
-  async findAll(predicate: (dataItem: StorageItemInterface) => boolean): Promise<string[]> {
+  async findAll(predicate: (dataItem: DocumentItem) => boolean): Promise<string[]> {
     log('findAll');
     await this.loadingPromise;
     const result: string[] = [];
-    for (const key of this.dataKeyArr!) {
-      if (predicate(this.data[key])) {
+    for (const key of this.storageKeyList!) {
+      if (predicate(this.storage[key])) {
         result.push(key);
       }
     }
@@ -127,14 +114,14 @@ export default class OneDB {
   async delete(id: string): Promise<void> {
     log('delete', id);
     await this.loadingPromise;
-    delete this.data[id];
-    this.dataKeyArr = Object.keys(this.data);
+    delete this.storage[id];
+    this.storageKeyList = Object.keys(this.storage);
     this.saveRequest();
   }
 
   saveRequest = debounce((): void => {
     log('Save db');
-    writeJsonFile(this.storagePath, this.data);
+    writeJsonFile(this.path, this.storage);
   }, 100, {
     leading: false,
     trailing: true,
