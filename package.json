@@ -5,7 +5,7 @@
   "author": "Ali Mihandoost <alimihandoost@gmail.com>",
   "main": "dist/1db.js",
   "license": "MIT",
-  "keywords": "database, db, nodejs, backend, alimd, typescript",
+  "keywords": ["database", "db", "nodejs", "backend", "alimd", "typescript"],
   "scripts": {
     "c": "yarn clean",
     "clean": "del-cli .tsbuildinfo dist",
