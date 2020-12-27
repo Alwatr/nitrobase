@@ -5,19 +5,18 @@
   "author": "Ali Mihandoost <alimihandoost@gmail.com>",
   "main": "dist/1db.js",
   "license": "MIT",
-  "keywords": "database, db, nodejs, backend, alimd",
+  "keywords": "database, db, nodejs, backend, alimd, typescript",
   "scripts": {
     "c": "yarn clean",
     "clean": "del-cli .tsbuildinfo dist",
-    "lint": "tslint -c tslint.json -p tsconfig.json",
     "b": "yarn build",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
     "build": "npm-run-all --serial clean build:ts lint",
     "build:ts": "tsc --build",
     "s": "yarn serve",
-    "serve": "nodemon --inspect dist/index.js",
+    "serve": "nodemon --inspect dist/demo.js",
     "w": "yarn watch",
     "watch": "npm-run-all --parallel serve \"build:ts --watch --preserveWatchOutput\"",
-    "deploy": "yarn build && ./deploy.sh"
   },
   "dependencies": {
     "debug": "^4.1.1",
