@@ -1,3 +1,3 @@
 # 1DB
 
-Supper Fast and Simple NoSQL JSON Based Database with Memory Cache
+Supper Fast & Tiny JSON Based Database with Memory Cache in TypeScript
