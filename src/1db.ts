@@ -1,11 +1,11 @@
 import { debounce } from 'lodash';
-import { log, readJsonFile, writeJsonFile } from './util';
+import { log, readJsonFile, writeJsonFile, utcTimestamp } from './util';
 
-export interface DocumentList extends Record<string, DocumentItem | string | undefined> {
+export interface DocumentStorage extends Record<string, DocumentRecord | string | undefined> {
   _latest?: string,
 }
 
-export interface DocumentItem extends Record<string, unknown> {
+export interface DocumentRecord extends Record<string, unknown> {
   _id: string;
   _created: number;
   _modified: number;
@@ -13,9 +13,8 @@ export interface DocumentItem extends Record<string, unknown> {
 
 export class OneDB {
   private path: string;
-  private storage?: DocumentList;
-  private storageKeyList?: string[];
-  private loadingPromise: Promise<void>;
+  private storage: Promise<DocumentStorage>;
+  private indexList?: string[];
 
   /**
    * Open JSON file
@@ -23,71 +22,91 @@ export class OneDB {
   constructor (storagePath: string) {
     log(`open ${storagePath}`);
     this.path = storagePath;
-    this.loadingPromise = new Promise(async resolve => {
-      this.storage = await readJsonFile<DocumentList>(this.path!);
-      resolve();
-    });
+    this.storage = readJsonFile<DocumentStorage>(this.path!);
+    this.storage.catch(err => { throw err });
+  }
+
+  protected async _updateIndexList(id?: string) {
+    if (id != undefined && this.indexList == undefined) { return; } // no index created yet and maybe not need at all
+    
+    const storage = await this.storage;
+
+    if (this.indexList == undefined) {
+      this.indexList = Object.keys(storage)
+    }
+
+    if (id != undefined && !(id in this.indexList)) {
+      this.indexList.push(id);
+    }
   }
 
   /**
-   * Insert/Update special record
+   * Insert/Update a document record
    */
-  async set(id: string, data: DocumentItem, replace: boolean = false): Promise<DocumentItem> {
+  async set(id: string, data: DocumentRecord, replace: boolean = false): Promise<DocumentRecord> {
     log(`set ${id}`);
-    await this.loadingPromise;
+    if (id === '_latest') { throw new Error('forbidden_key'); }
 
-    
-    let oldData = this.storage![id];
-    if (oldData !== undefined && typeof oldData !== 'object') {
-      oldData = undefined;
+    const storage = await this.storage;
+
+    let oldData = storage[id];
+    if (typeof oldData !== 'object') {
+      oldData = undefined; // invalid data!
     }
+
     data._id = id;
-    data._created = oldData?._created ?? Date.UTC();
+    data._modified = oldData?._modified ?? utcTimestamp();
+    data._created = oldData?._created ?? data._modified;
 
-
-    if (id in this.storage!) {
-      if (this.storageKeyList == undefined) {
-        
+    if (!replace) {
+      data = {
+        ...oldData,
+        ...data,
       }
-      this.storageKeyList!.push(id);
+    }
+
+    storage[id] = data;
+    void this._updateIndexList(id);
+
+    this.saveRequest();
+    return data;
+  }
+
+  /**
+   * Get a document record
+   */
+  async get<T extends DocumentRecord>(id: string): Promise<T | undefined> {
+    log(`get ${id}`);
+    if (id == null) return undefined;
+    const storage = await this.storage;
+    const data = storage[id];
+    if (typeof data === 'string') {
+      return this.get(data);
     }
     else {
-
+      return data as T;
     }
-
-    
-    this.storage[id] = data;
-    this.saveRequest();
-  }
-
-  /**
-   * Get single item base on id
-   */
-  async get<T extends DocumentItem>(id: string): Promise<T | undefined> {
-    log(`get ${id}`);
-    if (!id) return undefined;
-    await this.loadingPromise;
-    return this.storage[id] as T || undefined;
   }
 
   /**
    * Get all items
    */
-  async getAll<T extends DocumentList>(): Promise<T> {
-    log('getAll');
-    await this.loadingPromise;
-    return this.storage as T;
+  async _getStorage(): Promise<DocumentStorage> {
+    log('_getStorage');
+    return this.storage;
   }
 
   /**
    * Find single item
    */
-  async find(predicate: (dataItem: DocumentItem) => boolean): Promise<string | undefined> {
+  async find(predicate: (documentRecord: DocumentRecord) => boolean): Promise<DocumentRecord | undefined> {
     log('find');
-    await this.loadingPromise;
-    for (const key of this.storageKeyList!) {
-      if (predicate(this.storage[key])) {
-        return key;
+    await this._updateIndexList();
+    const storage = await this.storage;
+    for (const id of this.indexList!) {
+      const documentRecord = storage[id];
+      if (documentRecord != undefined && typeof documentRecord !== 'string' && predicate(documentRecord)) {
+        return documentRecord;
       }
     }
     return undefined;
@@ -96,13 +115,15 @@ export class OneDB {
   /**
    * Find all item
    */
-  async findAll(predicate: (dataItem: DocumentItem) => boolean): Promise<string[]> {
+  async findAll(predicate: (documentRecord: DocumentRecord) => boolean): Promise<Array<DocumentRecord>> {
     log('findAll');
-    await this.loadingPromise;
-    const result: string[] = [];
-    for (const key of this.storageKeyList!) {
-      if (predicate(this.storage[key])) {
-        result.push(key);
+    await this._updateIndexList();
+    const storage = await this.storage;
+    const result: Array<DocumentRecord> = [];
+    for (const id of this.indexList!) {
+      const documentRecord = storage[id];
+      if (documentRecord != undefined && typeof documentRecord !== 'string' && predicate(documentRecord)) {
+        result.push(documentRecord);
       }
     }
     return result;
@@ -113,9 +134,9 @@ export class OneDB {
    */
   async delete(id: string): Promise<void> {
     log('delete', id);
-    await this.loadingPromise;
-    delete this.storage[id];
-    this.storageKeyList = Object.keys(this.storage);
+    const storage = await this.storage;
+    delete storage[id];
+    delete this.indexList; // need to re-index
     this.saveRequest();
   }
 
