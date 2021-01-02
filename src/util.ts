@@ -11,10 +11,21 @@ export async function readJsonFile <T extends Record<string | number, unknown>>(
     throw new Error('file_not_found');
   }
 
-  const fileContent = await fs.readFile(path, {encoding: 'utf-8'});
+  let fileContent: string;
+  try {
+    fileContent = await fs.readFile(path, {encoding: 'utf-8'});
+  }
+  catch (err) {
+    throw new Error('read_file_error');
+  }
   log(`readJsonFile: ${fileContent.length} characters loaded`);
 
-  return JSON.parse(fileContent);
+  try {
+    return JSON.parse(fileContent);
+  }
+  catch (err) {
+    throw new Error('invalid_json');
+  }
 };
 
 export async function writeJsonFile (path: string, data: unknown): Promise<void> {
@@ -26,7 +37,12 @@ export async function writeJsonFile (path: string, data: unknown): Promise<void>
   }
 
   const json = JSON.stringify(data, undefined, 2);
-  await fs.writeFile(path, json, {encoding: 'utf-8'});
+  try {
+    await fs.writeFile(path, json, {encoding: 'utf-8'});
+  }
+  catch (err) {
+    throw new Error('write_file_error');
+  }
   log(`writeJsonFile: ${json.length} characters saved`);
 };
 
