@@ -1,14 +1,14 @@
 import { existsSync, promises as fs } from 'fs';
 import { resolve, dirname } from 'path';
-import { debug } from 'debug';
+import debug from 'debug';
 export const log = debug('1db');
 
-export async function readJsonFile <T extends Record<string | number, unknown>>(path: string): Promise<T> {
+export async function readJsonFile <T extends Record<string | number, unknown>>(path: string, defaultContent: T): Promise<T> {
   log(`readJsonFile ${path}`);
 
   path = resolve(path);
   if (!existsSync(path)) {
-    throw new Error('file_not_found');
+    return defaultContent;
   }
 
   let fileContent: string;
@@ -26,7 +26,7 @@ export async function readJsonFile <T extends Record<string | number, unknown>>(
   catch (err) {
     throw new Error('invalid_json');
   }
-};
+}
 
 export async function writeJsonFile (path: string, data: unknown): Promise<void> {
   log(`writeJsonFile ${path}`);
@@ -44,7 +44,7 @@ export async function writeJsonFile (path: string, data: unknown): Promise<void>
     throw new Error('write_file_error');
   }
   log(`writeJsonFile: ${json.length} characters saved`);
-};
+}
 
 export function utcTimestamp (): number {
   const now = new Date();

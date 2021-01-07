@@ -1,8 +1,8 @@
-import { debounce } from 'lodash';
-import { log, readJsonFile, writeJsonFile, utcTimestamp } from './util';
+import debounce from 'lodash/debounce.js';
+import { log, readJsonFile, writeJsonFile, utcTimestamp } from './util.js';
 
 export interface DocumentStorage extends Record<string, DocumentRecord | string | undefined> {
-  _latest?: string,
+  _latest?: string;
 }
 
 export interface DocumentRecord extends Record<string, unknown> {
@@ -22,17 +22,17 @@ export class OneDB {
   constructor (storagePath: string) {
     log(`open ${storagePath}`);
     this._path = storagePath;
-    this._storage = readJsonFile<DocumentStorage>(this._path);
-    this._storage.catch(err => { throw err });
+    this._storage = readJsonFile<DocumentStorage>(this._path, {});
+    this._storage.catch(err => { throw err; });
   }
 
   protected async _updateIndexList(id?: string) {
     if (id != undefined && this._indexList == undefined) { return; } // no index created yet and maybe not need at all
-    
+
     const storage = await this._storage;
 
     if (this._indexList == undefined) {
-      this._indexList = Object.keys(storage)
+      this._indexList = Object.keys(storage);
     }
 
     if (id != undefined && !(id in this._indexList)) {
@@ -43,7 +43,7 @@ export class OneDB {
   /**
    * Insert/Update a document record
    */
-  async set(id: string, data: DocumentRecord, replace: boolean = false): Promise<DocumentRecord> {
+  async set(id: string, data: Record<string, unknown>, replace: boolean = false): Promise<DocumentRecord> {
     log(`set ${id}`);
     if (id === '_latest') { throw new Error('forbidden_key'); }
 
@@ -62,15 +62,15 @@ export class OneDB {
       data = {
         ...oldData,
         ...data,
-      }
+      };
     }
 
-    storage[id] = data;
+    storage[id] = data as DocumentRecord;
     storage._latest = id;
     void this._updateIndexList(id);
 
     this.saveRequest();
-    return data;
+    return data as DocumentRecord;
   }
 
   /**
@@ -135,7 +135,7 @@ export class OneDB {
 
   saveRequest = debounce((): void => {
     log('Save db');
-    this._storage.then(storage => writeJsonFile(this._path, storage))
+    this._storage.then(storage => writeJsonFile(this._path, storage));
   }, 100, {
     leading: false,
     trailing: true,
