@@ -1,8 +1,8 @@
-import {type DigestAlgorithm, AlwatrTokenGenerator} from '@alwatr/token';
+import {AlwatrTokenGenerator, type CryptoAlgorithm} from '@alwatr/crypto';
 import {delay} from '@alwatr/util';
 
 if (process.env.NODE_ENV !== 'production') {
-  console.log('Please run node in production for benchmark. NODE_ENV=production node demo/token/benchmark.js');
+  console.log('Please run node in production for benchmark. NODE_ENV=production node demo/crypto/benchmark.js');
   process.exit();
 }
 
@@ -15,7 +15,7 @@ const tokenGenerator = new AlwatrTokenGenerator({
 
 const sampleData = 'Lorem ipsum dolor sit amet consectetur adipisicing elit.';
 
-function benchmark(algorithm: DigestAlgorithm): void {
+function benchmark(algorithm: CryptoAlgorithm): void {
   tokenGenerator.config.algorithm = algorithm;
   const now = Date.now();
   const testRun = 1_000_000;
