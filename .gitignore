@@ -1,7 +1,0 @@
-*.js
-*.d.ts
-/db
-.tsbuildinfo
-node_modules
-.DS_Store
-Thumbs.db
