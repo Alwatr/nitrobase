@@ -14,28 +14,27 @@ env:
 
 jobs:
   publish-npm:
-    if: github.repository_owner == 'AliMD'
+    if: github.repository_owner == 'Alwatr'
 
     name: Publish NPM
     runs-on: ubuntu-latest
 
     permissions:
       contents: read
-      security-events: write
 
     steps:
       - name: ⤵️ Checkout repository
-        uses: actions/checkout@v4.0.0
+        uses: actions/checkout@v4.1.1
 
       - name: 🏗 Setup nodejs
-        uses: actions/setup-node@v3.8.1
+        uses: actions/setup-node@v4.0.0
         with:
           node-version: ${{env.NODE_VERSION}}
           registry-url: https://registry.npmjs.org/
           cache: yarn
 
       - name: 🏗 Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: 🏗 Build Typescript
         run: yarn build

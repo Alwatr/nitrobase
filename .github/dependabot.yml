@@ -1,9 +1,9 @@
 # https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
 
 version: 2
+
 updates:
-  -
-    package-ecosystem: github-actions
+  - package-ecosystem: github-actions
     directory: /
     open-pull-requests-limit: 20
     reviewers:
@@ -17,10 +17,9 @@ updates:
     groups:
       github-actions:
         patterns:
-          - "*"
+          - '*'
 
-  -
-    package-ecosystem: npm
+  - package-ecosystem: npm
     directory: /
     versioning-strategy: increase
     open-pull-requests-limit: 20
@@ -35,11 +34,20 @@ updates:
       - maintenance
     groups:
       production-dependencies:
-        dependency-type: "production"
-      development-dependencies:
-        dependency-type: "development"
+        dependency-type: 'production'
         exclude-patterns:
-          - "*lint*"
+          - '@alwatr/*'
+          - 'fract'
+      development-dependencies:
+        dependency-type: 'development'
+        exclude-patterns:
+          - '*lint*'
+          - '@alwatr/*'
+          - 'fract'
       lint-dependencies:
         patterns:
-          - "*lint*"
+          - '*lint*'
+      alwatr-dependencies:
+        patterns:
+          - '@alwatr/*'
+          - 'fract'

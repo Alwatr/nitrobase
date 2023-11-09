@@ -1,5 +1,9 @@
-blank_issues_enabled: false
+blank_issues_enabled: true
 contact_links:
-  - name: Telegram group of Alwatr developers
-    url: 'https://t.me/AlwatrWG'
-    about: Communication with developers
+  - name: Discussions
+    url: https://github.com/AliMD/alwatr/discussions
+    about: Please ask and answer questions here.
+
+  - name: Contact up
+    url: 'https://t.me/AlwatrSupport'
+    about: Direct contact to Alwatr support team at Telegram.
