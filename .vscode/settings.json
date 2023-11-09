@@ -1,7 +1,5 @@
 {
-  "eslint.packageManager": "yarn",
   "npm.packageManager": "yarn",
-  "lit-plugin.strict": true,
   "editor.wordWrapColumn": 120,
   "editor.formatOnPaste": false,
   "editor.formatOnSave": false,
@@ -15,52 +13,35 @@
     "**/*.d.ts": true,
     "**/*.tsbuildinfo": true
   },
+  "files.associations": {
+    "*.mt": "routeros",
+    "*.conf.template": "nginx",
+    "ssh_config": "ssh_config",
+    "*.njk": "html",
+    "ssh-config": "ssh_config"
+  },
+  "markdownlint.ignore": [
+    "**/CHANGELOG.md"
+  ],
   "cSpell.language": "en,fa,fa-IR",
   "cSpell.words": [
-    "alimd",
-    "alwatr",
-    "bottomness",
-    "calt",
-    "chatbox",
-    "checkmark",
-    "cssprop",
-    "currentcolor",
-    "datetime",
-    "Disconnectable",
-    "esbuild",
-    "Fatemeh",
-    "Fract",
-    "kubernetes",
-    "mastmalize",
-    "metafile",
-    "mihandoost",
-    "nanoserver",
-    "nanoservice",
-    "noncallable",
-    "outbase",
-    "outdir",
-    "preconnect",
-    "preload",
-    "publistore",
-    "requestable",
-    "roundot",
-    "securage",
-    "Stringifyable",
-    "Superfast",
-    "tailwindcss",
-    "tnum",
-    "topness",
-    "tsbuildinfo",
-    "typescale",
-    "vazirmatn",
-    "videocam",
-    "xlarge",
-    "xsmall",
-    "zindex"
+    "Alwatr"
   ],
-  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.tsdk": ".yarn/sdks/typescript/lib",
+  "git.autoStash": true,
+  "git.branchProtection": [
+    "main",
+    "next"
+  ],
   "githubPullRequests.ignoredPullRequestBranches": [
     "main",
     "next"
-  ]
+  ],
+  "search.exclude": {
+    "**/.yarn": true,
+    "**/.pnp.*": true
+  },
+  "eslint.nodePath": ".yarn/sdks",
+  "prettier.prettierPath": ".yarn/sdks/prettier/index.cjs",
+  "typescript.enablePromptUseWorkspaceTsdk": true
 }

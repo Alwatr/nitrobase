@@ -1,3 +1,10 @@
+- name: 'bug-report'
+  color: ee0811
+  description: 'Inconsistencies or issues which will cause a problem for users or implementors.'
+- name: 'feature-request'
+  color: 0e9a26
+  description: 'Request new features or options.'
+
 - name: 'breaking-change'
   color: ee0701
   description: 'A change that changes the API or breaks backward compatibility for users.'
@@ -12,7 +19,7 @@
   description: 'Enhancement of the code, not introducing new features.'
 - name: 'refactor'
   color: 1d76db
-  description: 'Updating the code with simpler, easier to understand or more efficient syntax or methods, but not introducing new features.'
+  description: 'Updating the code with simpler, easier to understand or more efficient syntax or methods.'
 - name: 'performance'
   color: 1d76db
   description: 'Improving performance of the project, not introducing new features.'

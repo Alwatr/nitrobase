@@ -40,5 +40,9 @@
     "@alwatr/util": "^1.2.0",
     "exit-hook": "^4.0.0",
     "tslib": "^2.6.2"
+  },
+  "devDependencies": {
+    "@alwatr/type": "^1.1.5",
+    "@types/node": "^20.9.0"
   }
 }

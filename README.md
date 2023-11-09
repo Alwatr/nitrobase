@@ -1,1 +1,3 @@
-![Alwatr](./docs/image/logo.svg#gh-dark-mode-only)
+# Alwatr Storage
+
+An extremely fast and compact json-based database with memory cache.

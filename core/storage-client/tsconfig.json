@@ -9,9 +9,5 @@
 
   "include": ["src/**/*.ts"],
   "exclude": [],
-  "references": [
-    {"path": "../logger"},
-    {"path": "../fetch"},
-    {"path": "../type"}
-  ]
+  "references": []
 }
