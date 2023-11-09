@@ -12,7 +12,7 @@
       "changelogIncludeCommitsClientLogin": " by @%l",
       "ignoreChanges": ["*.md"],
       "message": "release:",
-      "private": false,
+      "private": true,
       "forceGitTag": true,
       "signGitTag": true,
       "signGitCommit": true,
