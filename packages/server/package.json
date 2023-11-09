@@ -22,17 +22,17 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "node": ">=18.13.0",
-    "npm": ">=8.0.0"
+    "node": ">=18.16.0",
+    "yarn": ">=4.0.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/AliMD/alwatr",
-    "directory": "services/storage-server"
+    "url": "https://github.com/Alwatr/storage",
+    "directory": "packages/server"
   },
-  "homepage": "https://github.com/AliMD/alwatr/tree/main/services/storage-server#readme",
+  "homepage": "https://github.com/Alwatr/storage#readme",
   "bugs": {
-    "url": "https://github.com/AliMD/alwatr/issues"
+    "url": "https://github.com/Alwatr/storage/issues"
   },
   "scripts": {
     "b": "yarn run build",

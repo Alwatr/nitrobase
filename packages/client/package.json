@@ -28,12 +28,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/AliMD/alwatr",
-    "directory": "core/storage-client"
+    "url": "https://github.com/Alwatr/storage",
+    "directory": "packages/client"
   },
-  "homepage": "https://github.com/AliMD/alwatr/tree/main/core/storage-client#readme",
+  "homepage": "https://github.com/Alwatr/storage/tree/next/packages/client#readme",
   "bugs": {
-    "url": "https://github.com/AliMD/alwatr/issues"
+    "url": "https://github.com/Alwatr/storage/issues"
   },
   "dependencies": {
     "@alwatr/fetch": "^1.1.2",
