@@ -6,18 +6,13 @@
   "type": "module",
   "private": true,
   "dependencies": {
-    "@alwatr/crypto": "^1.0.0",
-    "@alwatr/fetch": "^1.0.0",
-    "@alwatr/icon": "^1.0.0",
     "@alwatr/logger": "^1.0.0",
     "@alwatr/math": "^1.0.0",
-    "@alwatr/router": "^1.0.0",
     "@alwatr/signal": "^1.0.0",
     "@alwatr/storage-client": "^1.0.0",
     "@alwatr/storage-engine": "^1.0.0",
     "@alwatr/type": "^1.0.0",
     "@alwatr/util": "^1.0.0",
-    "@alwatr/validator": "^1.0.0",
     "tslib": "^2.6.2"
   },
   "devDependencies": {
