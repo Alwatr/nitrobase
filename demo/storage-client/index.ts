@@ -23,7 +23,7 @@ let ali: User | null;
 try {
   ali = await db.get('alimd');
 
-  if (ali == null ) {
+  if (ali == null) {
     console.log('ali not found');
     const ali = {
       id: 'alimd',
@@ -50,7 +50,7 @@ await db.set({
   token: Math.random().toString(36).substring(2, 15),
 });
 
-console.log('has \'alimd\': %o', await db.has('alimd'));
+console.log("has 'alimd': %o", await db.has('alimd'));
 console.log('keys: %o', await db.keys());
 console.log('getAll: %o', await db.getStorage());
 await db.delete('alimd');

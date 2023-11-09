@@ -5,14 +5,14 @@
   "compilerOptions": {
     "composite": true,
     "tsBuildInfoFile": ".tsbuildinfo",
-    "plugins": [],
+    "plugins": []
   },
   "files": [],
   "exclude": [],
   "references": [
-    {"path": "./core/storage-engine"},
-    {"path": "./core/storage-client"},
-    {"path": "./demo"},
-    {"path": "./services/storage-server"},
+    {"path": "./packages/engine"},
+    {"path": "./packages/client"},
+    {"path": "./packages/server"},
+    {"path": "./demo"}
   ]
 }
