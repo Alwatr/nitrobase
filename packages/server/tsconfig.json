@@ -5,13 +5,11 @@
     "composite": true,
     "tsBuildInfoFile": ".tsbuildinfo",
     "rootDir": "src",
-    "outDir": "build",
+    "outDir": "build"
     // "noEmit": true
   },
 
   "include": ["src/**/*.ts"],
   "exclude": [],
-  "references": [
-    {"path": "../engine"},
-  ]
+  "references": [{"path": "../engine"}]
 }

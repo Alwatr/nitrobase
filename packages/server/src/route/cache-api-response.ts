@@ -12,7 +12,7 @@ nanoServer.route<Record<string, never>>('PUT', '/cache-api-response', async (con
 
   connection.requireToken(config.nanoServer.accessToken);
 
-  const bodyJson = await connection.requireJsonBody<{ path: string; data: StringifyableRecord }>();
+  const bodyJson = await connection.requireJsonBody<{path: string; data: StringifyableRecord}>();
 
   const base = config.storage.path;
   const path = resolve(base, bodyJson.path + '.json');

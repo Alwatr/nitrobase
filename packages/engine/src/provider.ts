@@ -29,7 +29,7 @@ export class AlwatrStorageEngineProvider {
 
   // TODO: update all jsdoc and readme.
   get<T extends AlwatrDocumentObject = AlwatrDocumentObject>(
-      config: AlwatrStorageEngineConfig,
+    config: AlwatrStorageEngineConfig,
   ): AlwatrStorageEngine<T> {
     this._logger.logMethodArgs?.('get', {name: config.name});
     if (!this._list[config.name]) {

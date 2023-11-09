@@ -340,7 +340,7 @@ export class AlwatrStorageEngine<DocumentType extends AlwatrDocumentObject = Alw
    * }
    * ```
    */
-  * allObject(): Generator<DocumentType, void, void> {
+  *allObject(): Generator<DocumentType, void, void> {
     for (const documentId of this.keys) {
       const documentObject = this.get(documentId);
       if (documentObject != null) yield documentObject;
