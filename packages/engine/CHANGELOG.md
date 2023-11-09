@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-rc.0](https://github.com/Alwatr/storage/compare/v3.0.0...v4.0.0-rc.0) (2023-11-09)
+
+### Bug Fixes
+
+* all path ([de2a919](https://github.com/Alwatr/storage/commit/de2a9199932a83fa9adb247e3f3825b86aa1ee56)) by @AliMD
+* compatible with new logger ([7cdad46](https://github.com/Alwatr/storage/commit/7cdad4682d81acb9318b543a9524a33173e85dbc)) by @AliMD
+
 ## [1.1.2](https://github.com/Alwatr/storage/compare/@alwatr/storage-engine@1.1.1...@alwatr/storage-engine@1.1.2) (2023-09-12)
 
 **Note:** Version bump only for package @alwatr/storage-engine
