@@ -10,7 +10,7 @@
   "include": ["**/*.ts"],
   "exclude": ["*.d.ts", "node_modules"],
   "references": [
-    {"path": "../core/storage-client"},
-    {"path": "../core/storage-engine"}
+    {"path": "../packages/client"},
+    {"path": "../packages/engine"},
   ]
 }

@@ -41,7 +41,7 @@
     "s": "yarn run start",
     "w": "yarn run watch",
     "start": "NODE_OPTIONS=--enable-source-maps run-s clean build serve",
-    "build": "yarn run build:es --analyze=verbose",
+    "build": "yarn run build:ts",
     "build:ts": "tsc --build",
     "build:es": "esbuild src/index.ts --platform=node --target=node19 --bundle --format=esm --minify --sourcemap --outdir=dist --out-extension:.js=.mjs",
     "clean": "rm -rf dist build .tsbuildinfo",
