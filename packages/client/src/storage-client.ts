@@ -1,5 +1,5 @@
 import {type FetchOptions, serviceRequest} from '@alwatr/fetch';
-import {createLogger, globalAlwatr} from '@alwatr/logger';
+import {createLogger, definePackage} from '@alwatr/logger';
 
 import type {AlwatrStorageClientConfig} from './type.js';
 import type {
@@ -11,10 +11,7 @@ import type {
 
 export {type AlwatrStorageClientConfig};
 
-globalAlwatr.registeredList.push({
-  name: '@alwatr/storage-client',
-  version: _ALWATR_VERSION_,
-});
+definePackage('@alwatr/storage-client', '4.*');
 
 /**
  * Elegant micro client for storage server written in tiny TypeScript ES module.

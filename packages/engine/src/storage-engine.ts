@@ -1,6 +1,6 @@
 import {resolve} from 'node:path';
 
-import {createLogger, globalAlwatr, type AlwatrLogger} from '@alwatr/logger';
+import {createLogger, definePackage, type AlwatrLogger} from '@alwatr/logger';
 import {readJsonFileSync, writeJsonFile, writeJsonFileSync} from '@alwatr/util/node.js';
 import exitHook from 'exit-hook';
 
@@ -9,10 +9,7 @@ import type {AlwatrDocumentStorage, AlwatrDocumentObject, MaybePromise} from '@a
 
 export type {AlwatrDocumentObject, AlwatrDocumentStorage};
 
-globalAlwatr.registeredList.push({
-  name: '@alwatr/storage-engine',
-  version: _ALWATR_VERSION_,
-});
+definePackage('@alwatr/storage-engine', '4.*');
 
 /**
  * Elegant micro in-memory json-like storage with disk backed,
