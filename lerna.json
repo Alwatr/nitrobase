@@ -2,7 +2,7 @@
   "$schema": "node_modules/@lerna-lite/cli/schemas/lerna-schema.json",
   "version": "independent",
   "npmClient": "yarn",
-  "packages": ["core/*", "services/*"],
+  "packages": ["packages/*", "demo"],
   "loglevel": "verbose",
   "command": {
     "version": {
