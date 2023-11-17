@@ -43,7 +43,7 @@
     "publish": "lerna publish from-package"
   },
   "devDependencies": {
-    "@lerna-lite/changed": "^2.6.0",
+    "@lerna-lite/changed": "^2.7.0",
     "@lerna-lite/cli": "^2.6.0",
     "@lerna-lite/diff": "^2.6.0",
     "@lerna-lite/exec": "^2.6.0",
