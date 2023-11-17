@@ -59,6 +59,6 @@
     "@alwatr/storage-engine": "workspace:^",
     "@alwatr/type": "^1.1.5",
     "@alwatr/util": "^1.2.10",
-    "@types/node": "^20.9.0"
+    "@types/node": "^20.9.1"
   }
 }
