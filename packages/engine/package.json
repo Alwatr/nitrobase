@@ -36,13 +36,13 @@
     "url": "https://github.com/Alwatr/storage/issues"
   },
   "dependencies": {
-    "@alwatr/logger": "^2.1.3",
-    "@alwatr/util": "^1.2.10",
+    "@alwatr/logger": "^2.2.0",
+    "@alwatr/util": "^1.3.0",
     "exit-hook": "^4.0.0",
     "tslib": "^2.6.2"
   },
   "devDependencies": {
-    "@alwatr/type": "^1.1.5",
+    "@alwatr/type": "^1.2.0",
     "@types/node": "^20.9.2"
   }
 }
