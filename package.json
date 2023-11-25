@@ -26,6 +26,7 @@
     "fl": "yarn run format:eslint",
     "fp": "yarn run format:prettier",
     "rl": "run-s pull clean build release",
+    "upd": "yarn set version latest; yarn up '*'; yarn up '*' -R; yarn dlx @yarnpkg/sdks vscode;",
     "lint": "run-s 'lint:*'",
     "lint:ts": "eslint . --config .eslintrc.json --ext .ts",
     "build": "run-s build:ts build:r",
@@ -61,5 +62,5 @@
     "prettier": "^3.1.0",
     "typescript": "^5.2.2"
   },
-  "packageManager": "yarn@4.0.1"
+  "packageManager": "yarn@4.0.2"
 }
