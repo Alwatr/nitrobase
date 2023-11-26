@@ -14,7 +14,7 @@ ENV NODE_ENV production
 RUN yarn build:ts
 
 # Build target package
-ARG packageSource
+ARG packageSource='packages/server'
 RUN set -ex;\
     if [ -z "$packageSource" ]; then\
       echo 'packageSource not defined'>&2;\
