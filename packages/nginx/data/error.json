@@ -1,9 +1,0 @@
-{
-  "ok": false,
-  "statusCode": <!--# echo var="status" default="500" -->,
-  "errorCode": "serve_storage_error",
-  "meta": {
-    "server": "alwatr/storage",
-    "status": "<!--# echo var="status_text" default="Something goes wrong." -->"
-  }
-}

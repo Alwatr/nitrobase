@@ -1,0 +1,47 @@
+# Serves all data for public users without requiring any token.
+# If data is not found, it returns a 200 status code with `data: null`.
+location ~ ^(/api)?/v\d+/publistore/hub/(?<doc_path>.*)$ {
+  try_files /publistore/hub/$doc_path.json @null_data;
+}
+
+# If data is not found, it returns a 200 status code with `data: null`.
+location ~ ^(/api)?/v\d+/publistore/vault/(?<doc_path>.*)$ {
+  if ($bearer_token = "") {
+    return 401;
+  }
+  if (!-d $document_root/publistore/auth/$bearer_token) {
+    return 403;
+  }
+
+  try_files /publistore/vault/$doc_path.json @null_data;
+}
+
+# Serves private data that varies for each authenticated user who provides a valid bearer token.
+# If data is not found, it returns a 200 status code with `data: null`.
+location ~ ^(/api)?/v\d+/publistore/auth/(?<doc_path>.*)$ {
+  location ~ ^/auth/(?<doc_path>.*)$ {
+    if ($bearer_token = "") {
+      return 401;
+    }
+    if (!-d $document_root/publistore/auth/$bearer_token) {
+      return 403;
+    }
+
+    try_files /publistore/auth/$bearer_token/$doc_path.json @null_data;
+  }
+}
+
+location @null_data {
+  default_type application/json;
+  return 200 '{"ok": true, "data": null}';
+}
+
+# Deny locations containing /securage/
+location ~ /securage/ {
+  return 403;
+}
+
+# Deny all unknown location
+location / {
+  deny all;
+}
