@@ -39,7 +39,7 @@ ENV PORT 80
 EXPOSE 80
 
 # Copy builded files from last stage
-ARG packageSource
+ARG packageSource='packages/server'
 COPY ${packageSource}/package.json ./
 COPY ${packageSource}/dist ./dist
 
