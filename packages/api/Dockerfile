@@ -16,7 +16,7 @@ ENV NODE_ENV production
 RUN yarn build:ts
 
 # Build target package
-ARG packageSource='packages/server'
+ARG packageSource='packages/api'
 RUN set -ex;\
     if [ -z "$packageSource" ]; then\
       echo 'packageSource not defined'>&2;\
@@ -41,7 +41,7 @@ ENV PORT 80
 EXPOSE 80
 
 # Copy builded files from last stage
-ARG packageSource='packages/server'
+ARG packageSource='packages/api'
 COPY --from=builder ${packageSource}/package.json ./
 COPY --from=builder ${packageSource}/dist ./dist
 
@@ -49,8 +49,8 @@ COPY --from=builder ${packageSource}/dist ./dist
 
 ARG BUILD_REV
 ARG BUILD_DATE
-LABEL org.opencontainers.image.title="alwatr/storage-server" \
-      org.opencontainers.image.description="Alwatr Storage Server, Elegant micro in-memory json-like storage nanoservice with disk backed, Fastest NoSQL Database." \
+LABEL org.opencontainers.image.title="alwatr/storage-api" \
+      org.opencontainers.image.description="Alwatr Storage API, Elegant micro in-memory json-like storage nanoservice with disk backed, Fastest NoSQL Database." \
       org.opencontainers.image.base.name="docker.io/library/node:20-alpine" \
       org.opencontainers.image.version="4.0.0-rc.0" \
       org.opencontainers.image.ref.name="20-alpine" \

@@ -2,7 +2,7 @@ import {rm} from 'fs/promises';
 import {createLogger} from '@alwatr/logger';
 import {context, analyzeMetafile} from 'esbuild';
 
-const logger = createLogger('@alwatr/storage-server-build', true);
+const logger = createLogger('@alwatr/storage-api-build', true);
 
 const srcDir = 'src';
 const outDir = 'dist';

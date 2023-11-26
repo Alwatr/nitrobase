@@ -1,7 +1,7 @@
 {
-  "name": "@alwatr/storage-server",
+  "name": "@alwatr/storage-api",
   "version": "4.0.0-rc.0",
-  "description": "Alwatr Storage Server, Elegant micro in-memory json-like storage nanoservice with disk backed, Fastest NoSQL Database.",
+  "description": "Alwatr Storage API, Elegant micro in-memory json-like storage nanoservice with disk backed, Fastest NoSQL Database.",
   "type": "module",
   "keywords": [
     "database",
@@ -28,7 +28,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Alwatr/storage",
-    "directory": "packages/server"
+    "directory": "packages/api"
   },
   "homepage": "https://github.com/Alwatr/storage#readme",
   "bugs": {

@@ -12,7 +12,7 @@
   "references": [
     {"path": "./packages/engine"},
     {"path": "./packages/client"},
-    {"path": "./packages/server"},
+    {"path": "./packages/api"},
     {"path": "./demo"}
   ]
 }

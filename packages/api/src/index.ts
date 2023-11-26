@@ -9,4 +9,4 @@ import './route/patch.js';
 import './route/storage.js';
 import './route/touch.js';
 
-logger.logOther?.('..:: Alwatr Storage Server ::..');
+logger.logOther?.('..:: Alwatr Storage API ::..');
