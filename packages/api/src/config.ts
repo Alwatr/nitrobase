@@ -2,7 +2,7 @@ import {resolve} from 'node:path';
 
 import {createLogger} from '@alwatr/logger';
 
-export const logger = createLogger('storage-server');
+export const logger = createLogger('storage-api');
 
 export const config = {
   nanoServer: {
