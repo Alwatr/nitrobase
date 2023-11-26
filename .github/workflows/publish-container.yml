@@ -101,7 +101,7 @@ jobs:
         id: build_and_push
         uses: docker/build-push-action@v5.1.0
         with:
-          context: ./${{matrix.path}}
+          context: ./packages/${{matrix.path}}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{steps.meta.outputs.tags}}
           cache-from: type=local,src=/tmp/.buildx-cache
