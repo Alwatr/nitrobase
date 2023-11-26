@@ -46,3 +46,25 @@ updates:
         patterns:
           - '@alwatr/*'
           - 'fract'
+
+  - package-ecosystem: docker
+    directory: /packages/nginx
+    reviewers:
+      - AliMD
+    schedule:
+      interval: daily
+    labels:
+      - ci
+      - priority-low
+      - maintenance
+
+  - package-ecosystem: docker
+    directory: /packages/server
+    reviewers:
+      - AliMD
+    schedule:
+      interval: daily
+    labels:
+      - ci
+      - priority-low
+      - maintenance
