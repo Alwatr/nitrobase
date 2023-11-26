@@ -40,8 +40,8 @@ EXPOSE 80
 
 # Copy builded files from last stage
 ARG packageSource='packages/server'
-COPY ${packageSource}/package.json ./
-COPY ${packageSource}/dist ./dist
+COPY --from=builder ${packageSource}/package.json ./
+COPY --from=builder ${packageSource}/dist ./dist
 
 # RUN pwd; ls -lAhF;
 
