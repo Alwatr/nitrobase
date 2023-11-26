@@ -2,6 +2,8 @@ FROM docker.io/library/node:20-alpine as builder
 
 WORKDIR /app
 
+RUN corepack enable
+
 COPY . .
 RUN if [ -f *.lock ]; then \
       yarn install --immutable; \
