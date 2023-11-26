@@ -22,7 +22,7 @@ RUN ls -RlahF /etc/nginx /data
 
 ARG BUILD_REV
 ARG BUILD_DATE
-LABEL org.opencontainers.image.title="alwatr/storage-server" \
+LABEL org.opencontainers.image.title="alwatr/storage-nginx" \
       org.opencontainers.image.description="This is a high-performance version of NGINX, which has been enhanced by Alwatr for the purpose of serving JSON content efficiently." \
       org.opencontainers.image.base.name="ghcr.io/alwatr/nginx-json:2.0.0" \
       org.opencontainers.image.version="2.0.0" \

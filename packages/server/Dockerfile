@@ -44,3 +44,19 @@ COPY ${packageSource}/package.json ./
 COPY ${packageSource}/dist ./dist
 
 # RUN pwd; ls -lAhF;
+
+ARG BUILD_REV
+ARG BUILD_DATE
+LABEL org.opencontainers.image.title="alwatr/storage-server" \
+      org.opencontainers.image.description="Alwatr Storage Server, Elegant micro in-memory json-like storage nanoservice with disk backed, Fastest NoSQL Database." \
+      org.opencontainers.image.base.name="docker.io/library/node:20-alpine" \
+      org.opencontainers.image.version="4.0.0-rc.0" \
+      org.opencontainers.image.ref.name="20-alpine" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.created=${BUILD_DATE} \
+      org.opencontainers.image.revision=${BUILD_REV} \
+      org.opencontainers.image.vendor="Alwatr" \
+      org.opencontainers.image.source="https://github.com/Alwatr/storage" \
+      org.opencontainers.image.url="https://github.com/Alwatr/storage" \
+      org.opencontainers.image.documentation="https://github.com/Alwatr/storage" \
+      org.opencontainers.image.authors="S. Ali Mihandoost <ali.mihandoost@gmail.com> (https://ali.mihandoost.com), S. Amir Mohammad Najafi <njfamirm@gmail.com> (https://njfamirm.ir/)"
