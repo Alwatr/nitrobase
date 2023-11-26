@@ -46,7 +46,10 @@ async function build(cleanMode, watchMode, debugMode, prettyMode) {
     await esbuildContext.dispose();
 
     if (debugMode) {
-      logger.logOther?.(await analyzeMetafile(buildInfo.metafile));
+      for (const [outFile, outInfo] of Object.entries(buildInfo.metafile?.outputs ?? {})) {
+        const size = Math.round(outInfo.bytes / 1024);
+        logger.logOther?.(`📦 ${outFile} ${size}kb`);
+      }
     }
 
     logger.logOther?.('✅ Done.');
