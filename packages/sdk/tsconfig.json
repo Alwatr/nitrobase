@@ -6,7 +6,6 @@
     "rootDir": "src",
     "outDir": ".",
     "emitDeclarationOnly": true,
-    // "noEmit": true,
   },
 
   "include": ["src/**/*.ts"],
