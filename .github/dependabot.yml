@@ -59,7 +59,7 @@ updates:
       - maintenance
 
   - package-ecosystem: docker
-    directory: /packages/server
+    directory: /packages/api
     reviewers:
       - AliMD
     schedule:
