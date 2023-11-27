@@ -29,8 +29,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - path: api
-          - path: nginx
+          - name: storage-api
+            path: ./packages/api
+            context: .
+          - name: storage-nginx
+            path: ./packages/nginx
+            context: ./packages/nginx
 
     permissions:
       contents: read
@@ -48,7 +52,7 @@ jobs:
         with:
           filters: |
             container_folder:
-              ./packages/${{ matrix.path }}/*
+              ${{ matrix.context }}/**
 
       - name: 🏗 Install cosign
         if: ${{ github.event_name != 'pull_request' && steps.file_change.outputs.container_folder != 'false' }}
@@ -60,10 +64,10 @@ jobs:
 
       - name: 🏗 Cache Docker Layers
         if: ${{ steps.file_change.outputs.container_folder != 'false' }}
-        uses: actions/cache@v3
+        uses: actions/cache@v3.3.2
         with:
           path: /tmp/.buildx-cache
-          key: container/${{ matrix.path }}
+          key: container/${{ matrix.name }}
 
       - name: 🏗 Log into docker hub registry
         if: ${{ github.event_name != 'pull_request' && steps.file_change.outputs.container_folder != 'false' }}
@@ -87,15 +91,15 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           images: |
-            name=ghcr.io/${{env.USER}}/storage-${{matrix.path}},enable=true
-            name=docker.io/${{env.USER}}/storage-${{matrix.path}},enable=true
+            name=ghcr.io/${{env.USER}}/${{matrix.name}},enable=true
+            name=docker.io/${{env.USER}}/${{matrix.name}},enable=true
           tags: |
             type=semver,enable=true,pattern={{major}}
             type=semver,enable=true,pattern={{major}}.{{minor}}
             type=semver,enable=true,pattern={{version}}
             type=ref,enable=true,event=branch
           labels: |
-            org.opencontainers.image.title="alwatr/storage-${{matrix.path}}"
+            org.opencontainers.image.title="alwatr/${{matrix.name}}"
             org.opencontainers.image.vendor="Alwatr"
             org.opencontainers.image.documentation="https://github.com/Alwatr/storage"
             org.opencontainers.image.authors="S. Ali Mihandoost <ali.mihandoost@gmail.com> (https://ali.mihandoost.com)"
@@ -105,7 +109,8 @@ jobs:
         id: build_and_push
         uses: docker/build-push-action@v5.1.0
         with:
-          context: ./packages/${{matrix.path}}
+          context: ${{matrix.context}}
+          file: ${{matrix.path}}/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
