@@ -34,26 +34,27 @@
   "bugs": {
     "url": "https://github.com/Alwatr/storage/issues"
   },
+  "esbuild": {
+    "entryPoints": [
+      "src/main.ts"
+    ],
+    "outbase": "src",
+    "outfile": "dist/main.mjs",
+    "sourcemap": true,
+    "sourcesContent": true
+  },
   "scripts": {
+    "s": "yarn run start",
     "b": "yarn run build",
+    "w": "yarn run watch:es",
     "c": "yarn run clean",
     "cb": "run-s clean build",
-    "cw": "run-s clean watch",
-    "s": "yarn run start",
-    "w": "yarn run watch",
-    "l": "yarn lint",
-    "lint": "run-s 'lint:*'",
-    "lint:ts": "tsc --build",
-    "start": "NODE_OPTIONS=--enable-source-maps run-s clean build serve",
-    "build": "yarn run build:es",
-    "build:es": "yarn node ./build.js",
-    "clean": "rm -rf dist .tsbuildinfo",
-    "serve": "yarn node --enable-source-maps dist/index.js",
+    "start": "run-s clean build serve",
+    "build": "yarn node ./esbuild.mjs",
+    "clean": "rm -rfv dist .tsbuildinfo",
+    "serve": "yarn node --enable-source-maps dist/main.js",
     "serve:debug": "yarn node --inspect --enable-source-maps dist/index.js",
-    "watch": "run-s clean build && run-p watch:es watch:node",
-    "watch:node": "nodemon -w dist/ --enable-source-maps dist/index.js",
-    "watch:debug-node": "nodemon -w dist/ --inspect --enable-source-maps dist/index.js",
-    "watch:es": "yarn run build:es --watch"
+    "watch:es": "yarn run build --watch"
   },
   "devDependencies": {
     "@alwatr/logger": "^2.3.0",

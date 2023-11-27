@@ -22,7 +22,7 @@ ENV HOST 0.0.0.0
 ENV PORT 80
 EXPOSE 80
 
-CMD ["node", "main.js"]
+CMD ["node", "main.mjs"]
 
 LABEL org.opencontainers.image.base.name="ghcr.io/alwatr/node:20.10.0" \
       org.opencontainers.image.documentation="https://github.com/Alwatr/storage"
