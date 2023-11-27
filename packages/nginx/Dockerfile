@@ -2,7 +2,7 @@ FROM ghcr.io/alwatr/nginx-json:2.0.1
 
 COPY etc/nginx/ /etc/nginx/
 # COPY data/ .
-RUN ls -RlahF /etc/nginx /data
+RUN set -eux; ls -RlahF /etc/nginx /data
 
 ENV NGINX_OPEN_FILE_CACHE="max=5000 inactive=1h" \
     NGINX_OPEN_FILE_CACHE_VALID=1s \
@@ -15,5 +15,5 @@ ENV NGINX_OPEN_FILE_CACHE="max=5000 inactive=1h" \
     NGINX_LIMIT_REQ_BURST=1000 \
     NGINX_DISABLE_SYMLINKS=if_not_owner
 
-LABEL org.opencontainers.image.base.name="ghcr.io/alwatr/nginx-json:2.0.0" \
-      org.opencontainers.image.documentation="https://github.com/Alwatr/storage" \
+LABEL org.opencontainers.image.base.name="ghcr.io/alwatr/nginx-json:2.0.1" \
+      org.opencontainers.image.documentation="https://github.com/Alwatr/storage"
