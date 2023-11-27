@@ -1,4 +1,4 @@
-FROM ghcr.io/alwatr/nginx-json:2.0.0
+FROM ghcr.io/alwatr/nginx-json:2.0.1
 
 COPY etc/nginx/ /etc/nginx/
 # COPY data/ .
