@@ -1,4 +1,4 @@
-FROM docker.io/library/node:20-alpine as builder
+FROM docker.io/library/node:21-alpine as builder
 
 WORKDIR /app
 
@@ -28,7 +28,7 @@ RUN set -ex;\
 
 # ---
 
-FROM docker.io/library/node:20-alpine as service
+FROM docker.io/library/node:21-alpine as service
 
 WORKDIR /app
 
