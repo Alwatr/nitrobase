@@ -1,18 +1,11 @@
-// https://www.typescriptlang.org/tsconfig
-
 {
   "extends": "./tsconfig.base",
-  "compilerOptions": {
-    "composite": true,
-    "tsBuildInfoFile": ".tsbuildinfo",
-    "plugins": []
-  },
   "files": [],
   "exclude": [],
   "references": [
     {"path": "./packages/engine"},
     {"path": "./packages/sdk"},
     {"path": "./packages/api"},
-    {"path": "./demo"}
+    // {"path": "./demo"}
   ]
 }

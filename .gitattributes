@@ -1,2 +1,0 @@
-**/secret/** filter=crypt diff=crypt merge=crypt
-*.env filter=crypt diff=crypt merge=crypt

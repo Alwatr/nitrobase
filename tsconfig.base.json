@@ -1,6 +1,5 @@
-// https://www.typescriptlang.org/tsconfig
-
 {
+  // https://www.typescriptlang.org/tsconfig
   "compilerOptions": {
     /* Basic Options */
     "incremental": true,
@@ -8,7 +7,7 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "resolveJsonModule": true, // temporary for fix import json issue
-    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "lib": ["ES2023"],
     // "allowJs": true,
     // "checkJs": true,
     // "jsx": "preserve",
@@ -21,6 +20,7 @@
     "tsBuildInfoFile": ".tsbuildinfo",
     "removeComments": false,
     // "noEmit": true,
+    // "emitDeclarationOnly": true,
     "importHelpers": true,
     // "downlevelIteration": true,
     "isolatedModules": true, // need for esbuild

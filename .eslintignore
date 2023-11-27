@@ -4,3 +4,4 @@
 /uniquely/flight-finder-pwa
 node_modules
 _data
+esbuild.mjs

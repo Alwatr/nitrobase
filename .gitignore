@@ -40,5 +40,3 @@ build
 
 # dotenv environment variables file
 .env
-
-!build.js
