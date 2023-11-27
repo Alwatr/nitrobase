@@ -4,7 +4,9 @@
     "composite": true,
     "tsBuildInfoFile": ".tsbuildinfo",
     "rootDir": "src",
-    "outDir": "."
+    "outDir": ".",
+    "emitDeclarationOnly": true,
+    // "noEmit": true,
   },
 
   "include": ["src/**/*.ts"],
