@@ -13,7 +13,7 @@ RUN set -eux; \
 
 FROM ghcr.io/alwatr/node:20.10.0
 
-COPY --from=builder packages/api/dist/ .
+COPY --from=builder /app/packages/api/dist/ .
 RUN set -eux; ls -RlahF /app;
 
 ENV NODE_ENV production
