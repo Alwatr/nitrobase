@@ -105,7 +105,8 @@ jobs:
         with:
           context: ./packages/${{matrix.path}}
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{steps.meta.outputs.tags}}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           build-args: |
