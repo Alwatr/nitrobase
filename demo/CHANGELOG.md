@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/Alwatr/storage/compare/v4.0.0...v4.0.1) (2023-11-27)
+
+### Bug Fixes
+
+* **demo:** build ([80735fd](https://github.com/Alwatr/storage/commit/80735fde1bfde0b8d7c3e270ef3bbbfe359bff91)) by @AliMD
+
 # [4.0.0](https://github.com/Alwatr/storage/compare/v4.0.0-rc.0...v4.0.0) (2023-11-27)
 
 **Note:** Version bump only for package @alwatr/demo

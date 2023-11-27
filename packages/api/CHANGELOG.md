@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/Alwatr/storage/compare/v4.0.0...v4.0.1) (2023-11-27)
+
+**Note:** Version bump only for package @alwatr/storage-api
+
 # [4.0.0](https://github.com/Alwatr/storage/compare/v4.0.0-rc.0...v4.0.0) (2023-11-27)
 
 ### Bug Fixes
