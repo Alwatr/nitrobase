@@ -1,7 +1,7 @@
 import {type FetchOptions, serviceRequest} from '@alwatr/fetch';
 import {createLogger, definePackage} from '@alwatr/logger';
 
-import type {AlwatrStorageClientConfig} from './type.js';
+import type {AlwatrStorageConfig} from './type.js';
 import type {
   AlwatrDocumentObject,
   AlwatrDocumentStorage,
@@ -9,7 +9,7 @@ import type {
   StringifyableRecord,
 } from '@alwatr/type';
 
-export {type AlwatrStorageClientConfig};
+export {type AlwatrStorageConfig};
 
 definePackage('@alwatr/storage-sdk', '4.*');
 
@@ -19,7 +19,7 @@ definePackage('@alwatr/storage-sdk', '4.*');
  * Example:
  *
  * ```ts
- * import {type AlwatrDocumentObject, AlwatrStorageClient} from '@alwatr/storage-sdk';
+ * import {type AlwatrDocumentObject, AlwatrStorage} from '@alwatr/storage-sdk';
  *
  * interface User extends AlwatrDocumentObject  {
  *   fname: string;
@@ -28,7 +28,7 @@ definePackage('@alwatr/storage-sdk', '4.*');
  *   token?: string;
  * }
  *
- * const db = new AlwatrStorageClient<User>({
+ * const db = new AlwatrStorage<User>({
  *   name: 'user-list',
  *   host: 'http://127.0.0.1:80',
  *   token: 'YOUR_SECRET_TOKEN',
@@ -61,7 +61,7 @@ definePackage('@alwatr/storage-sdk', '4.*');
  *   console.log('delete 404: %o', (err as Error).message);
  * }
  */
-export class AlwatrStorageClient<DocumentType extends AlwatrDocumentObject = AlwatrDocumentObject> {
+export class AlwatrStorage<DocumentType extends AlwatrDocumentObject = AlwatrDocumentObject> {
   protected _logger = createLogger(
     'alwatr/storage-sdk' + (this.config.name == null ? '' : ':' + this.config.name),
     this.config.devMode,
@@ -81,7 +81,7 @@ export class AlwatrStorageClient<DocumentType extends AlwatrDocumentObject = Alw
     token: this.config.token,
   };
 
-  constructor(public readonly config: AlwatrStorageClientConfig) {
+  constructor(public readonly config: AlwatrStorageConfig) {
     this._logger.logMethodArgs?.('constructor', config);
   }
 

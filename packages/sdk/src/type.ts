@@ -1,4 +1,4 @@
-export interface AlwatrStorageClientConfig {
+export interface AlwatrStorageConfig {
   /**
    * Storage name (like database name).
    */
