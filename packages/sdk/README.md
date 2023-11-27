@@ -1,11 +1,11 @@
-# Alwatr Storage Client - `@alwatr/storage-client`
+# Alwatr Storage Client - `@alwatr/storage-sdk`
 
 Elegant micro client for storage server written in tiny TypeScript ES module.
 
 ## Example usage
 
 ```ts
-import {type AlwatrDocumentObject, AlwatrStorageClient} from '@alwatr/storage-client';
+import {type AlwatrDocumentObject, AlwatrStorageClient} from '@alwatr/storage-sdk';
 
 type User = AlwatrDocumentObject & {
   email: string;

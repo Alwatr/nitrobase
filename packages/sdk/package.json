@@ -1,5 +1,5 @@
 {
-  "name": "@alwatr/storage-client",
+  "name": "@alwatr/storage-sdk",
   "version": "4.0.0-rc.0",
   "description": "Elegant micro client for storage server written in tiny TypeScript ES module.",
   "keywords": [
@@ -15,9 +15,9 @@
     "esm",
     "alwatr"
   ],
-  "main": "storage-client.js",
+  "main": "storage-sdk.js",
   "type": "module",
-  "types": "storage-client.d.ts",
+  "types": "storage-sdk.d.ts",
   "author": "S. Ali Mihandoost <ali.mihandoost@gmail.com> (https://ali.mihandoost.com)",
   "license": "MIT",
   "files": [
@@ -29,9 +29,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Alwatr/storage",
-    "directory": "packages/client"
+    "directory": "packages/sdk"
   },
-  "homepage": "https://github.com/Alwatr/storage/tree/next/packages/client#readme",
+  "homepage": "https://github.com/Alwatr/storage/tree/next/packages/sdk#readme",
   "bugs": {
     "url": "https://github.com/Alwatr/storage/issues"
   },

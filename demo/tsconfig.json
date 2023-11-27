@@ -9,5 +9,5 @@
 
   "include": ["**/*.ts"],
   "exclude": ["*.d.ts", "node_modules"],
-  "references": [{"path": "../packages/client"}, {"path": "../packages/engine"}]
+  "references": [{"path": "../packages/sdk"}, {"path": "../packages/engine"}]
 }

@@ -11,7 +11,7 @@ import type {
 
 export {type AlwatrStorageClientConfig};
 
-definePackage('@alwatr/storage-client', '4.*');
+definePackage('@alwatr/storage-sdk', '4.*');
 
 /**
  * Elegant micro client for storage server written in tiny TypeScript ES module.
@@ -19,7 +19,7 @@ definePackage('@alwatr/storage-client', '4.*');
  * Example:
  *
  * ```ts
- * import {type AlwatrDocumentObject, AlwatrStorageClient} from '@alwatr/storage-client';
+ * import {type AlwatrDocumentObject, AlwatrStorageClient} from '@alwatr/storage-sdk';
  *
  * interface User extends AlwatrDocumentObject  {
  *   fname: string;
@@ -63,7 +63,7 @@ definePackage('@alwatr/storage-client', '4.*');
  */
 export class AlwatrStorageClient<DocumentType extends AlwatrDocumentObject = AlwatrDocumentObject> {
   protected _logger = createLogger(
-    'alwatr/storage-client' + (this.config.name == null ? '' : ':' + this.config.name),
+    'alwatr/storage-sdk' + (this.config.name == null ? '' : ':' + this.config.name),
     this.config.devMode,
   );
 

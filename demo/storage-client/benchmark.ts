@@ -1,5 +1,5 @@
 import {random} from '@alwatr/math';
-import {AlwatrStorageClient} from '@alwatr/storage-client';
+import {AlwatrStorageClient} from '@alwatr/storage-sdk';
 
 import type {AlwatrDocumentObject} from '@alwatr/type';
 
