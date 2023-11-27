@@ -37,9 +37,9 @@ location @null_data {
 }
 
 # Deny locations containing /securage/
-location ~ /securage/ {
-  return 403;
-}
+# location ~ /securage/ {
+#   return 403;
+# }
 
 # Deny all unknown location
 location / {
