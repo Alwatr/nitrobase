@@ -52,7 +52,7 @@
     "start": "run-s clean build serve",
     "build": "yarn node ./esbuild.mjs",
     "clean": "rm -rfv dist .tsbuildinfo",
-    "serve": "yarn node --enable-source-maps dist/main.js",
+    "serve": "yarn node --enable-source-maps dist/main.mjs",
     "serve:debug": "yarn node --inspect --enable-source-maps dist/index.js",
     "watch:es": "yarn run build --watch"
   },
