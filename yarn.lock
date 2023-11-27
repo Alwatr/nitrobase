@@ -12,6 +12,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@alwatr/demo@workspace:demo":
+  version: 0.0.0-use.local
+  resolution: "@alwatr/demo@workspace:demo"
+  dependencies:
+    "@alwatr/logger": "npm:^2.3.0"
+    "@alwatr/math": "npm:^1.2.1"
+    "@alwatr/storage-engine": "workspace:^"
+    "@alwatr/storage-sdk": "workspace:^"
+    "@alwatr/type": "npm:^1.2.1"
+    "@alwatr/util": "npm:^1.3.1"
+    "@types/node": "npm:^20.10.0"
+    npm-run-all: "npm:^4.1.5"
+    tslib: "npm:^2.6.2"
+    typescript: "npm:^5.3.2"
+  languageName: unknown
+  linkType: soft
+
 "@alwatr/fetch@npm:^2.1.1":
   version: 2.1.1
   resolution: "@alwatr/fetch@npm:2.1.1"
@@ -87,7 +104,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alwatr/storage-sdk@workspace:packages/sdk":
+"@alwatr/storage-sdk@workspace:^, @alwatr/storage-sdk@workspace:packages/sdk":
   version: 0.0.0-use.local
   resolution: "@alwatr/storage-sdk@workspace:packages/sdk"
   dependencies:

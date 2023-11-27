@@ -1,5 +1,5 @@
 import {random} from '@alwatr/math';
-import {AlwatrStorageClient} from '@alwatr/storage-sdk';
+import {AlwatrStorage} from '@alwatr/storage-sdk';
 
 import type {AlwatrDocumentObject} from '@alwatr/type';
 
@@ -12,7 +12,7 @@ type User = AlwatrDocumentObject & {
 
 const token = process.env.TOKEN ?? 'YOUR_SECRET_TOKEN';
 
-const db = new AlwatrStorageClient<User>({
+const db = new AlwatrStorage<User>({
   name: 'junk-data',
   host: '127.0.0.1',
   port: 9000,
