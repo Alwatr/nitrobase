@@ -20,13 +20,23 @@
     "*.njk": "html",
     "ssh-config": "ssh_config"
   },
-  "markdownlint.ignore": ["**/CHANGELOG.md"],
+  "markdownlint.ignore": [
+    "**/CHANGELOG.md"
+  ],
   "cSpell.language": "en,fa,fa-IR",
-  "cSpell.words": ["Alwatr"],
+  "cSpell.words": [
+    "Alwatr"
+  ],
   "typescript.tsdk": ".yarn/sdks/typescript/lib",
   "git.autoStash": true,
-  "git.branchProtection": ["main", "next"],
-  "githubPullRequests.ignoredPullRequestBranches": ["main", "next"],
+  "git.branchProtection": [
+    "main",
+    "next"
+  ],
+  "githubPullRequests.ignoredPullRequestBranches": [
+    "main",
+    "next"
+  ],
   "search.exclude": {
     "**/.yarn": true,
     "**/.pnp.*": true
