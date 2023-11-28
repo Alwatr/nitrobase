@@ -33,16 +33,19 @@ export interface AlwatrStorageEngineConfig {
   devMode?: boolean;
 }
 
+/**
+ * Configuration options for the AlwatrStorageEngineProvider.
+ */
 export interface AlwatrStorageEngineProviderConfig {
   /**
-   * Default storage path. you can override it in get config params.
+   * Default storage path. You can override it in the getConfigParams method.
    *
    * @default './db'
    */
   path?: string;
 
   /**
-   * Save debounce timeout for minimal disk iops usage.
+   * Save debounce timeout for minimal disk I/O operations usage.
    *
    * @default 100
    */
@@ -58,7 +61,7 @@ export interface AlwatrStorageEngineProviderConfig {
   /**
    * Enable or disable debug mode.
    *
-   * @default undefined Auto detect base in NODE_ENV
+   * @default undefined (Auto detect based on `NODE_ENV`)
    */
   devMode?: boolean;
 }

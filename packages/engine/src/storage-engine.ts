@@ -12,8 +12,9 @@ export type {AlwatrDocumentObject, AlwatrDocumentStorage};
 definePackage('@alwatr/storage-engine', '4.*');
 
 /**
- * Elegant micro in-memory json-like storage with disk backed,
- * Fastest NoSQL Database written in tiny TypeScript ES module.
+ * Extremely fast and compact JSON-based database that operates in memory, includes a JSON file backup.
+ *
+ * @template DocumentType - The type of the document object.
  *
  * Example:
  *
@@ -72,7 +73,7 @@ export class AlwatrStorageEngine<DocumentType extends AlwatrDocumentObject = Alw
   readonly name: string;
 
   /**
-   * Storage file full path.
+   * The path to the storage location.
    */
   readonly storagePath: string;
 
@@ -138,6 +139,11 @@ export class AlwatrStorageEngine<DocumentType extends AlwatrDocumentObject = Alw
     };
   }
 
+  /**
+   * Creates a new instance of AlwatrStorageEngine.
+   *
+   * @param config - The configuration for the storage engine.
+   */
   constructor(config: AlwatrStorageEngineConfig) {
     this._logger = createLogger(`alwatr-storage:${config.name}`, config.devMode);
     this._logger.logMethodArgs?.('constructor', config);
@@ -158,7 +164,9 @@ export class AlwatrStorageEngine<DocumentType extends AlwatrDocumentObject = Alw
   }
 
   /**
-   * load storage file.
+   * Loads the storage file.
+   *
+   * @returns The loaded storage data.
    */
   protected load(): AlwatrDocumentStorage<DocumentType> {
     this._logger.logMethodArgs?.('load', {name: this.name, path: this.storagePath});
@@ -204,7 +212,10 @@ export class AlwatrStorageEngine<DocumentType extends AlwatrDocumentObject = Alw
   }
 
   /**
-   * Check documentId exist in the storage or not.
+   * Checks if a documentId exists in the storage.
+   *
+   * @param documentId - The id of the document.
+   * @returns `true` if the documentId exists, otherwise `false`.
    *
    * Example:
    *
@@ -217,12 +228,12 @@ export class AlwatrStorageEngine<DocumentType extends AlwatrDocumentObject = Alw
   }
 
   /**
-   * Get a document object by id.
+   * Gets a document object by id.
    *
-   * @param documentId The id of the document object.
-   * @param fastInstance by default it will return a copy of the document.
-   * if you set fastInstance to true, it will return the original document.
-   * This is dangerous but much faster, you should use it only if you know what you are doing.
+   * @param documentId - The id of the document object.
+   * @param fastInstance - (Optional) If `true`, returns the original document object without making a copy.
+   * Default is `false`. This is dangerous but much faster, you should use it only if you know what you are doing.
+   * @returns The document object if found, otherwise `null`.
    *
    * Example:
    *
@@ -249,12 +260,12 @@ export class AlwatrStorageEngine<DocumentType extends AlwatrDocumentObject = Alw
   }
 
   /**
-   * Insert/update a document object in the storage.
+   * Inserts or updates a document object in the storage.
    *
-   * @param documentObject The document object to insert/update contain `id`.
-   * @param fastInstance by default it will make a copy of the document before set.
-   * if you set fastInstance to true, it will set the original document.
-   * This is dangerous but much faster, you should use it only if you know what you are doing.
+   * @param documentObject - The document object to insert or update.
+   * @param fastInstance - (Optional) If `true`, sets the original document object without making a copy.
+   * Default is `false`.
+   * @returns The inserted or updated document object.
    *
    * Example:
    *
@@ -301,7 +312,10 @@ export class AlwatrStorageEngine<DocumentType extends AlwatrDocumentObject = Alw
   }
 
   /**
-   * Delete a document object from the storage.
+   * Deletes a document object from the storage.
+   *
+   * @param documentId - The id of the document object to delete.
+   * @returns `true` if the document object was deleted, otherwise `false`.
    *
    * Example:
    *
@@ -326,7 +340,9 @@ export class AlwatrStorageEngine<DocumentType extends AlwatrDocumentObject = Alw
   }
 
   /**
-   * Loop over all document objects.
+   * Iterates over all document objects in the storage.
+   *
+   * @returns A generator that yields each document object.
    *
    * Example:
    *
@@ -348,7 +364,7 @@ export class AlwatrStorageEngine<DocumentType extends AlwatrDocumentObject = Alw
   private _saveTimer: NodeJS.Timeout | null = null;
 
   /**
-   * Save the storage to disk (debounced and none blocking).
+   * Saves the storage to disk (debounced and non-blocking).
    */
   save(): void {
     this._logger.logMethod?.('save');
@@ -358,9 +374,10 @@ export class AlwatrStorageEngine<DocumentType extends AlwatrDocumentObject = Alw
   }
 
   /**
-   * Save the storage to disk without any debounce (none blocking) when `this.hasUnsavedChanges` is true.
+   * Saves the storage to disk without any debounce (non-blocking) when `this.hasUnsavedChanges` is true.
    *
-   * @param [emergency=false] - Recommend to ignore it (default is false) for none blocking IO.
+   * @param emergency - (Optional) If `true`, performs an emergency save immediately. Default is `false`.
+   * @returns A promise that resolves when the save operation is complete.
    */
   private _$save(emergency = false): MaybePromise<void> {
     this._logger.logMethod?.('_$save');
@@ -382,7 +399,7 @@ export class AlwatrStorageEngine<DocumentType extends AlwatrDocumentObject = Alw
   }
 
   /**
-   * Unload storage data and free ram usage (auto saved before unload).
+   * Unloads the storage data and frees up memory usage (auto saved before unload).
    *
    * Example:
    *

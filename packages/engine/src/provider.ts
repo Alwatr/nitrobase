@@ -23,11 +23,20 @@ export class AlwatrStorageEngineProvider {
   protected _logger = createLogger('alwatr/storage-provider', this._config.devMode);
   protected _list: Record<string, AlwatrStorageEngine> = {};
 
+  /**
+   * Creates an instance of AlwatrStorageEngineProvider.
+   * @param _config The configuration for the storage engine provider.
+   */
   constructor(protected _config: AlwatrStorageEngineProviderConfig) {
     this._logger.logMethodArgs?.('constructor', _config);
   }
 
-  // TODO: update all jsdoc and readme.
+  /**
+   * Retrieves a storage engine based on the provided configuration.
+   * If the storage engine does not exist, a new one is created.
+   * @param config The configuration for the storage engine.
+   * @returns The storage engine instance.
+   */
   get<T extends AlwatrDocumentObject = AlwatrDocumentObject>(
     config: AlwatrStorageEngineConfig,
   ): AlwatrStorageEngine<T> {
@@ -43,6 +52,10 @@ export class AlwatrStorageEngineProvider {
     return this._list[config.name] as AlwatrStorageEngine<T>;
   }
 
+  /**
+   * Unloads a storage engine with the specified name.
+   * @param name The name of the storage engine to unload.
+   */
   unload(name: string): void {
     this._logger.logMethodArgs?.('unload', {name});
     if (this._list[name] == null) {
@@ -53,6 +66,9 @@ export class AlwatrStorageEngineProvider {
     delete this._list[name];
   }
 
+  /**
+   * Unloads all storage engines.
+   */
   unloadAll(): void {
     for (const name in this._list) {
       if (!Object.prototype.hasOwnProperty.call(this._list, name)) continue;
