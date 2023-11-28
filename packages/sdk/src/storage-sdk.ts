@@ -14,10 +14,11 @@ export {type AlwatrStorageConfig};
 definePackage('@alwatr/storage-sdk', '4.*');
 
 /**
- * Elegant micro client for storage server written in tiny TypeScript ES module.
+ * Extremely fast and compact JSON-based database that operates in memory, includes a JSON file backup.
  *
- * Example:
+ * @template DocumentType - The type of the document object.
  *
+ * @example
  * ```ts
  * import {type AlwatrDocumentObject, AlwatrStorage} from '@alwatr/storage-sdk';
  *
@@ -81,6 +82,11 @@ export class AlwatrStorage<DocumentType extends AlwatrDocumentObject = AlwatrDoc
     token: this.config.token,
   };
 
+  /**
+   * Creates an instance of AlwatrStorage.
+   *
+   * @param config - The configuration for the storage.
+   */
   constructor(public readonly config: AlwatrStorageConfig) {
     this._logger.logMethodArgs?.('constructor', config);
   }
@@ -88,10 +94,11 @@ export class AlwatrStorage<DocumentType extends AlwatrDocumentObject = AlwatrDoc
   /**
    * Get a document object by id.
    *
-   * @param documentId The id of the document object.
+   * @param documentId - The id of the document object.
+   * @param storage - The name of the storage. Defaults to the configured storage name.
+   * @returns A promise that resolves to the document object or null if not found.
    *
-   * Example:
-   *
+   * @example
    * ```ts
    * try {
    *   const user = await userStorage.get('user-1');
@@ -123,12 +130,13 @@ export class AlwatrStorage<DocumentType extends AlwatrDocumentObject = AlwatrDoc
   }
 
   /**
-   * Check document exists by id.
+   * Check if a document exists by id.
    *
-   * @param documentId The id of the document object.
+   * @param documentId - The id of the document object.
+   * @param storage - The name of the storage. Defaults to the configured storage name.
+   * @returns A promise that resolves to true if the document exists, false otherwise.
    *
-   * Example:
-   *
+   * @example
    * ```ts
    * const userExist = await userStorage.has('user-1');
    * if (!userExist) console.log('user_not_found');
@@ -156,12 +164,13 @@ export class AlwatrStorage<DocumentType extends AlwatrDocumentObject = AlwatrDoc
   }
 
   /**
-   * Insert/update a document object in the storage.
+   * Insert or update a document object in the storage.
    *
-   * @param documentObject The document object to insert/update contain `id`.
+   * @param documentObject - The document object to insert or update.
+   * @param storage - The name of the storage. Defaults to the configured storage name.
+   * @returns A promise that resolves to the inserted or updated document object.
    *
-   * Example:
-   *
+   * @example
    * ```ts
    * await userStorage.set({
    *   id: 'user-1',
@@ -191,10 +200,12 @@ export class AlwatrStorage<DocumentType extends AlwatrDocumentObject = AlwatrDoc
   }
 
   /**
-   * Touch the storage to make sure storage file exist.
+   * Touch the storage to make sure the storage file exists.
    *
-   * Example:
+   * @param storage - The name of the storage. Defaults to the configured storage name.
+   * @returns A promise that resolves when the storage is touched.
    *
+   * @example
    * ```ts
    * await userStorage.touch();
    * ```
@@ -214,12 +225,13 @@ export class AlwatrStorage<DocumentType extends AlwatrDocumentObject = AlwatrDoc
   }
 
   /**
-   * Make a symbolic link
+   * Make a symbolic link.
    *
-   * **CAUTION: the destination path will be removed if exists**
+   * @param src - The source path of the link.
+   * @param dest - The destination path of the link.
+   * @returns A promise that resolves when the link is created.
    *
-   * Example:
-   *
+   * @example
    * ```ts
    * await storageClient.link('private/user-50/order-list', 'public/token/oder-list');
    * ```
@@ -239,10 +251,13 @@ export class AlwatrStorage<DocumentType extends AlwatrDocumentObject = AlwatrDoc
   }
 
   /**
-   * Make a cache from the api response.
+   * Make a cache from the API response.
    *
-   * Example:
+   * @param path - The path of the cache.
+   * @param data - The data to be cached.
+   * @returns A promise that resolves when the cache is created.
    *
+   * @example
    * ```ts
    * await storageClient.cacheApiResponse('public/token/user-profile', {id: 'test', ...});
    * ```
@@ -264,8 +279,11 @@ export class AlwatrStorage<DocumentType extends AlwatrDocumentObject = AlwatrDoc
   /**
    * Delete a document object from the storage.
    *
-   * Example:
+   * @param documentId - The id of the document object to delete.
+   * @param storage - The name of the storage. Defaults to the configured storage name.
+   * @returns A promise that resolves to true if the document was deleted, false otherwise.
    *
+   * @example
    * ```ts
    * await userStorage.delete('user-1');
    * ```
@@ -294,10 +312,12 @@ export class AlwatrStorage<DocumentType extends AlwatrDocumentObject = AlwatrDoc
   }
 
   /**
-   * Dump all storage.
+   * Get the storage object.
    *
-   * Example:
+   * @param name - The name of the storage. Defaults to the configured storage name.
+   * @returns A promise that resolves to the storage object.
    *
+   * @example
    * ```ts
    * const userStorage = await userStorage.getStorage();
    * ```
@@ -328,10 +348,12 @@ export class AlwatrStorage<DocumentType extends AlwatrDocumentObject = AlwatrDoc
   }
 
   /**
-   * Get all documents keys.
+   * Get all document keys in the storage.
    *
-   * Example:
+   * @param storage - The name of the storage. Defaults to the configured storage name.
+   * @returns A promise that resolves to an array of document keys.
    *
+   * @example
    * ```ts
    * const userIdArray = await userStorage.keys();
    * ```

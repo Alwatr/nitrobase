@@ -1,3 +1,6 @@
+/**
+ * Configuration options for Alwatr Storage.
+ */
 export interface AlwatrStorageConfig {
   /**
    * Storage name (like database name).
@@ -22,7 +25,7 @@ export interface AlwatrStorageConfig {
   /**
    * A timeout in ms for the fetch request.
    *
-   * Use with cation, you will have memory leak issue in nodejs.
+   * Use with caution, as it may cause memory leak issues in Node.js.
    *
    * @default 0 disabled
    */
@@ -31,7 +34,7 @@ export interface AlwatrStorageConfig {
   /**
    * Enable or disable debug mode.
    *
-   * @default undefined Auto detect base on `NODE_ENV`
+   * @default undefined Auto detect based on `NODE_ENV`
    */
   devMode?: boolean;
 }
