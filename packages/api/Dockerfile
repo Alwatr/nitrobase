@@ -1,5 +1,7 @@
 FROM ghcr.io/alwatr/node:20.10.0 as builder
 
+LABEL org.opencontainers.image.base.name="ghcr.io/alwatr/node:20.10.0"
+
 RUN set -ex; corepack enable;
 
 COPY . .
@@ -23,6 +25,3 @@ ENV PORT 80
 EXPOSE 80
 
 CMD ["node", "main.mjs"]
-
-LABEL org.opencontainers.image.base.name="ghcr.io/alwatr/node:20.10.0" \
-      org.opencontainers.image.documentation="https://github.com/Alwatr/storage"
