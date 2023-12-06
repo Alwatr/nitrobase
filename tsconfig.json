@@ -4,6 +4,7 @@
   "exclude": [],
   "references": [
     {"path": "./packages/engine"},
+    {"path": "./packages/engine5"},
     {"path": "./packages/sdk"},
     {"path": "./packages/api"},
     {"path": "./demo"}
