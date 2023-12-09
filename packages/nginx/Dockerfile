@@ -1,6 +1,6 @@
-FROM ghcr.io/alwatr/nginx-json:2.0.1
+FROM ghcr.io/alwatr/nginx-json:2.0.2
 
-LABEL org.opencontainers.image.base.name="ghcr.io/alwatr/nginx-json:2.0.1"
+LABEL org.opencontainers.image.base.name="ghcr.io/alwatr/nginx-json:2.0.2"
 
 COPY etc/nginx/ /etc/nginx/
 # COPY data/ .
