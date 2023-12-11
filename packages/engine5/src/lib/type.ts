@@ -1,67 +1,79 @@
 export interface AlwatrStoreConfig {
   /**
    * The root path of the storage.
+   * This is where the AlwatrStore will store its data.
    */
   rootPath: string;
 
   /**
-   * The save debounce timeout in milliseconds for minimal disk I/O usage. The recommended value is `50`.
+   * The save debounce timeout in milliseconds for minimal disk I/O usage.
+   * This is used to limit the frequency of disk writes for performance reasons.
+   * The recommended value is `50`.
    */
   saveDebounce: number;
 }
 
 /**
- * Store file region
- *
- * Subdirectory location for each store file.
+ * The subdirectory location for each store file.
  */
 export enum Region {
   /**
-   * Public store file location can access by anyone.
+   * Store file location that can be accessed by anyone.
    */
   Public = 'p',
 
   /**
-   * Public store file location can access by authenticated user.
+   * Store file location that can be accessed by authenticated users.
    */
   Authenticated = 'a',
 
   /**
-   * Public store file location for each user id and can access by the user token.
+   * Store file location specific to each user id. Can be accessed using the user token.
    */
   PerUser = 'u',
 
   /**
-   * Public store file location for each device id.
+   * Store file location specific to each device id.
    */
   PerDevice = 'd',
 
   /**
-   * Public store file location for each token.
+   * Store file location specific to each token.
    */
   PerToken = 't',
 
   /**
-   * Private store file location can not access by anyone publicly and must directly access by the admin api only.
+   * Private store file location. Cannot be accessed publicly and must be directly accessed by the admin API only.
    */
   Secret = 's',
 }
 
 /**
- * Store file format type.
+ * The different types of store file formats.
  */
 export enum StoreFileType {
+  /**
+   * Type used for `single document` storage.
+   */
   document = 'doc',
+
+  /**
+   * Type used for storing a `collection` of simpler documents, referred to as collection items.
+   */
   collection = 'col',
+
+  /**
+   * Type used for storing a collection of items that are `append-only`.
+   */
   appendOnlyCollection = 'aoc',
 }
 
 /**
- * Store file encoding type.
+ * Store file encoding types.
  */
 export enum StoreFileEncoding {
   /**
-   * Alwatr json store format.
+   * Alwatr JSON store format.
    */
   json = 'ajs',
 }
@@ -102,90 +114,112 @@ export enum StoreFileTTL {
 }
 
 /**
- * Store file stat detail.
+ * Represents the detailed statistics of a store file.
  */
 export interface StoreFileStat {
   /**
-   * Store file ID.
+   * The unique identifier of the store file.
    */
   id: string;
 
   /**
-   * Store file type.
+   * The type of the store file.
+   *
+   * @see {@link StoreFileType}
    */
   type: StoreFileType;
 
   /**
-   * Store file file region.
+   * The region where the store file is located.
+   *
+   * @see {@link Region}
    */
   region: Region;
 
   /**
-   * Store file encoding.
+   * The encoding used for the store file.
+   *
+   * @see {@link StoreFileEncoding}
    */
   encoding: StoreFileEncoding;
 
   /**
-   * Store file time to live in memory.
+   * The time-to-live (TTL) of the store file in memory.
+   *
+   * @see {@link StoreFileTTL}
    */
   ttl: StoreFileTTL;
 }
-
 /**
- * Store file meta data.
+ * Represents the metadata of a store file.
  */
 export interface StoreFileMeta {
   /**
-   * Store file ID.
+   * The unique identifier of the store file.
    */
   id: string;
 
   /**
-   * Store file type.
+   * The type of the store file.
+   * @see {@link StoreFileType}
    */
   type: StoreFileType;
 
   /**
-   * Store file file region.
+   * The region where the store file is located.
+   * @see {@link Region}
    */
   region: Region;
 
+  /**
+   * The encoding used for the store file.
+   * @see {@link StoreFileEncoding}
+   */
   encoding: StoreFileEncoding;
 
   /**
-   * Alwatr store engine major version number.
+   * The major version number of the `Alwatr store` engine.
    */
   version: number;
 
   /**
-   * Store file revision number.
+   * The revision number of the store file.
+   *
+   * This number is incremented every time the store file is updated.
    */
   rev: number;
 
   /**
-   * Store file last updated timestamp.
+   * The Unix timestamp (in milliseconds since the epoch) for when the store file was updated.
    */
   updated: number;
 
   /**
-   * Store file created timestamp.
+   * The Unix timestamp (in milliseconds since the epoch) for when the store file was created.
    */
   created: number;
 }
 
+/**
+ * Represents the context of a store file.
+ * @template TData The type of the data content in the store file.
+ */
 export interface StoreFileContext<TData extends Record<string, unknown> = Record<string, unknown>> {
   /**
-   * Store file status.
+   * The status of the store file.
+   *
+   * if false, the Alwatr store throws an error.
    */
   ok: true;
 
   /**
-   * Store file meta information.
+   * The metadata of the store file.
+   * @see {@link StoreFileMeta}
    */
   meta: StoreFileMeta;
 
   /**
-   * Store file data content.
+   * The data content of the store file.
    */
   data: TData;
 }
@@ -200,29 +234,32 @@ export type StoreFileMetaOnlyContext = Omit<StoreFileContext<never>, 'data'>;
  */
 export type DocumentContext<TDoc extends Record<string, unknown> = Record<string, unknown>> = StoreFileContext<TDoc>;
 
+
 // collections
 
 /**
- * Collection item meta information.
+ * The metadata of an item in a collection.
  */
 export interface CollectionItemMeta {
   /**
-   * Collection item id.
+   * The unique identifier for the collection item.
    */
   id: string;
 
   /**
-   * Collection item revision number.
+   * The revision number for the collection item.
+   *
+   * This number is incremented each time the item is updated.
    */
   rev: number;
 
   /**
-   * Collection item last updated timestamp.
+   * The Unix timestamp (in milliseconds since the epoch) for when the collection item was updated.
    */
   updated: number;
 
   /**
-   * Collection item created timestamp.
+   * The Unix timestamp (in milliseconds since the epoch) for when the collection item was created.
    */
   created: number;
 }
@@ -231,8 +268,8 @@ export interface CollectionItemMeta {
  * Collection item context type.
  */
 export interface CollectionItem<TItem> {
-  /**
-   * Collection item meta information.
+/**
+   * Collection item's metadata.
    */
   meta: CollectionItemMeta;
 
