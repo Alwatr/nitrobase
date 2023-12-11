@@ -150,6 +150,7 @@ export interface StoreFileStat {
    */
   ttl: StoreFileTTL;
 }
+
 /**
  * Represents the metadata of a store file.
  */
@@ -172,15 +173,14 @@ export interface StoreFileMeta {
   region: Region;
 
   /**
-   * The encoding used for the store file.
-   * @see {@link StoreFileEncoding}
+   * The AlwatrStore engine version.
    */
-  encoding: StoreFileEncoding;
+  ver: string;
 
   /**
-   * The major version number of the `Alwatr store` engine.
+   * Store file format version.
    */
-  version: number;
+  fv: number;
 
   /**
    * The revision number of the store file.
