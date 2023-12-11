@@ -1,6 +1,6 @@
 import {createLogger} from '@alwatr/logger';
 
-import { logger } from './logger.js';
+import {logger} from './logger.js';
 
 import type {DocumentContext, StoreFileMeta} from './type.js';
 
@@ -9,7 +9,7 @@ logger.logModule?.('document-reference');
 /**
  * Document reference have methods to get, set, update and save the Alwatr Store Document.
  *
- * This class is dommy in saving and loading the document.
+ * This class is dummy in saving and loading the document.
  * It's the responsibility of the Alwatr Store to save and load the document.
  *
  * @template TDoc The document data type.
@@ -31,7 +31,7 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
   /**
    * Get Document's data.
    *
-   * @returns {TDoc} Document's data.
+   * @returns Document's data.
    */
   get(): TDoc {
     this._logger.logMethod?.('get');
@@ -39,7 +39,7 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
   }
 
   /**
-   * Document's metadata.
+   * Get Document's metadata.
    *
    * @returns Document's metadata.
    */
@@ -51,7 +51,7 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
   /**
    * Set Document's data.
    *
-   * @param {TDoc} data New document data.
+   * @param data New document data.
    */
   set(data: TDoc): void {
     this._logger.logMethodArgs?.('set', data);

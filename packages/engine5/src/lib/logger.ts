@@ -1,4 +1,4 @@
-import { createLogger, definePackage } from "@alwatr/logger";
+import {createLogger, definePackage} from '@alwatr/logger';
 
 definePackage('store-engine', '5.x');
 
