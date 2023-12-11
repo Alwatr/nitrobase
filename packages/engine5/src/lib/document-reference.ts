@@ -1,6 +1,6 @@
-import { createLogger } from '@alwatr/logger';
+import {createLogger} from '@alwatr/logger';
 
-import type {DocumentContext, StoreFileMeta} from './type.js';
+import type {DocumentContext, StoreFileMeta} from './type';
 
 export class DocumentReference<TDoc extends Record<string, unknown> = Record<string, unknown>> {
   protected _logger = createLogger(`doc:${this.context_.meta.id.slice(0, 20)}`, true);
