@@ -91,7 +91,7 @@ export class AlwatrStore {
   /**
    * Keep all loaded store file context loaded in memory.
    */
-  protected storeFilesRecord_: Record<string, StoreFileContext> = {};
+  protected memoryContextRecord_: Record<string, StoreFileContext> = {};
 
   constructor(readonly config: AlwatrStoreConfig) {
     logger.logMethodArgs?.('new', config);
@@ -123,8 +123,14 @@ export class AlwatrStore {
     this.storeFilesCollection_.update({[stat.id]: stat});
   }
 
-  stat(id: string): Readonly<StoreFileStat> | null {
+  exists(id: string): boolean {
+    logger.logMethodArgs?.('exist', id);
+    return id in this.storeFilesCollection_.get();
+  }
+
+  stat(id: string): Readonly<StoreFileStat> {
     logger.logMethodArgs?.('stat', id);
+    // TODO: error store_file_not_defined
     return this.storeFilesCollection_.get()[id] ?? null;
   }
 
@@ -153,7 +159,7 @@ export class AlwatrStore {
       logger.error?.('getDocument', 'document_wrong_type', stat);
       throw new Error('document_not_found', {cause: stat});
     }
-    const context = this.storeFilesRecord_[id] = await AlwatrStore.readStoreFile_<TDoc>(stat);
+    const context = this.memoryContextRecord_[id] = await AlwatrStore.readStoreFile_<TDoc>(stat);
     return new DocumentReference(context, this.save_.bind(this));
   }
 
@@ -164,7 +170,7 @@ export class AlwatrStore {
       logger.error?.('updated_', 'store_file_not_defined', {id});
       return;
     }
-    const context = this.storeFilesRecord_[id];
+    const context = this.memoryContextRecord_[id];
     if (context === undefined) {
       logger.error?.('updated_', 'store_file_unloaded', {id});
       return;
@@ -175,12 +181,12 @@ export class AlwatrStore {
   unload(id: string): void {
     logger.logMethodArgs?.('unload', id);
     // TODO: this.save_(id);
-    delete this.storeFilesRecord_[id];
+    delete this.memoryContextRecord_[id];
   }
 
   deleteFile(id: string): void {
     logger.logMethodArgs?.('deleteFile', id);
-    if (id in this.storeFilesRecord_) {
+    if (id in this.memoryContextRecord_) {
       this.unload(id);
     }
     // TODO: AlwatrStore.deleteStoreFile_(this.stat(id));
