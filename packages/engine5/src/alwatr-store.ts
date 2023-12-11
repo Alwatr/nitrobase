@@ -1,3 +1,4 @@
+import {CollectionReference} from './lib/collection-reference.js';
 import {DocumentReference} from './lib/document-reference.js';
 import {logger} from './lib/logger.js';
 import {
@@ -5,7 +6,6 @@ import {
   StoreFileEncoding,
   Region,
   type StoreFileStat,
-  type DocumentContext,
   type AlwatrStoreConfig,
   type StoreFileContext,
 } from './lib/type.js';
@@ -14,41 +14,16 @@ logger.logModule?.('alwatr-store');
 
 export class AlwatrStore {
   /**
-   * Alwatr store engine major version number.
+   * Alwatr store engine version string.
    */
-  static readonly version = 5;
-
-  /**
-   * Create a new document context.
-   */
-  protected static newDocumentContext_<TDoc extends Record<string, unknown>>(
-    id: string,
-    region: Region,
-    data: TDoc,
-  ): DocumentContext<TDoc> {
-    const now = Date.now();
-    return {
-      ok: true,
-      meta: {
-        id,
-        region,
-        rev: 1,
-        updated: now,
-        created: now,
-        type: StoreFileType.document,
-        encoding: StoreFileEncoding.json,
-        version: AlwatrStore.version,
-      },
-      data,
-    };
-  }
+  static readonly version = __package_version;
 
   protected static async readStoreFile_<TData extends Record<string, unknown>>(
     stat: StoreFileStat,
   ): Promise<StoreFileContext<TData>> {
     logger.logMethodArgs?.('readStoreFile', stat.id);
-    const context = AlwatrStore.newDocumentContext_(stat.id, stat.region, {} as TData);
-    await AlwatrStore.validateStoreFile_(context);
+    const context = DocumentReference.newContext_(stat.id, stat.region, {} as TData);
+    AlwatrStore.validateStoreFile_(context);
     return context;
   }
 
@@ -60,29 +35,34 @@ export class AlwatrStore {
     logger.logProperty?.('context', context); // tmp
   }
 
-  protected static async validateStoreFile_(context: StoreFileContext<Record<string, unknown>>): Promise<void> {
+  protected static validateStoreFile_(context: StoreFileContext<Record<string, unknown>>): void {
     logger.logMethodArgs?.('_validateStoreFile', {id: context.meta});
 
     if (context.ok !== true) {
       throw new Error('store_not_ok', {cause: context});
     }
 
-    if (context.meta.version < AlwatrStore.version) {
+    if (context.meta?.ver !== AlwatrStore.version) {
       logger.accident?.('_validateStoreFile', 'store_version_incompatible', {
-        fileVersion: context.meta.version,
+        fileVersion: context.meta.ver,
         currentVersion: AlwatrStore.version,
       });
-      await AlwatrStore.migrateStoreFile_(context);
-    }
 
-    if (context.meta.version !== AlwatrStore.version) {
-      throw new Error('store_version_incompatible', {cause: {meta: context.meta}});
-    }
-  }
+      switch (context.meta?.type) {
+        case StoreFileType.document: {
+          DocumentReference.migrateContext_(context);
+          break;
+        }
 
-  protected static async migrateStoreFile_(context: StoreFileContext<Record<string, unknown>>): Promise<void> {
-    logger.logMethodArgs?.('_migrateStoreFile', {id: context.meta, version: context.meta.version});
-    // if(context.meta.version === 4) {})
+        case StoreFileType.collection: {
+          CollectionReference.migrateContext_(context);
+          break;
+        }
+
+        default:
+          throw new Error('store_file_type_not_supported', {cause: context.meta})
+      }
+    }
   }
 
   /**
@@ -105,7 +85,7 @@ export class AlwatrStore {
    */
   protected loadRootStoreDocument_(): DocumentReference<Record<string, StoreFileStat>> {
     // TODO: load root meta or make empty and save
-    const context = AlwatrStore.newDocumentContext_<Record<string, StoreFileStat>>('.store-files', Region.Secret, {});
+    const context = DocumentReference.newContext_<Record<string, StoreFileStat>>('.store-files', Region.Secret, {});
     return new DocumentReference(context, this.rootStoreUpdated_.bind(this));
   }
 
@@ -138,7 +118,7 @@ export class AlwatrStore {
     return stat;
   }
 
-  defineDoc<TDoc extends Record<string, unknown>>(
+  defineDocument<TDoc extends Record<string, unknown>>(
     config: Pick<StoreFileStat, 'id' | 'region' | 'ttl'>,
     initialData: TDoc,
   ): Promise<void> {
@@ -151,7 +131,25 @@ export class AlwatrStore {
     };
 
     this.addStoreFile_(stat);
-    return AlwatrStore.writeStoreFile_(stat, AlwatrStore.newDocumentContext_(config.id, config.region, initialData));
+    return AlwatrStore.writeStoreFile_(stat, DocumentReference.newContext_(config.id, config.region, initialData));
+  }
+
+  defineCollection<TItem extends Record<string, unknown>>(
+    config: Pick<StoreFileStat, 'id' | 'region' | 'ttl'>,
+  ): Promise<void> {
+    logger.logMethodArgs?.('defineCollection', config);
+
+    const stat: StoreFileStat = {
+      ...config,
+      type: StoreFileType.collection,
+      encoding: StoreFileEncoding.json,
+    };
+
+    this.addStoreFile_(stat);
+    return AlwatrStore.writeStoreFile_(
+      stat,
+      CollectionReference.newContext_<TItem>(config.id, config.region),
+    );
   }
 
   async doc<TDoc extends Record<string, unknown>>(id: string) {
@@ -163,7 +161,7 @@ export class AlwatrStore {
       logger.error?.('getDocument', 'document_wrong_type', stat);
       throw new Error('document_not_found', {cause: stat});
     }
-    const context = this.memoryContextRecord_[id] = await AlwatrStore.readStoreFile_<TDoc>(stat);
+    const context = (this.memoryContextRecord_[id] = await AlwatrStore.readStoreFile_<TDoc>(stat));
     return new DocumentReference(context, this.save_.bind(this));
   }
 
