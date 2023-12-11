@@ -10,6 +10,8 @@ import {
   type StoreFileContext,
 } from './lib/type.js';
 
+logger.logModule?.('alwatr-store');
+
 export class AlwatrStore {
   /**
    * Alwatr store engine major version number.
@@ -124,14 +126,16 @@ export class AlwatrStore {
   }
 
   exists(id: string): boolean {
-    logger.logMethodArgs?.('exist', id);
-    return id in this.storeFilesCollection_.get();
+    const exists = id in this.storeFilesCollection_.get();
+    logger.logMethodFull?.('exists', id, exists);
+    return exists;
   }
 
   stat(id: string): Readonly<StoreFileStat> {
-    logger.logMethodArgs?.('stat', id);
+    const stat = this.storeFilesCollection_.get()[id] ?? null;
+    logger.logMethodFull?.('stat', id, stat);
     // TODO: error store_file_not_defined
-    return this.storeFilesCollection_.get()[id] ?? null;
+    return stat;
   }
 
   defineDoc<TDoc extends Record<string, unknown>>(
