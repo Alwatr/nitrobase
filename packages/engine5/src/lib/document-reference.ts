@@ -13,6 +13,11 @@ logger.logModule?.('document-reference');
  * It's the responsibility of the Alwatr Store to save and load the document.
  *
  * @template TDoc The document data type.
+ *
+ * @example
+ * ```typescript
+ * const documentRef = alwatrStore.doc('user/order');
+ * ```
  */
 export class DocumentReference<TDoc extends Record<string, unknown> = Record<string, unknown>> {
   protected _logger = createLogger(`doc:${this.context_.meta.id.slice(0, 20)}`);
@@ -29,9 +34,14 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
   }
 
   /**
-   * Get Document's data.
+   * Retrieves the document's data.
    *
-   * @returns Document's data.
+   * @returns The document's data.
+   *
+   * @example
+   * ```typescript
+   * const documentData = documentRef.get();
+   * ```
    */
   get(): TDoc {
     this._logger.logMethod?.('get');
@@ -39,9 +49,14 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
   }
 
   /**
-   * Get Document's metadata.
+   * Retrieves the document's metadata.
    *
-   * @returns Document's metadata.
+   * @returns The document's metadata.
+   *
+   * @example
+   * ```typescript
+   * const documentMeta = documentRef.meta();
+   * ```
    */
   meta(): Readonly<StoreFileMeta> {
     this._logger.logMethod?.('meta');
@@ -49,9 +64,14 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
   }
 
   /**
-   * Set Document's data.
+   * Sets the document's data.
    *
-   * @param data New document data.
+   * @param data The new document data.
+   *
+   * @example
+   * ```typescript
+   * documentRef.set({ key: 'value' });
+   * ```
    */
   set(data: TDoc): void {
     this._logger.logMethodArgs?.('set', data);
@@ -63,7 +83,12 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
    * Update Document's data.
    * Can be used to update a part of the document.
    *
-   * @param {Partial<TDoc>} data Data to update the document with.
+   * @param data Data to update the document with.
+   *
+   * @example
+   * ```typescript
+   * documentRef.update({ key: 'updated value' });
+   * ```
    */
   update(data: Partial<TDoc>): void {
     this._logger.logMethodArgs?.('update', data);
@@ -72,9 +97,13 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
   }
 
   /**
-   * Request the Alwatr Store to save the document.
-   *
+   * Requests the Alwatr Store to save the document.
    * Saving may take some time in Alwatr Store due to the use of throttling.
+   *
+   * @example
+   * ```typescript
+   * documentRef.save();
+   * ```
    */
   save(): void {
     this._logger.logMethod?.('save');
@@ -91,9 +120,8 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
   }
 
   /**
-   * Notify the Alwatr Store (parent) that the document is updated.
-   *
-   * Alwatr Store save the document to the storage based the throttling.
+   * Notifies the Alwatr Store (parent) that the document is updated.
+   * Alwatr Store saves the document to the storage based on the throttling.
    */
   protected updated_(): void {
     this._logger.logMethod?.('_updated');
