@@ -1,30 +1,68 @@
 import {createLogger} from '@alwatr/logger';
 
 import {logger} from './logger.js';
-
-import type {DocumentContext, StoreFileMeta} from './type.js';
+import {StoreFileType, type DocumentContext, type Region, type StoreFileMeta, type StoreFileContext} from './type.js';
 
 logger.logModule?.('document-reference');
 
-/**
- * Document reference have methods to get, set, update and save the Alwatr Store Document.
- *
- * This class is dummy in saving and loading the document.
- * It's the responsibility of the Alwatr Store to save and load the document.
- *
- * @template TDoc The document data type.
- *
- * @example
- * ```typescript
- * const documentRef = alwatrStore.doc('user/order');
- * ```
- */
 export class DocumentReference<TDoc extends Record<string, unknown> = Record<string, unknown>> {
+  /**
+   * Alwatr store engine version string.
+   */
+  static readonly version = __package_version;
+
+  /**
+   * Alwatr store engine file format version number.
+   */
+  static readonly fileFormatVersion = 1;
+
+  static newContext_<TDoc extends Record<string, unknown>>(
+    id: string,
+    region: Region,
+    data: TDoc,
+  ): DocumentContext<TDoc> {
+    logger.logMethodArgs?.('doc.newContext', {id, region});
+
+    const now = Date.now();
+    return {
+      ok: true,
+      meta: {
+        id,
+        region,
+        rev: 1,
+        updated: now,
+        created: now,
+        type: StoreFileType.document,
+        ver: DocumentReference.version,
+        fv: DocumentReference.fileFormatVersion,
+      },
+      data,
+    };
+  }
+
+  static migrateContext_(context: StoreFileContext<Record<string, unknown>>): void {
+    logger.logMethodArgs?.('doc.migrateContext_', {id: context.meta.id, ver: context.meta.ver, fv: context.meta.fv});
+
+    // if (context.meta.fv === 1) migrate_to_2
+
+    if (context.meta.fv > DocumentReference.fileFormatVersion) {
+      throw new Error('store_version_incompatible', {cause: {meta: context.meta}});
+    }
+
+    if (context.meta.ver !== DocumentReference.version) {
+      context.meta.ver = DocumentReference.version;
+    }
+  }
+
   protected _logger = createLogger(`doc:${this.context_.meta.id.slice(0, 20)}`);
 
   /**
+   * Create a new document reference.
+   * Document reference have methods to get, set, update and save the AlwatrStore Document.
+   *
    * @param context_ Document's context filled from the Alwatr Store (parent).
    * @param updatedCallback_ updated callback to invoke when the document is updated from the Alwatr Store (parent).
+   * @template TDoc The document data type.
    */
   constructor(
     protected context_: DocumentContext<TDoc>,
