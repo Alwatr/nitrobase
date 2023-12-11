@@ -29,7 +29,7 @@ async function quickstart() {
   logger.logProperty?.('exists', alwatrStore.exists(docId));
 
   // Create a new document.
-  alwatrStore.defineDoc(
+  alwatrStore.defineDocument(
     {
       id: docId,
       region: Region.Public,
