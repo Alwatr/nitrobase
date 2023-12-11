@@ -25,8 +25,8 @@ async function quickstart() {
 
   logger.logProperty?.('docId', docId);
 
-  // Check document stat. return null if not exist.
-  logger.logProperty?.('stat', alwatrStore.stat(docId));
+  // Check the document exist?
+  logger.logProperty?.('exists', alwatrStore.exists(docId));
 
   // Create a new document.
   alwatrStore.defineDoc(
@@ -40,6 +40,9 @@ async function quickstart() {
       body: '',
     },
   );
+
+  // Check the document stat.
+  logger.logProperty?.('stat', alwatrStore.stat(docId));
 
   // Create new document reference of specific id.
   const myPostDoc = await alwatrStore.doc<Post>(docId);
