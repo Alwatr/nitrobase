@@ -93,7 +93,7 @@ export class AlwatrStore {
    * On storeFilesCollection has been updated.
    */
   protected rootStoreUpdated_() {
-    logger.logMethod?.('rootStoreUpdated');
+    logger.logMethod?.('rootStoreUpdated_');
     // TODO: save
   }
 
