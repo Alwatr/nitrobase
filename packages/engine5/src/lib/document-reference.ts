@@ -1,6 +1,10 @@
 import {createLogger} from '@alwatr/logger';
 
-import type {DocumentContext, StoreFileMeta} from './type';
+import { logger } from './logger.js';
+
+import type {DocumentContext, StoreFileMeta} from './type.js';
+
+logger.logModule?.('document-reference');
 
 /**
  * Document reference have methods to get, set, update and save the Alwatr Store Document.
@@ -11,7 +15,7 @@ import type {DocumentContext, StoreFileMeta} from './type';
  * @template TDoc The document data type.
  */
 export class DocumentReference<TDoc extends Record<string, unknown> = Record<string, unknown>> {
-  protected _logger = createLogger(`doc:${this.context_.meta.id.slice(0, 20)}`, true);
+  protected _logger = createLogger(`doc:${this.context_.meta.id.slice(0, 20)}`);
 
   /**
    * @param context_ Document's context filled from the Alwatr Store (parent).
@@ -52,7 +56,7 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
   set(data: TDoc): void {
     this._logger.logMethodArgs?.('set', data);
     this.context_.data = data;
-    this._updated();
+    this.updated_();
   }
 
   /**
@@ -64,7 +68,7 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
   update(data: Partial<TDoc>): void {
     this._logger.logMethodArgs?.('update', data);
     Object.assign(this.context_.data, data);
-    this._updated();
+    this.updated_();
   }
 
   /**
@@ -74,13 +78,13 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
    */
   save(): void {
     this._logger.logMethod?.('save');
-    this._updated();
+    this.updated_();
   }
 
   /**
    * Updates the document's metadata.
    */
-  _updateMeta(): void {
+  protected updateMeta_(): void {
     this._logger.logMethod?.('_updateMeta');
     this.context_.meta.updated = Date.now();
     this.context_.meta.rev++;
@@ -91,9 +95,9 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
    *
    * Alwatr Store save the document to the storage based the throttling.
    */
-  protected _updated(): void {
+  protected updated_(): void {
     this._logger.logMethod?.('_updated');
-    this._updateMeta();
+    this.updateMeta_();
     this.updatedCallback_(this.context_.meta.id);
   }
 }
