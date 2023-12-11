@@ -1,29 +1,76 @@
 import {createLogger} from '@alwatr/logger';
 
 import {logger} from './logger.js';
-
-import type {CollectionContext, CollectionItem, CollectionItemMeta, StoreFileMeta} from './type.js';
+import {
+  StoreFileType,
+  type CollectionContext,
+  type CollectionItem,
+  type CollectionItemMeta,
+  type Region,
+  type StoreFileMeta,
+  type StoreFileContext,
+} from './type.js';
 
 logger.logModule?.('collection-reference');
 
-/**
- * Collection reference have methods to get, set, update and save the Alwatr Store Collection.
- * This class is dummy in saving and loading the collection from file.
- * It's the responsibility of the Alwatr Store to save and load the collection.
- *
- * @template TItem - Items data type.
- *
- * @example
- * ```typescript
- * const collectionRef = alwatrStore.col('blog/posts');
- * ```
- */
 export class CollectionReference<TItem extends Record<string, unknown> = Record<string, unknown>> {
+  /**
+   * Alwatr store engine version string.
+   */
+  static readonly version = __package_version;
+
+  /**
+   * Alwatr store engine file format version number.
+   */
+  static readonly fileFormatVersion = 1;
+
+  static newContext_<TItem extends Record<string, unknown>>(id: string, region: Region): CollectionContext<TItem> {
+    logger.logMethodArgs?.('coll.newContext', {id, region});
+    const now = Date.now();
+    return {
+      ok: true,
+      meta: {
+        id,
+        region,
+        rev: 1,
+        updated: now,
+        created: now,
+        type: StoreFileType.collection,
+        ver: CollectionReference.version,
+        fv: CollectionReference.fileFormatVersion,
+      },
+      data: {},
+    };
+  }
+
+  static migrateContext_(context: StoreFileContext<Record<string, unknown>>): void {
+    logger.logMethodArgs?.('coll.migrateContext_', {id: context.meta.id, ver: context.meta.ver, fv: context.meta.fv});
+
+    // if (context.meta.fv === 1) migrate_to_2
+
+    if (context.meta.fv > CollectionReference.fileFormatVersion) {
+      throw new Error('store_version_incompatible', {cause: {meta: context.meta}});
+    }
+
+    if (context.meta.ver !== CollectionReference.version) {
+      context.meta.ver = CollectionReference.version;
+    }
+  }
+
   protected _logger = createLogger(`coll:${this.context_.meta.id.slice(0, 20)}`);
 
   /**
+   * Collection reference have methods to get, set, update and save the Alwatr Store Collection.
+   * This class is dummy in saving and loading the collection from file.
+   * It's the responsibility of the Alwatr Store to save and load the collection.
+   *
    * @param context_ Collection's context filled from the Alwatr Store (parent).
    * @param updatedCallback_ updated callback to invoke when the collection is updated from the Alwatr Store (parent).
+   * @template TItem - Items data type.
+   * @example
+   * ```typescript
+   * const collectionRef = alwatrStore.col('blog/posts');
+   * ```
    */
   constructor(
     protected context_: CollectionContext<TItem>,
