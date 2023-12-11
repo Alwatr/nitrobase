@@ -29,6 +29,9 @@ const watchMode = process.argv.includes('--watch');
     splitting: false,
     charset: 'utf8',
     legalComments: 'none',
+    define: {
+      __package_version: `'${packageJson.version}'`,
+    },
     ...packageJson.esbuild,
   };
 
