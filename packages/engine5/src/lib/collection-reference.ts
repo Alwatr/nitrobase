@@ -12,6 +12,11 @@ logger.logModule?.('collection-reference');
  * It's the responsibility of the Alwatr Store to save and load the collection.
  *
  * @template TItem - Items data type.
+ *
+ * @example
+ * ```typescript
+ * const collectionRef = alwatrStore.col('blog/posts');
+ * ```
  */
 export class CollectionReference<TItem extends Record<string, unknown> = Record<string, unknown>> {
   protected _logger = createLogger(`coll:${this.context_.meta.id.slice(0, 20)}`);
@@ -28,10 +33,19 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
   }
 
   /**
-   * Check Collection's item existence.
+   * Checks if an item exists in the collection.
    *
    * @param id - The ID of the item.
-   * @returns Whether the item with the given ID exists in the collection.
+   * @returns `true` if the item with the given ID exists in the collection, `false` otherwise.
+   *
+   * @example
+   * ```typescript
+   * const doesExist = collectionRef.exists('item1');
+   *
+   * if (doesExist) {
+   *    collectionRef.create('item1', { key: 'value' });
+   * }
+   * ```
    */
   exists(id: string): boolean {
     const exists = id in this.context_.data;
@@ -40,17 +54,21 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
   }
 
   /**
-   * Get Collection's metadata.
+   * Retrieves the metadata of the store file.
    *
    * @returns The metadata of the store file.
+   *
+   * @example
+   * ```typescript
+   * const metadata = collectionRef.stat();
+   * ```
    */
   stat(): Readonly<StoreFileMeta> {
     this._logger.logMethodFull?.('meta', undefined, this.context_.meta);
     return this.context_.meta;
   }
-
   /**
-   * Get Collection's item, if not exists throw an error.
+   * Retrieves an item from the collection. If the item does not exist, an error is thrown.
    *
    * @param id - The ID of the item.
    * @returns The item with the given ID.
@@ -62,7 +80,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
   }
 
   /**
-   * Get Collection's item metadata, if not exists throw an error.
+   * Retrieves an item's metadata from the collection. If the item does not exist, an error is thrown.
    *
    * @param id - The ID of the item.
    * @returns The metadata of the item with the given ID.
@@ -73,10 +91,15 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
   }
 
   /**
-   * Get Collection's item data, if not exists throw an error.
+   * Retrieves an item's data from the collection. If the item does not exist, an error is thrown.
    *
    * @param id - The ID of the item.
    * @returns The data of the item with the given ID.
+   *
+   * @example
+   * ```typescript
+   * const itemData = collectionRef.get('item1');
+   * ```
    */
   get(id: string): TItem {
     this._logger.logMethodArgs?.('get', id);
@@ -84,11 +107,15 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
   }
 
   /**
-   * Create a new item in the collection.
-   * If an item with the given ID already exists, an error will be thrown.
+   * Creates a new item in the collection. If an item with the given ID already exists, an error is thrown.
    *
    * @param id - The ID of the item to create.
    * @param initialData - The initial data of the item.
+   *
+   * @example
+   * ```typescript
+   * collectionRef.create('item1', { key: 'value' });
+   * ```
    */
   create(id: string, initialData: TItem): void {
     this._logger.logMethodArgs?.('create', {id, initialData});
@@ -106,9 +133,14 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
   }
 
   /**
-   * Delete an item from the collection.
+   * Deletes an item from the collection.
    *
    * @param id - The ID of the item to delete.
+   *
+   * @example
+   * ```typescript
+   * collectionRef.delete('item1');
+   * ```
    */
   delete(id: string): void {
     this._logger.logMethodArgs?.('delete', id);
@@ -117,11 +149,15 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
   }
 
   /**
-   * Set an item's data in the collection.
-   * Replaces the item's data with the given data.
+   * Sets an item's data in the collection. Replaces the item's data with the given data.
    *
    * @param id - The ID of the item to set.
    * @param data - The data to set for the item.
+   *
+   * @example
+   * ```typescript
+   * collectionRef.set('item1', { key: 'new value' });
+   * ```
    */
   set(id: string, data: TItem): void {
     this._logger.logMethodArgs?.('set', {id, data});
@@ -130,11 +166,15 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
   }
 
   /**
-   * Update an item in the collection.
-   * Can be used to update a part of the item.
+   * Updates an item in the collection. Can be used to update a part of the item.
    *
    * @param id - The ID of the item to update.
    * @param data - The data to update for the item.
+   *
+   * @example
+   * ```typescript
+   * collectionRef.update('item1', { key: 'updated value' });
+   * ```
    */
   update(id: string, data: Partial<TItem>): void {
     this._logger.logMethodArgs?.('update', data);
@@ -143,11 +183,15 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
   }
 
   /**
-   * Request the Alwatr Store to save the collection.
-   *
+   * Requests the Alwatr Store to save the collection.
    * Saving may take some time in Alwatr Store due to the use of throttling.
    *
    * @param id - The ID of the item to save.
+   *
+   * @example
+   * ```typescript
+   * collectionRef.save('item1');
+   * ```
    */
   save(id: string): void {
     this._logger.logMethodArgs?.('save', id);
@@ -155,7 +199,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
   }
 
   /**
-   * Update the collection's metadata.
+   * Updates the collection's metadata.
    *
    * @param id - The ID of the item to update.
    */
@@ -172,9 +216,8 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
   }
 
   /**
-   * Notify the Alwatr Store (parent) that the collection is updated.
-   *
-   * Alwatr Store save the collection to the storage based the throttling.
+   * Notifies the Alwatr Store (parent) that the collection is updated.
+   * Alwatr Store saves the collection to the storage based on the throttling.
    *
    * @param id - The ID of the item to update.
    */
