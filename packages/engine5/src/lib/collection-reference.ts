@@ -114,6 +114,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
     this._logger.logMethodFull?.('meta', undefined, this.context_.meta);
     return this.context_.meta;
   }
+
   /**
    * Retrieves an item from the collection. If the item does not exist, an error is thrown.
    *
