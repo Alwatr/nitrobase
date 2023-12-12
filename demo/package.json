@@ -6,6 +6,7 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "d": "yarn run build && ALWATR_DEBUG=1 yarn node",
     "b": "yarn run build",
     "build": "tsc --build"
   },
