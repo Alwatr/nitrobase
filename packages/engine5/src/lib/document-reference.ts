@@ -1,7 +1,7 @@
 import {createLogger} from '@alwatr/logger';
 
 import {logger} from './logger.js';
-import {StoreFileType, type DocumentContext, type Region, type StoreFileMeta, type StoreFileContext} from './type.js';
+import {StoreFileType, type DocumentContext, type Region, type StoreFileMeta, type StoreFileContext} from '../type.js';
 
 logger.logModule?.('document-reference');
 

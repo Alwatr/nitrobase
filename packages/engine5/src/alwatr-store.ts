@@ -9,7 +9,7 @@ import {
   type AlwatrStoreConfig,
   type StoreFileContext,
   type CollectionItem,
-} from './lib/type.js';
+} from './type.js';
 
 logger.logModule?.('alwatr-store');
 
