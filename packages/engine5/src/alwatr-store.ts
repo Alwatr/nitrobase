@@ -114,6 +114,7 @@ export class AlwatrStore {
    *   rootPath: './db',
    *   saveDebounce: 1000,
    * });
+   * ```
    */
   constructor(readonly config: AlwatrStoreConfig) {
     logger.logMethodArgs?.('new', config);
@@ -160,6 +161,7 @@ export class AlwatrStore {
    * @example
    * ```typescript
    * const exists = await alwatrStore.exists('user1/profile');
+   * ```
    */
   exists(id: string): boolean {
     const exists = id in this.storeFilesCollection_.get();
@@ -178,6 +180,7 @@ export class AlwatrStore {
    * const stat = alwatrStore.stat('user1/orders');
    *
    * console.log(stat.type); // document
+   * ```
    */
   stat(id: string): Readonly<StoreFileStat> {
     const stat = this.storeFilesCollection_.get()[id] ?? null;
@@ -203,6 +206,7 @@ export class AlwatrStore {
    *   name: 'Copilot',
    *   email: 'copilot@github.com',
    * });
+   * ```
    */
   defineDocument<TDoc extends Record<string, unknown>>(
     config: Pick<StoreFileStat, 'id' | 'region' | 'ttl'>,
@@ -232,6 +236,7 @@ export class AlwatrStore {
    *   region: Region.PerUser,
    *   ttl: StoreFileTTL.medium,
    * });
+   * ```
    */
   defineCollection(config: Pick<StoreFileStat, 'id' | 'region' | 'ttl'>): Promise<void> {
     logger.logMethodArgs?.('defineCollection', config);
@@ -258,6 +263,7 @@ export class AlwatrStore {
    * const doc = await alwatrStore.doc<Order>('user1/profile');
    *
    * doc.update({name: 'Copilot2'});
+   * ```
    */
   async doc<TDoc extends Record<string, unknown>>(id: string): Promise<DocumentReference<TDoc>> {
     logger.logMethodArgs?.('doc', id);
@@ -282,6 +288,7 @@ export class AlwatrStore {
    * const collection = await alwatrStore.collection<Order>('user1/orders');
    *
    * collection.create({name: 'order2'});
+   * ```
    */
   async collection<TItem extends Record<string, unknown>>(id: string): Promise<CollectionReference<TItem>> {
     logger.logMethodArgs?.('collection', id);
@@ -324,6 +331,7 @@ export class AlwatrStore {
    * @example
    * ```typescript
    * alwatrStore.unload('user1/orders');
+   * ```
    */
   unload(id: string): void {
     logger.logMethodArgs?.('unload', id);
@@ -341,6 +349,7 @@ export class AlwatrStore {
    * alwatrStore.deleteFile('user1/orders');
    *
    * alwatrStore.exists('user1/orders'); // false
+   * ```
    */
   deleteFile(id: string): void {
     logger.logMethodArgs?.('deleteFile', id);
