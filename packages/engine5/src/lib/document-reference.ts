@@ -16,6 +16,16 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
    */
   static readonly fileFormatVersion = 1;
 
+  /**
+   * Creates a new empty document context.
+   *
+   * @param id the document id.
+   * @param region the document region.
+   * @param data the document data.
+   * @template TDoc The document data type.
+   *
+   * @returns A new document context.
+   */
   static newContext_<TDoc extends Record<string, unknown>>(
     id: string,
     region: Region,
@@ -40,6 +50,11 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
     };
   }
 
+  /**
+   * Migrate the document context to the latest.
+   *
+   * @param context document context
+   */
   static migrateContext_(context: StoreFileContext<Record<string, unknown>>): void {
     logger.logMethodArgs?.('doc.migrateContext_', {id: context.meta.id, ver: context.meta.ver, fv: context.meta.fv});
 
