@@ -1,6 +1,6 @@
-import { existsSync } from 'node:fs';
-import { copyFile, mkdir, readFile, rename, writeFile } from 'node:fs/promises';
-import { dirname } from 'node:path';
+import {existsSync} from 'node:fs';
+import {copyFile, mkdir, readFile, rename, writeFile} from 'node:fs/promises';
+import {dirname} from 'node:path';
 
 import {logger} from './logger.js';
 
@@ -64,7 +64,6 @@ export async function readJsonFile(path: string): Promise<unknown> {
   return data;
 }
 
-
 /**
  * Enhanced write json file.
  *
@@ -74,7 +73,7 @@ export async function readJsonFile(path: string): Promise<unknown> {
 export async function writeJsonFile(
   path: string,
   data: unknown,
-  existFile: 'replace' | 'copy' | 'rename' = 'rename',
+  existFile: 'replace' | 'copy' | 'rename',
 ): Promise<void> {
   logger.logMethodArgs?.('writeJsonFile', path);
 
