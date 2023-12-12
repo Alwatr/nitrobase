@@ -24,6 +24,15 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
    */
   static readonly fileFormatVersion = 1;
 
+  /**
+   * Creates a new empty collection context.
+   *
+   * @param id the collection id.
+   * @param region the collection region.
+   * @template TItem The collection item data type.
+   *
+   * @returns A new collection context.
+   */
   static newContext_<TItem extends Record<string, unknown>>(id: string, region: Region): CollectionContext<TItem> {
     logger.logMethodArgs?.('coll.newContext', {id, region});
     const now = Date.now();
@@ -43,6 +52,11 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
     };
   }
 
+  /**
+   * Migrate the collection context to the latest.
+   *
+   * @param context collection context
+   */
   static migrateContext_(context: StoreFileContext<Record<string, unknown>>): void {
     logger.logMethodArgs?.('coll.migrateContext_', {id: context.meta.id, ver: context.meta.ver, fv: context.meta.fv});
 
