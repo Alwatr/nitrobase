@@ -1,12 +1,12 @@
 import {createLogger} from '@alwatr/logger';
 
-import {AlwatrStore} from './alwatr-store';
-import {Region, StoreFileTTL} from './lib/type';
+import {AlwatrStore} from './alwatr-store.js';
+import {Region, StoreFileTTL} from './lib/type.js';
 
 const logger = createLogger('AlwatrStore/Demo', true);
 logger.banner('AlwatrStore/Demo');
 
-// Create a new storage instance
+// Create a new store instance
 const alwatrStore = new AlwatrStore({
   rootPath: './db',
   saveDebounce: 5_000, // for demo
@@ -19,8 +19,6 @@ interface Post {
 }
 
 async function quickstart() {
-  // Obtain a document reference.
-
   const docId = 'posts/intro-to-alwatr-store';
 
   logger.logProperty?.('docId', docId);
@@ -28,7 +26,7 @@ async function quickstart() {
   // Check the document exist?
   logger.logProperty?.('exists', alwatrStore.exists(docId));
 
-  // Create a new document.
+  // Define a new document store file.
   alwatrStore.defineDocument(
     {
       id: docId,
@@ -45,27 +43,27 @@ async function quickstart() {
   logger.logProperty?.('stat', alwatrStore.stat(docId));
 
   // Create new document reference of specific id.
-  const myPostDoc = await alwatrStore.doc<Post>(docId);
+  const myPost = await alwatrStore.doc<Post>(docId);
 
   // Read the document meta information.
-  logger.logProperty?.('doc.meta', myPostDoc.meta());
+  logger.logProperty?.('doc.meta', myPost.meta());
 
   // Enter new data into the document.
-  myPostDoc.set({
-    title: 'Welcome to Alwatr Storage',
+  myPost.set({
+    title: 'Welcome to Alwatr Store',
     body: 'This is a amazing content',
   });
 
   // Read the document.
-  logger.logProperty?.('context', myPostDoc.get());
+  logger.logProperty?.('context', myPost.get());
 
   // Update an existing document.
-  myPostDoc.update({
-    body: 'My first AlwatrStore app',
+  myPost.update({
+    body: 'My first AlwatrStore Document',
   });
-  logger.logProperty?.('context', myPostDoc.get());
+  logger.logProperty?.('context', myPost.get());
 
-  logger.logProperty?.('doc.meta', myPostDoc.meta());
+  logger.logProperty?.('doc.meta', myPost.meta());
 
   // Unload the document from memory.
   alwatrStore.unload(docId);
