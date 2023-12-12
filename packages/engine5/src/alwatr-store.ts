@@ -8,6 +8,7 @@ import {
   type StoreFileStat,
   type AlwatrStoreConfig,
   type StoreFileContext,
+  type CollectionItem,
 } from './lib/type.js';
 
 logger.logModule?.('alwatr-store');
@@ -60,7 +61,7 @@ export class AlwatrStore {
         }
 
         default:
-          throw new Error('store_file_type_not_supported', {cause: context.meta})
+          throw new Error('store_file_type_not_supported', {cause: context.meta});
       }
     }
   }
@@ -134,9 +135,7 @@ export class AlwatrStore {
     return AlwatrStore.writeStoreFile_(stat, DocumentReference.newContext_(config.id, config.region, initialData));
   }
 
-  defineCollection<TItem extends Record<string, unknown>>(
-    config: Pick<StoreFileStat, 'id' | 'region' | 'ttl'>,
-  ): Promise<void> {
+  defineCollection(config: Pick<StoreFileStat, 'id' | 'region' | 'ttl'>): Promise<void> {
     logger.logMethodArgs?.('defineCollection', config);
 
     const stat: StoreFileStat = {
@@ -146,23 +145,32 @@ export class AlwatrStore {
     };
 
     this.addStoreFile_(stat);
-    return AlwatrStore.writeStoreFile_(
-      stat,
-      CollectionReference.newContext_<TItem>(config.id, config.region),
-    );
+    return AlwatrStore.writeStoreFile_(stat, CollectionReference.newContext_(config.id, config.region));
   }
 
-  async doc<TDoc extends Record<string, unknown>>(id: string) {
-    logger.logMethodArgs?.('getDocument', id);
-
+  async doc<TDoc extends Record<string, unknown>>(id: string): Promise<DocumentReference<TDoc>> {
+    logger.logMethodArgs?.('doc', id);
     const stat = this.stat(id);
     if (stat == null) throw new Error('document_not_found', {cause: {id}});
     if (stat.type != StoreFileType.document) {
-      logger.error?.('getDocument', 'document_wrong_type', stat);
+      logger.error?.('doc', 'document_wrong_type', stat);
       throw new Error('document_not_found', {cause: stat});
     }
     const context = (this.memoryContextRecord_[id] = await AlwatrStore.readStoreFile_<TDoc>(stat));
     return new DocumentReference(context, this.save_.bind(this));
+  }
+
+  async collection<TItem extends Record<string, unknown>>(id: string): Promise<CollectionReference<TItem>> {
+    logger.logMethodArgs?.('collection', id);
+    const stat = this.stat(id);
+    if (stat == null) throw new Error('collection_not_found', {cause: {id}});
+    if (stat.type != StoreFileType.collection) {
+      logger.error?.('collection', 'collection_wrong_type', stat);
+      throw new Error('collection_not_found', {cause: stat});
+    }
+    const context = (this.memoryContextRecord_[id] =
+      await AlwatrStore.readStoreFile_<Record<string, CollectionItem<TItem>>>(stat));
+    return new CollectionReference(context, this.save_.bind(this));
   }
 
   protected async save_(id: string): Promise<void> {
