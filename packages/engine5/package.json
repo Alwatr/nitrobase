@@ -53,6 +53,7 @@
     "w": "yarn run watch",
     "c": "yarn run clean",
     "cb": "run-s clean build",
+    "d": "yarn run build && ALWATR_DEBUG=1 yarn node",
     "build": "run-p -l 'build:*'",
     "build:es": "yarn node ./esbuild.mjs",
     "build:ts": "tsc --build --preserveWatchOutput",
