@@ -88,7 +88,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
    */
   constructor(
     protected context_: CollectionContext<TItem>,
-    protected updatedCallback_: (id: string) => void,
+    protected updatedCallback_: (id: string, context: CollectionContext<TItem>) => void,
   ) {
     this._logger.logMethodArgs?.('new', context_.meta.id);
   }
@@ -286,6 +286,6 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
   protected updated_(id?: string): void {
     this._logger.logMethod?.('_updated');
     this.updateMeta_(id);
-    this.updatedCallback_(this.context_.meta.id);
+    this.updatedCallback_(this.context_.meta.id, this.context_);
   }
 }
