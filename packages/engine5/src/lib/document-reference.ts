@@ -81,7 +81,7 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
    */
   constructor(
     protected context_: DocumentContext<TDoc>,
-    protected updatedCallback_: (id: string) => void,
+    protected updatedCallback_: (id: string, context: DocumentContext<TDoc>) => void,
   ) {
     this._logger.logMethodArgs?.('new', context_.meta.id);
   }
@@ -179,6 +179,6 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
   protected updated_(): void {
     this._logger.logMethod?.('_updated');
     this.updateMeta_();
-    this.updatedCallback_(this.context_.meta.id);
+    this.updatedCallback_(this.context_.meta.id, this.context_);
   }
 }
