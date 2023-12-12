@@ -1,7 +1,7 @@
 import {createLogger} from '@alwatr/logger';
 
 import {AlwatrStore} from './alwatr-store.js';
-import {Region, StoreFileTTL} from './lib/type.js';
+import {Region, StoreFileTTL} from './type.js';
 
 const logger = createLogger('AlwatrStore/Demo', true);
 logger.banner('AlwatrStore/Demo');

@@ -21,7 +21,7 @@ const watchMode = process.argv.includes('--watch');
     target: 'es2020',
     format: 'esm',
     minify: true,
-    mangleProps: /_$/, // end with underscore
+    // mangleProps: /_$/, // end with underscore
     treeShaking: true,
     sourcemap: false,
     sourcesContent: false,

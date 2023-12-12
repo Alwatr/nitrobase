@@ -9,7 +9,7 @@ import {
   type Region,
   type StoreFileMeta,
   type StoreFileContext,
-} from './type.js';
+} from '../type.js';
 
 logger.logModule?.('collection-reference');
 
