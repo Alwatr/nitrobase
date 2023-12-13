@@ -83,9 +83,14 @@ export enum StoreFileEncoding {
  */
 export enum StoreFileTTL {
   /**
-   * Store file will be removed from memory after 20 second of inactivity.
+   * Store file will be removed from memory immediately after it is read.
    */
-  veryShort = 20_000,
+  zero = 0,
+
+  /**
+   * Store file will be removed from memory after 1 minutes of inactivity.
+   */
+  veryShort = 60_000,
 
   /**
    * Store file will be removed from memory after 5 minutes of inactivity.
@@ -93,14 +98,14 @@ export enum StoreFileTTL {
   short = 300_000,
 
   /**
-   * Store file will be removed from memory after 30 minutes of inactivity.
+   * Store file will be removed from memory after 1 hour of inactivity.
    */
-  medium = 1_800_000,
+  medium = 3_600_000,
 
   /**
-   * Store file will be removed from memory after 4 hour of inactivity.
+   * Store file will be removed from memory after 6 hour of inactivity.
    */
-  long = 14_400_000,
+  long = 21_600_000,
 
   /**
    * Store file will be removed from memory after 24 hour of inactivity.
@@ -198,6 +203,11 @@ export interface StoreFileMeta {
    * The Unix timestamp (in milliseconds since the epoch) for when the store file was created.
    */
   created: number;
+
+  /**
+   * Last auto increment id.
+   */
+  lastAutoId: number;
 }
 
 /**
@@ -244,7 +254,7 @@ export interface CollectionItemMeta {
   /**
    * The unique identifier for the collection item.
    */
-  id: string;
+  id: string | number;
 
   /**
    * The revision number for the collection item.
@@ -283,5 +293,5 @@ export interface CollectionItem<TItem> {
  * Collection item context type.
  */
 export type CollectionContext<TItem extends Record<string, unknown> = Record<string, unknown>> = StoreFileContext<
-  Record<string, CollectionItem<TItem>>
+  Record<string | number, CollectionItem<TItem>>
 >;
