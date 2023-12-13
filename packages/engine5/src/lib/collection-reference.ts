@@ -372,8 +372,8 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
    */
   protected nextAutoIncrementId_(): number {
     do {
-      this.context_.meta.lastAutoId++;
-    } while (this.context_.meta.lastAutoId in this.context_.data);
-    return this.context_.meta.lastAutoId;
+      this.context_.meta.lastAutoId!++;
+    } while (this.context_.meta.lastAutoId! in this.context_.data);
+    return this.context_.meta.lastAutoId!;
   }
 }
