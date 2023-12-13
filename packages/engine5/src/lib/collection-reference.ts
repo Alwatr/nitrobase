@@ -269,8 +269,10 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
   }
 
   /**
-   * Retrieves the IDs of all items in the collection.
-   * @returns The IDs of all items in the collection.
+   * Retrieves the IDs of all items in the collection in array.
+   * Impact performance if the collection is large, use `ids()` instead.
+   *
+   * @returns Array of IDs of all items in the collection.
    * @example
    * ```typescript
    * const ids = collectionRef.keys();
@@ -278,6 +280,57 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
    */
   keys(): string[] {
     return Object.keys(this.context_.data);
+  }
+
+  /**
+   * Retrieves all items in the collection in array.
+   * Impact performance if the collection is large, use `items()` instead.
+   *
+   * @returns Array of all items in the collection.
+   * @example
+   * ```typescript
+   * const items = collectionRef.values();
+   * console.log('meta: %o', items[0].meta);
+   * console.log('data: %o', items[0].data);
+   * ```
+   */
+  values(): CollectionItem<TItem>[] {
+    return Object.values(this.context_.data);
+  }
+
+  /**
+   * Retrieves the IDs of all items in the collection.
+   * Use this method instead of `keys()` if the collection is large.
+   * This method is a generator and can be used in `for...of` loops.
+   * @returns Generator of IDs of all items in the collection.
+   * @example
+   * ```typescript
+   * for (const id of collectionRef.ids()) {
+   *   const doc = collectionRef.get(id);
+   * }
+   * ```
+   */
+  *ids(): Generator<string, void, void> {
+    for (const id in this.context_.data) {
+      yield id;
+    }
+  }
+
+  /**
+   * Retrieves all items in the collection.
+   * Use this method instead of `values()` if the collection is large.
+   * This method is a generator and can be used in `for...of` loops.
+   * @returns Generator of all items in the collection.
+   * @example
+   * ```typescript
+   * for (const item of collectionRef.items()) {
+   *  console.log(item.data);
+   * }
+   */
+  *items(): Generator<CollectionItem<TItem>, void, void> {
+    for (const id in this.context_.data) {
+      yield this.context_.data[id];
+    }
   }
 
   /**
@@ -298,8 +351,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
   }
 
   /**
-   * Notifies the Alwatr Store (parent) that the collection is updated.
-   * Alwatr Store saves the collection to the storage based on the throttling.
+   * Updates the collection's metadata and invokes the updated callback.
    *
    * @param id - The ID of the item to update.
    */
@@ -309,6 +361,15 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
     this.updatedCallback_(this.context_.meta.id, this.context_);
   }
 
+  /**
+   * Generates the next auto increment ID.
+   *
+   * @returns The next auto increment ID.
+   * @example
+   * ```typescript
+   * const nextId = this.nextAutoIncrementId_();
+   * ```
+   */
   protected nextAutoIncrementId_(): number {
     do {
       this.context_.meta.lastAutoId++;
