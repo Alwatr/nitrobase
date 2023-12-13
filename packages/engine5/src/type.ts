@@ -28,19 +28,14 @@ export enum Region {
   Authenticated = 'a',
 
   /**
-   * Store file location specific to each user id. Can be accessed using the user token.
+   * Store file location that can be accessed by super admin only.
    */
-  PerUser = 'u',
+  SuperAdmin = 'sa',
 
   /**
-   * Store file location specific to each device id.
+   * Store file location specific to each owner id.
    */
-  PerDevice = 'd',
-
-  /**
-   * Store file location specific to each token.
-   */
-  PerToken = 't',
+  PerOwner = 'o',
 
   /**
    * Private store file location. Cannot be accessed publicly and must be directly accessed by the admin API only.
@@ -128,18 +123,25 @@ export interface StoreFileStat {
   id: string;
 
   /**
+   * The region where the store file is located.
+   * @see {@link Region}
+   */
+  region: Region;
+
+  /**
+   * The owner of the store file.
+   * If the region is `Region.PerOwner` then this is the user id, device id, or token id etc.
+   * @see {@link Region}
+   *
+   */
+  ownerId?: string;
+
+  /**
    * The type of the store file.
    *
    * @see {@link StoreFileType}
    */
   type: StoreFileType;
-
-  /**
-   * The region where the store file is located.
-   *
-   * @see {@link Region}
-   */
-  region: Region;
 
   /**
    * The encoding used for the store file.
@@ -203,6 +205,14 @@ export interface StoreFileMeta {
    * The Unix timestamp (in milliseconds since the epoch) for when the store file was created.
    */
   created: number;
+
+  /**
+   * The owner of the store file.
+   * If the region is `Region.PerOwner` then this is the user id, device id, or token id etc.
+   * @see {@link Region}
+   *
+   */
+  ownerId?: string;
 
   /**
    * Last auto increment id.
