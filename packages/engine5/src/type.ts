@@ -207,7 +207,7 @@ export interface StoreFileMeta {
   /**
    * Last auto increment id.
    */
-  lastAutoId: number;
+  lastAutoId?: number;
 }
 
 /**
