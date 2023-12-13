@@ -64,6 +64,17 @@ export class AlwatrStore {
           throw new Error('store_file_type_not_supported', {cause: context.meta});
       }
     }
+
+    if (
+      context.meta.region === Region.PerUser ||
+      context.meta.region === Region.PerToken ||
+      context.meta.region === Region.PerDevice
+    ) {
+      if (context.meta.ownerId === undefined) {
+        logger.accident('_validateStoreFile', 'store_owner_id_not_defined', context.meta);
+        throw new Error('store_owner_id_not_defined', {cause: context.meta});
+      }
+    }
   }
 
   /**
@@ -206,7 +217,7 @@ export class AlwatrStore {
     if (this.exists(id) === false) throw new Error('document_not_found', {cause: {id}});
     const stat = this.stat(id);
     if (stat.type != StoreFileType.document) {
-      logger.error?.('doc', 'document_wrong_type', stat);
+      logger.accident('doc', 'document_wrong_type', stat);
       throw new Error('document_not_found', {cause: stat});
     }
     return new DocumentReference((await this.getContext_(id)) as DocumentContext<TDoc>, this.writeContext_.bind(this));
@@ -230,7 +241,7 @@ export class AlwatrStore {
     if (this.exists(id) === false) throw new Error('collection_not_found', {cause: {id}});
     const stat = this.stat(id);
     if (stat.type != StoreFileType.collection) {
-      logger.error?.('collection', 'collection_wrong_type', stat);
+      logger.accident('collection', 'collection_wrong_type', stat);
       throw new Error('collection_not_found', {cause: stat});
     }
     return new CollectionReference(
@@ -329,7 +340,7 @@ export class AlwatrStore {
     else {
       context = this.memoryContextRecord_[id];
       if (context === undefined) {
-        logger.error?.('writeContext_', 'store_file_unloaded', {id});
+        logger.accident('writeContext_', 'store_file_unloaded', {id});
         throw new Error('store_file_unloaded', {cause: {id}});
       }
     }
@@ -354,12 +365,10 @@ export class AlwatrStore {
    * ```
    */
   protected storeFilePath_(stat: StoreFileStat): string {
-    const regionPath = stat.region;
-
-    if (stat.region === Region.PerUser) {
-      // TODO:
+    let regionPath: string = stat.region;
+    if (stat.ownerId !== undefined) {
+      regionPath += `/${stat.ownerId.slice(0, 3)}/${stat.ownerId}`;
     }
-
     return resolve(this.config.rootPath, regionPath, `${stat.id}.${stat.type}.${stat.encoding}`);
   }
 
