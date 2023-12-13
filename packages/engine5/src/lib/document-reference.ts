@@ -61,7 +61,8 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
     // if (context.meta.fv === 1) migrate_to_2
 
     if (context.meta.fv > DocumentReference.fileFormatVersion) {
-      throw new Error('store_version_incompatible', {cause: {meta: context.meta}});
+      logger.accident('doc.migrateContext_', 'store_version_incompatible', context.meta);
+      throw new Error('store_version_incompatible', {cause: context.meta});
     }
 
     if (context.meta.ver !== DocumentReference.version) {

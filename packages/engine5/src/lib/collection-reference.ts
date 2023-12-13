@@ -64,7 +64,8 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
     // if (context.meta.fv === 1) migrate_to_2
 
     if (context.meta.fv > CollectionReference.fileFormatVersion) {
-      throw new Error('store_version_incompatible', {cause: {meta: context.meta}});
+      logger.accident('coll.migrateContext_', 'store_version_incompatible', context.meta);
+      throw new Error('store_version_incompatible', {cause: context.meta});
     }
 
     if (context.meta.ver !== CollectionReference.version) {
