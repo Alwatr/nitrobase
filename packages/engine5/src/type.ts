@@ -33,9 +33,19 @@ export enum Region {
   SuperAdmin = 'sa',
 
   /**
-   * Store file location specific to each owner id.
+   * Store file location specific to each user id. Can be accessed using the user token.
    */
-  PerOwner = 'o',
+  PerUser = 'u',
+
+  /**
+   * Store file location specific to each device id.
+   */
+  PerDevice = 'd',
+
+  /**
+   * Store file location specific to each token.
+   */
+  PerToken = 't',
 
   /**
    * Private store file location. Cannot be accessed publicly and must be directly accessed by the admin API only.
@@ -130,7 +140,7 @@ export interface StoreFileStat {
 
   /**
    * The owner of the store file.
-   * If the region is `Region.PerOwner` then this is the user id, device id, or token id etc.
+   * If the region is `Region.PerX` then this is the user id, device id, or token id etc.
    * @see {@link Region}
    *
    */
@@ -208,7 +218,7 @@ export interface StoreFileMeta {
 
   /**
    * The owner of the store file.
-   * If the region is `Region.PerOwner` then this is the user id, device id, or token id etc.
+   * If the region is `Region.PerX` then this is the user id, device id, or token id etc.
    * @see {@link Region}
    *
    */
