@@ -1,3 +1,5 @@
+export type MaybePromise<T> = T | Promise<T>;
+
 export interface AlwatrStoreConfig {
   /**
    * The root path of the storage.
