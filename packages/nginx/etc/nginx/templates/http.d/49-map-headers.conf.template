@@ -6,18 +6,18 @@
 
 # extract $user_id_location from first 3 characters of `user-id` header.
 map $http_user_id $user_id_location {
-  ~^(?<prefix>.{3}) $storeRegionPerUser/$prefix/$http_user_id;
+  "~^(?<prefix>.{3})" $storeRegionPerUser/$prefix/$http_user_id;
   default '';
 }
 
 # extract $user_token_location from first 3 characters of `user-token` header.
 map $http_user_token $user_token_location {
-  ~^(?<prefix>.{3}) $storeRegionPerToken/$prefix/$http_user_token;
+  "~^(?<prefix>.{3})" $storeRegionPerToken/$prefix/$http_user_token;
   default '';
 }
 
 # extract $device_id_location from first 3 characters of `device-id` header.
 map $http_user_device $user_device_location {
-  ~^(?<prefix>.{3}) $storeRegionPerDevice/$prefix/$http_user_device;
+  "~^(?<prefix>.{3})" $storeRegionPerDevice/$prefix/$http_user_device;
   default '';
 }
