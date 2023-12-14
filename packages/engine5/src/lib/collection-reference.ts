@@ -92,7 +92,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
     protected context_: CollectionContext<TItem>,
     protected updatedCallback_: (id: string, context: CollectionContext<TItem>) => void,
   ) {
-    this._logger.logMethodArgs?.('new', context_.meta.id);
+    this._logger.logMethodArgs?.('new', context_.meta);
   }
 
   /**
@@ -139,7 +139,10 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
    */
   protected item_(id: string | number): CollectionItem<TItem> {
     const item = this.context_.data[id];
-    if (item === undefined) throw new Error(`collection_item_not_found`, {cause: {id}});
+    if (item === undefined) {
+      this._logger.accident('item_', `collection_item_not_found`, {id});
+      throw new Error(`collection_item_not_found`, {cause: {id}});
+    }
     return item;
   }
 
@@ -183,7 +186,10 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
    */
   create(id: string | number, data: TItem): void {
     this._logger.logMethodArgs?.('create', {id, data});
-    if (id in this.context_.data) throw new Error(`collection_item_exist`, {cause: {id}});
+    if (this.exists(id)) {
+      this._logger.accident('create', `collection_item_exist`, {id});
+      throw new Error(`collection_item_exist`, {cause: {id}});
+    }
     this.context_.data[id] = {
       meta: {
         id,

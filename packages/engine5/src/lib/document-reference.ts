@@ -84,7 +84,7 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
     protected context_: DocumentContext<TDoc>,
     protected updatedCallback_: (id: string, context: DocumentContext<TDoc>) => void,
   ) {
-    this._logger.logMethodArgs?.('new', context_.meta.id);
+    this._logger.logMethodArgs?.('new', context_.meta);
   }
 
   /**
