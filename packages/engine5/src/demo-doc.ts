@@ -29,7 +29,7 @@ async function quickstart() {
 
   if (!exists) {
     // Define a new document store file.
-    alwatrStore.defineDocument(
+    await alwatrStore.defineDocument(
       {
         id: docId,
         region: Region.Public,
