@@ -1,59 +1,88 @@
 import {createLogger} from '@alwatr/logger';
-import {AlwatrStore, type AlwatrDocumentRefrence} from '@alwatr/store-engine';
+import {AlwatrStore, Region, StoreFileTTL} from '@alwatr/store-engine';
 
-const logger = createLogger('AlwatrStoreDemo', true);
-logger.banner('AlwatrStoreDemo');
+const logger = createLogger('AlwatrStore/Demo', true);
+logger.banner('AlwatrStore/Demo');
 
 // Create a new storage instance
 const alwatrStore = new AlwatrStore({
-  pathPrefix: 'db',
-  saveDebounce: 100,
+  rootPath: './db',
+  saveDebounce: 5_000, // for demo
 });
 
-interface DocumentDataType {
+interface Post {
+  [P: string]: string;
   title: string;
   body: string;
 }
 
 async function quickstart() {
-  // Obtain a document reference.
+  const postsCollectionId = 'post-list';
 
-  const collectionPath = {
-    id: 'post-list',
-    region: 'public',
-  };
+  logger.logProperty?.('collectionId', postsCollectionId);
 
-  logger.logProperty?.('collectionPath', collectionPath);
+  // Check the collection exist?
+  const exists = alwatrStore.exists(postsCollectionId);
+  logger.logProperty?.('exists', exists);
 
-  logger.logProperty?.('stat(collPath)', alwatrStore.stat(collectionPath));
+  if (exists) {
+    // Delete the collection store file.
+    alwatrStore.deleteFile(postsCollectionId);
+    logger.logOther?.('The collection store file deleted');
+  }
 
-  const collectionRef = alwatrStore.collection<DocumentDataType>(collectionPath);
-
-  processDocument(collectionRef.document('post-1'));
-  processDocument(collectionRef.document('post-2'));
-
-  // Delete the document.
-  alwatrStore.unloadCollection(collectionRef.collectionPath);
-  logger.logOther('Unload the collection from ram');
-}
-
-function processDocument(documentRef: AlwatrDocumentRefrence<DocumentDataType>) {
-  // Enter new data into the document.
-  let documentContext = documentRef.set({
-    title: 'Welcome to Alwatr Storage',
-    body: 'Hello World',
+  // Create a new collection.
+  await alwatrStore.defineCollection({
+    id: postsCollectionId,
+    region: Region.Public,
+    ttl: StoreFileTTL.veryShort, // for demo
   });
-  logger.logOther?.('Entered new data into the document', documentContext);
 
-  // Update an existing document.
-  documentContext = documentRef.update({
-    body: 'My first AlwatrStore app',
+  // Check the collection stat.
+  logger.logProperty?.('stat', alwatrStore.stat(postsCollectionId));
+
+  // Get a collection reference.
+  const postsCollection = await alwatrStore.collection<Post>(postsCollectionId);
+
+  const post1Id = 'intro-to-alwatr-store';
+  const post2Id = 'intro-to-alwatr-collections';
+
+  // Create new new post (new item in the collection).
+  postsCollection.create(post1Id, {
+    title: 'Welcome to Alwatr Store',
+    body: 'This is a amazing content',
   });
-  logger.logOther?.('Updated an existing document', documentContext);
 
-  // Read the document.
-  documentContext = documentRef.get();
-  logger.logOther?.('Read the document', documentContext);
+  // Read the collection item meta information.
+  logger.logProperty?.('collection.meta', postsCollection.meta(post1Id));
+
+  // Read the collection item.
+  logger.logProperty?.('context1', postsCollection.get(post1Id));
+
+  // Update an existing collection item.
+  postsCollection.update(post1Id, {
+    body: 'My first AlwatrStore Collection',
+  });
+  logger.logProperty?.('context', postsCollection.get(post1Id));
+
+  // post 2
+
+  postsCollection.create(post2Id, {
+    title: 'Welcome to Alwatr Collections',
+    body: 'This is a amazing content',
+  });
+  logger.logProperty?.('context2', postsCollection.get(post1Id));
+
+  logger.logProperty?.('collection.meta1', postsCollection.meta(post1Id));
+  logger.logProperty?.('collection.meta2', postsCollection.meta(post2Id));
+
+  // Unload the collection from memory.
+  alwatrStore.unload(postsCollectionId);
+  logger.logOther?.('The collection unloaded from ram');
+
+  // Delete the collection store file.
+  // alwatrStore.deleteFile(postsCollectionId);
+  logger.logOther?.('The collection store file deleted');
 }
 
 quickstart();
