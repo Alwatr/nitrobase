@@ -24,14 +24,17 @@ async function quickstart() {
   logger.logProperty?.('collectionId', postsCollectionId);
 
   // Check the collection exist?
-  logger.logProperty?.('exists', alwatrStore.exists(postsCollectionId));
+  const exists = alwatrStore.exists(postsCollectionId);
+  logger.logProperty?.('exists', exists);
 
-  // Create a new collection.
-  alwatrStore.defineCollection({
-    id: postsCollectionId,
-    region: Region.Public,
-    ttl: StoreFileTTL.veryShort, // for demo
-  });
+  if (!exists) {
+    // Create a new collection.
+    alwatrStore.defineCollection({
+      id: postsCollectionId,
+      region: Region.Public,
+      ttl: StoreFileTTL.veryShort, // for demo
+    });
+  }
 
   // Check the collection stat.
   logger.logProperty?.('stat', alwatrStore.stat(postsCollectionId));
@@ -76,7 +79,7 @@ async function quickstart() {
   logger.logOther?.('The collection unloaded from ram');
 
   // Delete the collection store file.
-  alwatrStore.deleteFile(postsCollectionId);
+  // alwatrStore.deleteFile(postsCollectionId);
   logger.logOther?.('The collection store file deleted');
 }
 
