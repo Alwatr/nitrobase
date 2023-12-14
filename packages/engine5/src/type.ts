@@ -52,7 +52,7 @@ export enum Region {
   /**
    * Private store file location. Cannot be accessed publicly and must be directly accessed by the admin API only.
    */
-  Secret = 's',
+  Secret = 'secret',
 }
 
 /**
@@ -80,9 +80,9 @@ export enum StoreFileType {
  */
 export enum StoreFileEncoding {
   /**
-   * Alwatr JSON store format.
+   * AlwatrStore JSON format.
    */
-  json = 'ajs',
+  json = 'asj',
 }
 
 /**
