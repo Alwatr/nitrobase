@@ -24,20 +24,23 @@ async function quickstart() {
   logger.logProperty?.('docId', docId);
 
   // Check the document exist?
-  logger.logProperty?.('exists', alwatrStore.exists(docId));
+  const exists = alwatrStore.exists(docId);
+  logger.logProperty?.('exists', exists);
 
-  // Define a new document store file.
-  alwatrStore.defineDocument(
-    {
-      id: docId,
-      region: Region.Public,
-      ttl: StoreFileTTL.veryShort, // for demo
-    },
-    {
-      title: 'new title',
-      body: '',
-    },
-  );
+  if (!exists) {
+    // Define a new document store file.
+    alwatrStore.defineDocument(
+      {
+        id: docId,
+        region: Region.Public,
+        ttl: StoreFileTTL.veryShort, // for demo
+      },
+      {
+        title: 'new title',
+        body: '',
+      },
+    );
+  }
 
   // Check the document stat.
   logger.logProperty?.('stat', alwatrStore.stat(docId));
@@ -65,12 +68,14 @@ async function quickstart() {
 
   logger.logProperty?.('doc.meta', myPost.meta());
 
+  await new Promise((resolve) => setTimeout(resolve, 1_000));
+
   // Unload the document from memory.
   alwatrStore.unload(docId);
   logger.logOther?.('The document unloaded from ram');
 
   // Delete the document store file.
-  alwatrStore.deleteFile(docId);
+  // alwatrStore.deleteFile(docId);
   logger.logOther?.('The document store file deleted');
 }
 
