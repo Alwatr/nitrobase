@@ -1,90 +1,97 @@
-# TODO: NGINX_LOCATION_PREFIX=/api/v1
+# Configuration environment variables
+# -----------------------------------
+# $storeApiPrefix: The prefix of all nginx locations for example `/api/v1`.
+# $storeRegionPublic: The location for public data.
+# $storeRegionSecret: The location for secret data.
+# $storeRegionAuthenticated: The location for authenticated data.
+# $storeRegionSuperAdmin: The location for super admin data.
+# $storeRegionPerUser: The location for per user data.
+# $storeRegionPerDevice: The location for per device data.
+# $storeRegionPerToken: The location for per token data.
 
-# Serves data for public without requiring any authenticated.
-# If data is not found, it returns a 200 status code with `data: null`.
-location ~ ^(/api)?/v\d+/publistore/public/(?<doc_path>.*)$ {
-  try_files /p/$doc_path.ajs @null_data;
+
+# Variables for headers
+# ---------------------
+# $http_user_id: Extracted from `user-id` header.
+# $http_user_token: Extracted from `user-token` header.
+# $http_device_id: Extracted from `device-id` header.
+
+# Variables for defining locations including prefix folder
+# --------------------------------------------------------
+# $user_id_location: The location of the user id.
+# $user_token_location: The location of the user token.
+# $device_id_location: The location of the device id.
+
+
+# Define main routes
+# ------------------
+
+# Store file location that can be accessed by anyone.
+location ~ ^$storeApiPrefix/$storeRegionPublic/(?<storePath>.*)$ {
+  try_files /$storeRegionPublic/$storePath =404;
 }
 
-# Serves all data to authenticated users.
-# If data is not found, it returns a 200 status code with `data: null`.
-location ~ ^(/api)?/v\d+/publistore/authenticated/(?<doc_path>.*)$ {
-  if ($bearer_token = "") {
+# Store file location that can be accessed by authenticated users.
+location ~ ^$storeApiPrefix/$storeRegionAuthenticated/(?<storePath>.*)$ {
+  if ($user_id_location = "") {
     return 401;
   }
-  if (!-d /t/$bearer_token) {
+
+  if ($http_user_token = "") {
+    return 401;
+  }
+
+  if (!-f $document_root/$user_id_location/$http_user_token.asn) {
     return 403;
   }
 
-  try_files /a/$doc_path.ajs @null_data;
+  try_files /$storeRegionAuthenticated/$storePath =404;
 }
 
-# Serves all data can be accessed using valid both user token and id.
-# If data is not found, it returns a 200 status code with `data: null`.
-location ~ ^(/api)?/v\d+/publistore/per-user/(?<doc_path>.*)$ {
-  if ($bearer_token = "") {
+# Store file location specific to each user id. Can be accessed using the user token.
+location ~ ^$storeApiPrefix/$storeRegionPerUser/(?<storePath>.*)$ {
+  if ($user_id_location = "") {
     return 401;
   }
-  if ($user_id = "") {
+
+  if ($http_user_token = "") {
     return 401;
   }
-  if (!-d /u/$user_id/token/$bearer_token) {
+
+  if (!-f $document_root/$user_id_location/$http_user_token.asn) {
     return 403;
   }
 
-  try_files /u/$user_id/$doc_path.ajs @null_data;
+  try_files /$user_id_location/$storePath =404;
 }
 
-# Serves all data to each device id.
-# If data is not found, it returns a 200 status code with `data: null`.
-location ~ ^(/api)?/v\d+/publistore/device/(?<doc_path>.*)$ {
-  if ($device_id = "") {
+# Store file location specific to each token.
+location ~ ^$storeApiPrefix/$storeRegionPerToken/(?<storePath>.*)$ {
+  if ($user_token_location = "") {
     return 401;
   }
-  if (!-d /d/$device_id) {
-    return 403;
-  }
 
-  try_files /d/$device_id/$doc_path.ajs @null_data;
+  try_files /$user_token_location/$storePath =404;
 }
 
-# Serves all data to each device id.
-# If data is not found, it returns a 200 status code with `data: null`.
-location ~ ^(/api)?/v\d+/publistore/device/(?<doc_path>.*)$ {
-  if ($bearer_token = "") {
-    return 401;
-  }
-  if (!-d /t/$bearer_token) {
-    return 403;
+# Store file location specific to each device id.
+location ~ ^$storeApiPrefix/$storeRegionPerDevice/(?<storePath>.*)$ {
+  if ($device_id_location = "") {
+    return 400;
   }
 
-  try_files /t/$bearer_token/$doc_path.ajs @null_data;
+  try_files /$device_id_location/$storePath =404;
 }
 
-# Serves all data to authenticated users.
-# If data is not found, it returns a 200 status code with `data: null`.
-location ~ ^(/api)?/v\d+/publistore/authenticated/(?<doc_path>.*)$ {
-  if ($bearer_token = "") {
-    return 401;
-  }
-  if (!-d /t/$bearer_token.ajs) {
-    return 403;
-  }
-
-  try_files /a/$doc_path.ajs @null_data;
+# Deny secret locations
+location ~ ^/$storeRegionSecret/ {
+  return 403;
 }
-
-location @null_data {
-  default_type application/json;
-  return 200 '{"ok": true, "data": null}';
+location ~ ^$storeApiPrefix/$storeRegionSecret/ {
+  return 403;
 }
-
-# Deny locations containing /securage/
-# location ~ /securage/ {
-#   return 403;
-# }
 
 # Deny all unknown location
 location / {
-  deny all;
+  return 403 '🍌 to dahan kasi ke migoft kar nemikone';
 }
