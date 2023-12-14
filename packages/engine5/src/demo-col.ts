@@ -27,14 +27,18 @@ async function quickstart() {
   const exists = alwatrStore.exists(postsCollectionId);
   logger.logProperty?.('exists', exists);
 
-  if (!exists) {
-    // Create a new collection.
-    alwatrStore.defineCollection({
-      id: postsCollectionId,
-      region: Region.Public,
-      ttl: StoreFileTTL.veryShort, // for demo
-    });
+  if (exists) {
+    // Delete the collection store file.
+    alwatrStore.deleteFile(postsCollectionId);
+    logger.logOther?.('The collection store file deleted');
   }
+
+  // Create a new collection.
+  await alwatrStore.defineCollection({
+    id: postsCollectionId,
+    region: Region.Public,
+    ttl: StoreFileTTL.veryShort, // for demo
+  });
 
   // Check the collection stat.
   logger.logProperty?.('stat', alwatrStore.stat(postsCollectionId));

@@ -12,7 +12,6 @@ import {
   type CollectionContext,
   type DocumentContext,
   StoreFileTTL,
-  MaybePromise,
 } from './type.js';
 
 logger.logModule?.('alwatr-store');
@@ -329,16 +328,17 @@ export class AlwatrStore {
 
   protected async readContext_(stat: StoreFileStat): Promise<StoreFileContext> {
     logger.logMethodArgs?.('readContext_', stat.id);
+    logger.time?.(`readContextTime(${stat.id})`);
     const path = this.storeFilePath_(stat);
     const context = (await readJsonFile(path)) as StoreFileContext;
     AlwatrStore.validateStoreFile_(context);
     this.memoryContextRecord_[stat.id] = context;
+    logger.timeEnd?.(`readContextTime(${stat.id})`);
     return context;
   }
 
   /**
-   * Write store file context (async).
-   * If the store file not exists, an error is thrown.
+   * Write store file context.
    *
    * @param id The unique identifier of the store file.
    * @param context The store file context. If not provided, it will be loaded from memory.
@@ -348,51 +348,15 @@ export class AlwatrStore {
    * await this.writeContext_('user1/profile', {data: {name: 'ali'}});
    * ```
    */
-  protected writeContext_(id: string, context: StoreFileContext): Promise<void>;
-  /**
-   * Write store file context (sync).
-   * If the store file not exists, an error is thrown.
-   *
-   * @param id The unique identifier of the store file.
-   * @param context The store file context. If not provided, it will be loaded from memory.
-   * @param sync If true, the file will be written synchronously.
-   * @example
-   * ```typescript
-   * this.writeContext_('user1/profile', {data: {name: 'ali'}}, true);
-   * ```
-   */
-  protected writeContext_(id: string, context: StoreFileContext, sync: true): void;
-  /**
-   * Write store file context.
-   * If the store file not exists, an error is thrown.
-   *
-   * @param id The unique identifier of the store file.
-   * @param context The store file context. If not provided, it will be loaded from memory.
-   * @param sync If true, the file will be written synchronously.
-   * @example
-   * ```typescript
-   * await this.writeContext_('user1/profile', {data: {name: 'ali'}}, sync);
-   * ```
-   */
-  protected writeContext_(id: string, context: StoreFileContext, sync: boolean): MaybePromise<void>;
-  /**
-   * Write store file context.
-   * If the store file not exists, an error is thrown.
-   *
-   * @param id The unique identifier of the store file.
-   * @param context The store file context. If not provided, it will be loaded from memory.
-   * @param sync If true, the file will be written synchronously.
-   * @example
-   * ```typescript
-   * await this.writeContext_('user1/profile', {data: {name: 'ali'}});
-   * ```
-   */
-  protected writeContext_(id: string, context: StoreFileContext, sync = false): MaybePromise<void> {
+  protected async writeContext_(id: string, context: StoreFileContext, sync = false): Promise<void> {
     logger.logMethodArgs?.('writeContext', id);
+    logger.time?.(`writeContextTime(${id})`);
     const stat = id === AlwatrStore.rootDbStat_.id ? AlwatrStore.rootDbStat_ : this.stat(id);
     const path = this.storeFilePath_(stat);
     this.memoryContextRecord_[id] = context;
-    return writeJsonFile(path, context, WriteFileMode.Rename, sync);
+    await writeJsonFile(path, context, WriteFileMode.Rename, sync);
+    logger.timeEnd?.(`writeContextTime(${id})`);
+    logger.logOther?.('writeContextDone', id);
   }
 
   /**
