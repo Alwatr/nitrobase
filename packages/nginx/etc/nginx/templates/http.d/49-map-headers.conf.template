@@ -17,7 +17,7 @@ map $http_user_token $user_token_location {
 }
 
 # extract $device_id_location from first 3 characters of `device-id` header.
-map $http_user_device $user_device_location {
+map $http_user_device $device_id_location {
   "~^(?<prefix>.{3})" $storeRegionPerDevice/$prefix/$http_user_device;
   default '';
 }
