@@ -170,7 +170,7 @@ export class AlwatrStore {
    * ```
    */
   defineDocument<TDoc extends Record<string, unknown>>(
-    config: Pick<StoreFileStat, 'id' | 'region' | 'ttl'>,
+    config: Pick<StoreFileStat, 'id' | 'region' | 'ttl' | 'ownerId'>,
     initialData: TDoc,
   ): Promise<void> {
     logger.logMethodArgs?.('defineDocument', config);
@@ -197,7 +197,7 @@ export class AlwatrStore {
    * });
    * ```
    */
-  defineCollection(config: Pick<StoreFileStat, 'id' | 'region' | 'ttl'>): Promise<void> {
+  defineCollection(config: Pick<StoreFileStat, 'id' | 'region' | 'ttl' | 'ownerId'>): Promise<void> {
     logger.logMethodArgs?.('defineCollection', config);
     const stat: StoreFileStat = {
       ...config,
