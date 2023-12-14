@@ -48,6 +48,23 @@ location ~ ^$storeApiPrefix/$storeRegionAuthenticated/(?<storePath>.*)$ {
   try_files /$storeRegionAuthenticated/$storePath =404;
 }
 
+# Store file location that can be accessed by super admin only.
+location ~ ^$storeApiPrefix/$storeRegionSuperAdmin/(?<storePath>.*)$ {
+  if ($user_id_location = "") {
+    return 401;
+  }
+
+  if ($http_user_token = "") {
+    return 401;
+  }
+
+  if (!-f $document_root/$user_id_location/is-super-admin.asn) {
+    return 403;
+  }
+
+  try_files /$storeRegionSuperAdmin/$storePath =404;
+}
+
 # Store file location specific to each user id. Can be accessed using the user token.
 location ~ ^$storeApiPrefix/$storeRegionPerUser/(?<storePath>.*)$ {
   if ($user_id_location = "") {
