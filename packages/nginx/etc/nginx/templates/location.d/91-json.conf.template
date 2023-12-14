@@ -1,34 +1,77 @@
-# Serves all data for public users without requiring any token.
+# TODO: NGINX_LOCATION_PREFIX=/api/v1
+
+# Serves data for public without requiring any authenticated.
 # If data is not found, it returns a 200 status code with `data: null`.
-location ~ ^(/api)?/v\d+/publistore/hub/(?<doc_path>.*)$ {
-  try_files /publistore/hub/$doc_path.json @null_data;
+location ~ ^(/api)?/v\d+/publistore/public/(?<doc_path>.*)$ {
+  try_files /p/$doc_path.ajs @null_data;
 }
 
+# Serves all data to authenticated users.
 # If data is not found, it returns a 200 status code with `data: null`.
-location ~ ^(/api)?/v\d+/publistore/vault/(?<doc_path>.*)$ {
+location ~ ^(/api)?/v\d+/publistore/authenticated/(?<doc_path>.*)$ {
   if ($bearer_token = "") {
     return 401;
   }
-  if (!-d $document_root/publistore/auth/$bearer_token) {
+  if (!-d /t/$bearer_token) {
     return 403;
   }
 
-  try_files /publistore/vault/$doc_path.json @null_data;
+  try_files /a/$doc_path.ajs @null_data;
 }
 
-# Serves private data that varies for each authenticated user who provides a valid bearer token.
+# Serves all data can be accessed using valid both user token and id.
 # If data is not found, it returns a 200 status code with `data: null`.
-location ~ ^(/api)?/v\d+/publistore/auth/(?<doc_path>.*)$ {
-  location ~ ^/auth/(?<doc_path>.*)$ {
-    if ($bearer_token = "") {
-      return 401;
-    }
-    if (!-d $document_root/publistore/auth/$bearer_token) {
-      return 403;
-    }
-
-    try_files /publistore/auth/$bearer_token/$doc_path.json @null_data;
+location ~ ^(/api)?/v\d+/publistore/per-user/(?<doc_path>.*)$ {
+  if ($bearer_token = "") {
+    return 401;
   }
+  if ($user_id = "") {
+    return 401;
+  }
+  if (!-d /u/$user_id/token/$bearer_token) {
+    return 403;
+  }
+
+  try_files /u/$user_id/$doc_path.ajs @null_data;
+}
+
+# Serves all data to each device id.
+# If data is not found, it returns a 200 status code with `data: null`.
+location ~ ^(/api)?/v\d+/publistore/device/(?<doc_path>.*)$ {
+  if ($device_id = "") {
+    return 401;
+  }
+  if (!-d /d/$device_id) {
+    return 403;
+  }
+
+  try_files /d/$device_id/$doc_path.ajs @null_data;
+}
+
+# Serves all data to each device id.
+# If data is not found, it returns a 200 status code with `data: null`.
+location ~ ^(/api)?/v\d+/publistore/device/(?<doc_path>.*)$ {
+  if ($bearer_token = "") {
+    return 401;
+  }
+  if (!-d /t/$bearer_token) {
+    return 403;
+  }
+
+  try_files /t/$bearer_token/$doc_path.ajs @null_data;
+}
+
+# Serves all data to authenticated users.
+# If data is not found, it returns a 200 status code with `data: null`.
+location ~ ^(/api)?/v\d+/publistore/authenticated/(?<doc_path>.*)$ {
+  if ($bearer_token = "") {
+    return 401;
+  }
+  if (!-d /t/$bearer_token.ajs) {
+    return 403;
+  }
+
+  try_files /a/$doc_path.ajs @null_data;
 }
 
 location @null_data {
