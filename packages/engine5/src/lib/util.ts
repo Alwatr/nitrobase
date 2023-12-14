@@ -6,11 +6,14 @@ import {
   copyFileSync,
   renameSync,
 } from 'node:fs';
-import {copyFile, mkdir, readFile as readFile_, rename, writeFile as writeFile_} from 'node:fs/promises';
+import {copyFile, mkdir, readFile as readFile_, rename, writeFile as writeFile_, unlink} from 'node:fs/promises';
 import {dirname} from 'node:path';
 
 import {logger} from './logger.js';
 import {MaybePromise} from '../type.js';
+
+export {resolve} from 'node:path';
+export {unlink, existsSync};
 
 /**
  * Deep clones an object.
