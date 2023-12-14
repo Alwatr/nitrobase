@@ -6,7 +6,8 @@ COPY etc/nginx/ /etc/nginx/
 # COPY data/ .
 RUN set -eux; ls -RlahF /etc/nginx /data
 
-ENV NGINX_OPEN_FILE_CACHE="max=5000 inactive=1h" \
+ENV NGINX_DOCUMENT_ROOT=/data \
+    NGINX_OPEN_FILE_CACHE="max=5000 inactive=1h" \
     NGINX_OPEN_FILE_CACHE_VALID=1s \
     NGINX_OPEN_FILE_CACHE_MIN_USES=2 \
     NGINX_OUTPUT_BUFFERS="8 8k" \
@@ -16,3 +17,12 @@ ENV NGINX_OPEN_FILE_CACHE="max=5000 inactive=1h" \
     NGINX_LIMIT_REQ_RATE=400 \
     NGINX_LIMIT_REQ_BURST=1000 \
     NGINX_DISABLE_SYMLINKS=if_not_owner
+
+ENV storeApiPrefix="/api/v1" \
+    storeRegionPublic="p" \
+    storeRegionSecret="s" \
+    storeRegionAuthenticated="a" \
+    storeRegionSuperAdmin="sa" \
+    storeRegionPerUser="u" \
+    storeRegionPerDevice="d" \
+    storeRegionPerToken="t"
