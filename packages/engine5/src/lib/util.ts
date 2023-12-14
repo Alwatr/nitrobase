@@ -209,9 +209,9 @@ export function readJsonFile(path: string, sync = false): MaybePromise<unknown> 
  * Write file mode for exists file.
  */
 export enum WriteFileMode {
-  Replace,
-  Rename,
-  Copy,
+  Replace = 'replace',
+  Rename = 'rename',
+  Copy = 'copy',
 }
 
 /**
@@ -265,11 +265,11 @@ export function writeFile(path: string, content: string, mode: WriteFileMode, sy
  * ```
  */
 export function writeFile(path: string, content: string, mode: WriteFileMode, sync = false): MaybePromise<void> {
-  logger.logMethodArgs?.('writeFile', {path, existFile: mode, sync});
+  logger.logMethodArgs?.('writeFile', {path, mode, sync});
   if (sync === true) {
     handleExistsFile(path, mode, true);
     try {
-      writeFileSync_(path, content, {encoding: 'utf-8', flag: 'w'});
+      return writeFileSync_(path, content, {encoding: 'utf-8', flag: 'w'});
     }
     catch (err) {
       logger.error('writeFile', 'write_file_failed', err);
@@ -363,29 +363,31 @@ export function handleExistsFile(path: string, mode: WriteFileMode, sync = false
       }
     }
   }
-  // else, async mode
-  if (existsSync(path)) {
-    // existsSync is much faster than access.
-    if (mode === WriteFileMode.Copy) {
-      return copyFile(path, path + '.bk').catch((err) => {
-        logger.error('handleExistsFile', 'copy_failed', err);
-      });
-    }
-    else if (mode === WriteFileMode.Rename) {
-      return rename(path, path + '.bk').catch((err) => {
-        logger.error('handleExistsFile', 'rename_failed', err);
-      });
-    }
-  }
   else {
-    return mkdir(dirname(path), {recursive: true})
-      .then(() => {
-        logger.logOther?.('handleExistsFile', 'make_dir_success');
-      })
-      .catch((err) => {
-        logger.error('handleExistsFile', 'make_dir_failed', err);
-        throw new Error('make_dir_failed', {cause: (err as Error).cause});
-      });
+    // async mode
+    if (existsSync(path)) {
+      // existsSync is much faster than access.
+      if (mode === WriteFileMode.Copy) {
+        return copyFile(path, path + '.bk').catch((err) => {
+          logger.error('handleExistsFile', 'copy_failed', err);
+        });
+      }
+      else if (mode === WriteFileMode.Rename) {
+        return rename(path, path + '.bk').catch((err) => {
+          logger.error('handleExistsFile', 'rename_failed', err);
+        });
+      }
+    }
+    else {
+      return mkdir(dirname(path), {recursive: true})
+        .then(() => {
+          logger.logOther?.('handleExistsFile', 'make_dir_success');
+        })
+        .catch((err) => {
+          logger.error('handleExistsFile', 'make_dir_failed', err);
+          throw new Error('make_dir_failed', {cause: (err as Error).cause});
+        });
+    }
   }
 }
 
@@ -440,6 +442,6 @@ export function writeJsonFile(path: string, data: unknown, mode: WriteFileMode, 
  * ```
  */
 export function writeJsonFile(path: string, data: unknown, mode: WriteFileMode, sync = false): MaybePromise<void> {
-  logger.logMethodArgs?.('writeJsonFile', {path, existFile: mode, sync});
+  logger.logMethodArgs?.('writeJsonFile', {path, mode, sync});
   return writeFile(path, flatStr(jsonStringify(data)), mode, sync);
 }
