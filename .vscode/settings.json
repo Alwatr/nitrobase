@@ -14,11 +14,9 @@
     "**/*.tsbuildinfo": true
   },
   "files.associations": {
-    "*.mt": "routeros",
     "*.conf.template": "nginx",
-    "ssh_config": "ssh_config",
-    "*.njk": "html",
-    "ssh-config": "ssh_config"
+    "*.ajs": "json",
+    "*.ajs.bk": "json"
   },
   "markdownlint.ignore": [
     "**/CHANGELOG.md"
