@@ -1,60 +1,80 @@
-import { AlwatrStoreDocument } from 'fs/promises';
+import {createLogger} from '@alwatr/logger';
+import {AlwatrStore, Region, StoreFileTTL} from '@alwatr/store-engine'
 
-import { createLogger } from '@alwatr/logger';
-import {AlwatrStore} from '@alwatr/store-engine';
-const logger = createLogger('AlwatrStoreDemo', true);
-logger.banner('AlwatrStoreDemo');
+const logger = createLogger('AlwatrStore/Demo', true);
+logger.banner('AlwatrStore/Demo');
 
-// Create a new storage instance
+// Create a new store instance
 const alwatrStore = new AlwatrStore({
-  pathPrefix: 'db',
-  saveDebounce: 100,
+  rootPath: './db',
+  saveDebounce: 5_000, // for demo
 });
 
-interface DocumentDataType {
+interface Post {
+  [P: string]: string;
   title: string;
   body: string;
 }
 
 async function quickstart() {
-  // Obtain a document reference.
+  const docId = 'posts/intro-to-alwatr-store';
 
-  const documentPath = {
-    id: 'posts/intro-to-alwatr-store',
-    region: 'public',
-  };
+  logger.logProperty?.('docId', docId);
 
-  logger.logProperty?.('documentPath', documentPath);
+  // Check the document exist?
+  const exists = alwatrStore.exists(docId);
+  logger.logProperty?.('exists', exists);
 
-  logger.logProperty?.('stat(docPath)', alwatrStore.stat(documentPath));
+  if (!exists) {
+    // Define a new document store file.
+    await alwatrStore.defineDocument(
+      {
+        id: docId,
+        region: Region.Public,
+        ttl: StoreFileTTL.veryShort, // for demo
+      },
+      {
+        title: 'new title',
+        body: '',
+      },
+    );
+  }
 
-  const documentRef = alwatrStore.document<DocumentDataType>(documentPath);
+  // Check the document stat.
+  logger.logProperty?.('stat', alwatrStore.stat(docId));
 
-  logger.logProperty?.('doc.stat', documentRef.stat());
+  // Create new document reference of specific id.
+  const myPost = await alwatrStore.doc<Post>(docId);
+
+  // Read the document meta information.
+  logger.logProperty?.('doc.meta', myPost.meta());
 
   // Enter new data into the document.
-  let documentContext = documentRef.set({
-    title: 'Welcome to Alwatr Storage',
-    body: 'Hello World',
+  myPost.set({
+    title: 'Welcome to Alwatr Store',
+    body: 'This is a amazing content',
   });
-  logger.logOther?.('Entered new data into the document', documentContext);
-
-  // Update an existing document.
-  documentContext = documentRef.update({
-    body: 'My first AlwatrStore app',
-  });
-  logger.logOther?.('Updated an existing document', documentContext);
 
   // Read the document.
-  documentContext = documentRef.get();
-  logger.logOther?.('Read the document', documentContext);
+  logger.logProperty?.('context', myPost.get());
 
-  // Delete the document.
-  documentRef.deleteFile();
-  logger.logOther?.('Deleted the document');
+  // Update an existing document.
+  myPost.update({
+    body: 'My first AlwatrStore Document',
+  });
+  logger.logProperty?.('context', myPost.get());
 
-  // Delete the document.
-  alwatrStore.unloadDocument(documentRef.documentPath);
-  logger.logOther?.('Unload the document from ram');
+  logger.logProperty?.('doc.meta', myPost.meta());
+
+  await new Promise((resolve) => setTimeout(resolve, 1_000));
+
+  // Unload the document from memory.
+  alwatrStore.unload(docId);
+  logger.logOther?.('The document unloaded from ram');
+
+  // Delete the document store file.
+  // alwatrStore.deleteFile(docId);
+  logger.logOther?.('The document store file deleted');
 }
+
 quickstart();

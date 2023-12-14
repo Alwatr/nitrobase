@@ -6,13 +6,15 @@ import {
   StoreFileType,
   StoreFileEncoding,
   Region,
+  StoreFileTTL,
   type StoreFileStat,
   type AlwatrStoreConfig,
   type StoreFileContext,
   type CollectionContext,
   type DocumentContext,
-  StoreFileTTL,
 } from './type.js';
+
+export {Region, StoreFileTTL};
 
 logger.logModule?.('alwatr-store');
 
