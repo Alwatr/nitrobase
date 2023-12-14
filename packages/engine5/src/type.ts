@@ -129,6 +129,8 @@ export enum StoreFileTTL {
  * Represents the detailed statistics of a store file.
  */
 export interface StoreFileStat {
+  [P: string]: unknown;
+
   /**
    * The unique identifier of the store file.
    */
