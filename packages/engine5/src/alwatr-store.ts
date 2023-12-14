@@ -1,5 +1,3 @@
-import {log} from 'node:console';
-
 import {CollectionReference} from './lib/collection-reference.js';
 import {DocumentReference} from './lib/document-reference.js';
 import {logger} from './lib/logger.js';
@@ -14,6 +12,7 @@ import {
   type CollectionContext,
   type DocumentContext,
   StoreFileTTL,
+  MaybePromise,
 } from './type.js';
 
 logger.logModule?.('alwatr-store');
@@ -38,7 +37,7 @@ export class AlwatrStore {
   protected static readonly rootDbStat_: StoreFileStat = {
     id: '.store',
     region: Region.Secret,
-    type: StoreFileType.document,
+    type: StoreFileType.collection,
     encoding: StoreFileEncoding.json,
     ttl: StoreFileTTL.maximum,
   };
@@ -49,14 +48,15 @@ export class AlwatrStore {
    * @param context The store file context.
    */
   protected static validateStoreFile_(context: StoreFileContext<Record<string, unknown>>): void {
-    logger.logMethodArgs?.('_validateStoreFile', {id: context.meta});
+    logger.logMethodArgs?.('validateStoreFile_', {id: context.meta});
 
     if (context.ok !== true) {
+      logger.accident?.('validateStoreFile_', 'store_not_ok', context);
       throw new Error('store_not_ok', {cause: context});
     }
 
     if (context.meta?.ver !== AlwatrStore.version) {
-      logger.accident?.('_validateStoreFile', 'store_version_incompatible', {
+      logger.accident?.('validateStoreFile_', 'store_version_incompatible', {
         fileVersion: context.meta.ver,
         currentVersion: AlwatrStore.version,
       });
@@ -73,6 +73,7 @@ export class AlwatrStore {
         }
 
         default:
+          logger.accident?.('validateStoreFile_', 'store_file_type_not_supported', context.meta);
           throw new Error('store_file_type_not_supported', {cause: context.meta});
       }
     }
@@ -83,7 +84,7 @@ export class AlwatrStore {
       context.meta.region === Region.PerDevice
     ) {
       if (context.meta.ownerId === undefined) {
-        logger.accident('_validateStoreFile', 'store_owner_id_not_defined', context.meta);
+        logger.accident('validateStoreFile_', 'store_owner_id_not_defined', context.meta);
         throw new Error('store_owner_id_not_defined', {cause: context.meta});
       }
     }
@@ -144,7 +145,7 @@ export class AlwatrStore {
    */
   stat(id: string): Readonly<StoreFileStat> {
     logger.logMethodArgs?.('stat', id);
-    if (!this.rootDb_.exists(id)) throw new Error('store_file_not_defined', {cause: {id}});
+    // if (!this.rootDb_.exists(id)) throw new Error('store_file_not_defined', {cause: {id}});
     return this.rootDb_.get(id);
   }
 
@@ -172,13 +173,11 @@ export class AlwatrStore {
     initialData: TDoc,
   ): Promise<void> {
     logger.logMethodArgs?.('defineDocument', config);
-
     const stat: StoreFileStat = {
       ...config,
       type: StoreFileType.document,
       encoding: StoreFileEncoding.json,
     };
-
     this.addStoreFile_(stat);
     return this.writeContext_(stat.id, DocumentReference.newContext_(config.id, config.region, initialData));
   }
@@ -199,13 +198,11 @@ export class AlwatrStore {
    */
   defineCollection(config: Pick<StoreFileStat, 'id' | 'region' | 'ttl'>): Promise<void> {
     logger.logMethodArgs?.('defineCollection', config);
-
     const stat: StoreFileStat = {
       ...config,
       type: StoreFileType.collection,
       encoding: StoreFileEncoding.json,
     };
-
     this.addStoreFile_(stat);
     return this.writeContext_(stat.id, CollectionReference.newContext_(config.id, config.region));
   }
@@ -225,13 +222,19 @@ export class AlwatrStore {
    */
   async doc<TDoc extends Record<string, unknown>>(id: string): Promise<DocumentReference<TDoc>> {
     logger.logMethodArgs?.('doc', id);
-    if (this.exists(id) === false) throw new Error('document_not_found', {cause: {id}});
+    if (!this.exists(id)) {
+      logger.accident('doc', 'document_not_found', {id});
+      throw new Error('document_not_found', {cause: {id}});
+    }
     const stat = this.stat(id);
     if (stat.type != StoreFileType.document) {
       logger.accident('doc', 'document_wrong_type', stat);
       throw new Error('document_not_found', {cause: stat});
     }
-    return new DocumentReference((await this.getContext_(id)) as DocumentContext<TDoc>, this.writeContext_.bind(this));
+    return new DocumentReference(
+      (await this.getContext_(stat)) as DocumentContext<TDoc>,
+      this.writeContext_.bind(this),
+    );
   }
 
   /**
@@ -249,7 +252,10 @@ export class AlwatrStore {
    */
   async collection<TItem extends Record<string, unknown>>(id: string): Promise<CollectionReference<TItem>> {
     logger.logMethodArgs?.('collection', id);
-    if (this.exists(id) === false) throw new Error('collection_not_found', {cause: {id}});
+    if (this.exists(id) === false) {
+      logger.accident('collection', 'collection_not_found', {id});
+      throw new Error('collection_not_found', {cause: {id}});
+    }
     const stat = this.stat(id);
     if (stat.type != StoreFileType.collection) {
       logger.accident('collection', 'collection_wrong_type', stat);
@@ -317,34 +323,76 @@ export class AlwatrStore {
    * ```
    */
   protected async getContext_(stat: StoreFileStat): Promise<StoreFileContext> {
-    logger.logMethodArgs?.('getContext', stat.id);
-
-    if (stat.id in this.memoryContextRecord_) {
-      return this.memoryContextRecord_[stat.id];
-    }
-
-    const path = this.storeFilePath_(stat);
-
-    return (this.memoryContextRecord_[stat.id] = (await readJsonFile(path)) as StoreFileContext);
+    logger.logMethodArgs?.('getContext_', stat.id);
+    return this.memoryContextRecord_[stat.id] ?? this.readContext_(stat);
   }
 
+  protected async readContext_(stat: StoreFileStat): Promise<StoreFileContext> {
+    logger.logMethodArgs?.('readContext_', stat.id);
+    const path = this.storeFilePath_(stat);
+    const context = (await readJsonFile(path)) as StoreFileContext;
+    AlwatrStore.validateStoreFile_(context);
+    this.memoryContextRecord_[stat.id] = context;
+    return context;
+  }
+
+  /**
+   * Write store file context (async).
+   * If the store file not exists, an error is thrown.
+   *
+   * @param id The unique identifier of the store file.
+   * @param context The store file context. If not provided, it will be loaded from memory.
+   * @param sync If true, the file will be written synchronously.
+   * @example
+   * ```typescript
+   * await this.writeContext_('user1/profile', {data: {name: 'ali'}});
+   * ```
+   */
+  protected writeContext_(id: string, context: StoreFileContext): Promise<void>;
+  /**
+   * Write store file context (sync).
+   * If the store file not exists, an error is thrown.
+   *
+   * @param id The unique identifier of the store file.
+   * @param context The store file context. If not provided, it will be loaded from memory.
+   * @param sync If true, the file will be written synchronously.
+   * @example
+   * ```typescript
+   * this.writeContext_('user1/profile', {data: {name: 'ali'}}, true);
+   * ```
+   */
+  protected writeContext_(id: string, context: StoreFileContext, sync: true): void;
   /**
    * Write store file context.
    * If the store file not exists, an error is thrown.
    *
    * @param id The unique identifier of the store file.
    * @param context The store file context. If not provided, it will be loaded from memory.
+   * @param sync If true, the file will be written synchronously.
    * @example
    * ```typescript
-   * await this.writeContext_('user1/profile');
+   * await this.writeContext_('user1/profile', {data: {name: 'ali'}}, sync);
    * ```
    */
-  protected async writeContext_(id: string, context: StoreFileContext): Promise<void> {
+  protected writeContext_(id: string, context: StoreFileContext, sync: boolean): MaybePromise<void>;
+  /**
+   * Write store file context.
+   * If the store file not exists, an error is thrown.
+   *
+   * @param id The unique identifier of the store file.
+   * @param context The store file context. If not provided, it will be loaded from memory.
+   * @param sync If true, the file will be written synchronously.
+   * @example
+   * ```typescript
+   * await this.writeContext_('user1/profile', {data: {name: 'ali'}});
+   * ```
+   */
+  protected writeContext_(id: string, context: StoreFileContext, sync = false): MaybePromise<void> {
     logger.logMethodArgs?.('writeContext', id);
     const stat = id === AlwatrStore.rootDbStat_.id ? AlwatrStore.rootDbStat_ : this.stat(id);
     const path = this.storeFilePath_(stat);
-    // this.memoryContextRecord_[id] = context;
-    return await writeJsonFile(path, context, WriteFileMode.Rename);
+    this.memoryContextRecord_[id] = context;
+    return writeJsonFile(path, context, WriteFileMode.Rename, sync);
   }
 
   /**
@@ -380,6 +428,7 @@ export class AlwatrStore {
     let context;
     if (existsSync(path)) {
       context = readJsonFile(path, true) as CollectionContext<StoreFileStat>;
+      AlwatrStore.validateStoreFile_(context);
     }
     else {
       logger.banner('Initialize new alwatr-store');
@@ -387,6 +436,7 @@ export class AlwatrStore {
         AlwatrStore.rootDbStat_.id,
         AlwatrStore.rootDbStat_.region,
       );
+      this.writeContext_(AlwatrStore.rootDbStat_.id, context, true);
     }
     return new CollectionReference(context, this.writeContext_.bind(this));
   }
