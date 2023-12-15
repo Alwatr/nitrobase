@@ -3,8 +3,8 @@ FROM ghcr.io/alwatr/nginx-json:2.2.1
 LABEL org.opencontainers.image.base.name="ghcr.io/alwatr/nginx-json:2.2.1"
 
 COPY etc/nginx/ /etc/nginx/
-# COPY data/ .
-RUN set -eux; ls -RlahF /etc/nginx /data
+COPY default-data/ /default-data/
+RUN ls -RlahF /etc/nginx /default-data /data
 
 ENV NGINX_DOCUMENT_ROOT=/data \
     NGINX_OPEN_FILE_CACHE="max=5000 inactive=1h" \
