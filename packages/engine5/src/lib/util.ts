@@ -269,7 +269,10 @@ export function writeFile(path: string, content: string, mode: WriteFileMode, sy
   if (sync === true) {
     handleExistsFile(path, mode, true);
     try {
-      return writeFileSync_(path, content, {encoding: 'utf-8', flag: 'w'});
+      logger.logOther?.('write_file_start', {path, sync});
+      writeFileSync_(path, content, {encoding: 'utf-8', flag: 'w'});
+      logger.logOther?.('write_file_success', {path, sync});
+      return;
     }
     catch (err) {
       logger.error('writeFile', 'write_file_failed', err);
@@ -278,7 +281,13 @@ export function writeFile(path: string, content: string, mode: WriteFileMode, sy
   }
   // else, async mode
   return handleExistsFile(path, mode)
-    .then(() => writeFile_(path, content, {encoding: 'utf-8', flag: 'w'}))
+    .then(() => {
+      logger.logOther?.('write_file_start', {path, sync});
+      return writeFile_(path, content, {encoding: 'utf-8', flag: 'w'});
+    })
+    .then(() => {
+      logger.logOther?.('write_file_success', {path, sync});
+    })
     .catch((err) => {
       logger.error('writeFile', 'write_file_failed', err);
       throw new Error('write_file_failed', {cause: (err as Error).cause});
@@ -388,6 +397,8 @@ export function handleExistsFile(path: string, mode: WriteFileMode, sync = false
           throw new Error('make_dir_failed', {cause: (err as Error).cause});
         });
     }
+
+    return Promise.resolve(); // do nothing but return a resolved promise.
   }
 }
 
