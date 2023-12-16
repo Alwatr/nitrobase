@@ -4,9 +4,12 @@ import {readJsonFileSync} from '@alwatr/util/node.js';
 import {context, build} from 'esbuild';
 // import packageJson from './package.json' assert { type: 'json' };
 
+const logger = createLogger('esbuild', true);
+
+logger.logOther?.('📦 esbuild.mjs');
+
 const packageJson = readJsonFileSync('./package.json');
 
-const logger = createLogger('esbuild', true);
 const watchMode = process.argv.includes('--watch');
 
 (async () => {
