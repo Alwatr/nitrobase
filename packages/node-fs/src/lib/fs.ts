@@ -10,7 +10,7 @@ import {copyFile, mkdir, readFile as readFile_, rename, writeFile as writeFile_,
 import {dirname} from 'node:path';
 
 import {logger} from './logger.js';
-import {MaybePromise} from '../type.js';
+import {MaybePromise} from './type.js';
 
 export {resolve} from 'node:path';
 export {unlink, existsSync};

@@ -1,7 +1,8 @@
+import {WriteFileMode, existsSync, readJsonFile, resolve, unlink, writeJsonFile} from '@alwatr/store-node-fs';
+
 import {CollectionReference} from './lib/collection-reference.js';
 import {DocumentReference} from './lib/document-reference.js';
 import {logger} from './lib/logger.js';
-import {WriteFileMode, existsSync, readJsonFile, resolve, unlink, writeJsonFile} from './lib/util.js';
 import {
   StoreFileType,
   StoreFileEncoding,
