@@ -20,7 +20,7 @@ ENV NGINX_DOCUMENT_ROOT=/data \
 
 ENV storeApiPrefix="/api/v1" \
     storeRegionPublic="p" \
-    storeRegionSecret="s" \
+    storeRegionSecret="secret" \
     storeRegionAuthenticated="a" \
     storeRegionSuperAdmin="sa" \
     storeRegionPerUser="u" \
