@@ -126,7 +126,8 @@ export class AlwatrStore {
    * }
    * ```
    */
-  exists(id: string): boolean {
+  exists(id: string, ownerId?: string): boolean {
+    if (ownerId) id += `/${ownerId}`;
     const exists = this.rootDb_.exists(id);
     logger.logMethodFull?.('exists', id, exists);
     return exists;
@@ -144,7 +145,8 @@ export class AlwatrStore {
    * console.log(stat.type); // collection
    * ```
    */
-  stat(id: string): Readonly<StoreFileStat> {
+  stat(id: string, ownerId?: string): Readonly<StoreFileStat> {
+    if (ownerId) id += `/${ownerId}`;
     logger.logMethodArgs?.('stat', id);
     // if (!this.rootDb_.exists(id)) throw new Error('store_file_not_defined', {cause: {id}});
     return this.rootDb_.get(id);
@@ -180,7 +182,10 @@ export class AlwatrStore {
       encoding: StoreFileEncoding.json,
     };
     this.addStoreFile_(stat);
-    return this.writeContext_(stat.id, DocumentReference.newContext_(config.id, config.region, initialData));
+    return this.writeContext_(
+      stat.id,
+      DocumentReference.newContext_(config.id, config.region, initialData, stat.ownerId),
+    );
   }
 
   /**
@@ -192,7 +197,7 @@ export class AlwatrStore {
    * ```typescript
    * alwatrStore.defineCollection({
    *   id: 'user1/orders',
-   *   region: Region.PerUser,
+      *   region: Region.PerUser,
    *   ttl: StoreFileTTL.medium,
    * });
    * ```
@@ -205,7 +210,7 @@ export class AlwatrStore {
       encoding: StoreFileEncoding.json,
     };
     this.addStoreFile_(stat);
-    return this.writeContext_(stat.id, CollectionReference.newContext_(config.id, config.region));
+    return this.writeContext_(stat.id, CollectionReference.newContext_(config.id, config.region, stat.ownerId));
   }
 
   /**
@@ -221,7 +226,8 @@ export class AlwatrStore {
    * doc.update({name: 'ali'});
    * ```
    */
-  async doc<TDoc extends Record<string, unknown>>(id: string): Promise<DocumentReference<TDoc>> {
+  async doc<TDoc extends Record<string, unknown>>(id: string, ownerId?: string): Promise<DocumentReference<TDoc>> {
+    if (ownerId) id += `/${ownerId}`;
     logger.logMethodArgs?.('doc', id);
     if (!this.exists(id)) {
       logger.accident('doc', 'document_not_found', {id});
@@ -251,7 +257,11 @@ export class AlwatrStore {
    * collection.add({name: 'order 1'});
    * ```
    */
-  async collection<TItem extends Record<string, unknown>>(id: string): Promise<CollectionReference<TItem>> {
+  async collection<TItem extends Record<string, unknown>>(
+    id: string,
+    ownerId?: string,
+  ): Promise<CollectionReference<TItem>> {
+    if (ownerId) id += `/${ownerId}`;
     logger.logMethodArgs?.('collection', id);
     if (this.exists(id) === false) {
       logger.accident('collection', 'collection_not_found', {id});
@@ -278,7 +288,8 @@ export class AlwatrStore {
    * alwatrStore.exists('user1/orders'); // true
    * ```
    */
-  unload(id: string): void {
+  unload(id: string, ownerId?: string): void {
+    if (ownerId) id += `/${ownerId}`;
     logger.logMethodArgs?.('unload', id);
     // TODO: this.save_(id);
     delete this.memoryContextRecord_[id];
@@ -294,7 +305,8 @@ export class AlwatrStore {
    * alwatrStore.exists('user1/orders'); // false
    * ```
    */
-  deleteFile(id: string): void {
+  deleteFile(id: string, ownerId?: string): void {
+    if (ownerId) id += `/${ownerId}`;
     logger.logMethodArgs?.('deleteFile', id);
     delete this.memoryContextRecord_[id]; // direct unload to prevent save
     const path = this.storeFilePath_(this.stat(id));
@@ -413,6 +425,7 @@ export class AlwatrStore {
    * Adds a new store file to the root storeFilesCollection.
    */
   protected addStoreFile_(stat: StoreFileStat) {
+    if (stat.ownerId) stat.id += `/${stat.ownerId}`;
     logger.logMethodArgs?.('_addStoreFile', stat);
     this.rootDb_.create(stat.id, stat);
   }

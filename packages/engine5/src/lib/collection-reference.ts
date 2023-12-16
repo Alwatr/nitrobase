@@ -33,7 +33,11 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
    *
    * @returns A new collection context.
    */
-  static newContext_<TItem extends Record<string, unknown>>(id: string, region: Region): CollectionContext<TItem> {
+  static newContext_<TItem extends Record<string, unknown>>(
+    id: string,
+    region: Region,
+    ownerId?: string,
+  ): CollectionContext<TItem> {
     logger.logMethodArgs?.('coll.newContext', {id, region});
     const now = Date.now();
     return {
@@ -41,6 +45,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
       meta: {
         id,
         region,
+        ownerId,
         rev: 1,
         updated: now,
         created: now,
