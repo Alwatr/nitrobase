@@ -30,6 +30,7 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
     id: string,
     region: Region,
     data: TDoc,
+    ownerId?: string,
   ): DocumentContext<TDoc> {
     logger.logMethodArgs?.('doc.newContext', {id, region});
 
@@ -39,6 +40,7 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
       meta: {
         id,
         region,
+        ownerId,
         rev: 1,
         updated: now,
         created: now,
