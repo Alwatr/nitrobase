@@ -16,9 +16,9 @@
     "alwatr"
   ],
   "private": true,
-  "main": "alwatr-store.js",
+  "main": "main.js",
   "type": "module",
-  "types": "alwatr-store.d.ts",
+  "types": "main.d.ts",
   "author": "S. Ali Mihandoost <ali.mihandoost@gmail.com> (https://ali.mihandoost.com)",
   "license": "MIT",
   "files": [
