@@ -126,13 +126,13 @@ export enum StoreFileTTL {
 }
 
 /**
- * Unique address of the store file.
+ * Unique identifier of the store file.
  */
 export interface StoreFileAddress {
   /**
-   * The name of the store file.
+   * The id of the store file.
    */
-  name: string;
+  id: string;
 
   /**
    * The owner of the store file.
@@ -141,19 +141,6 @@ export interface StoreFileAddress {
    *
    */
   ownerId?: string;
-}
-
-/**
- * Represents the detailed statistics of a store file.
- */
-export interface StoreFileStat {
-  [P: string]: unknown;
-
-  /**
-   * The unique address of the store file.
-   * @see {@link StoreFileAddress}
-   */
-  address: StoreFileAddress;
 
   /**
    * The region where the store file is located.
@@ -183,28 +170,76 @@ export interface StoreFileStat {
   ttl: StoreFileTTL;
 }
 
-/**
- * Represents the metadata of a store file.
- */
-export interface StoreFileMeta {
+export class StoreFileId {
   /**
-   * The unique address of the store file.
-   * @see {@link StoreFileAddress}
+   * The id of the store file.
    */
-  address: StoreFileAddress;
+  readonly id: string;
 
   /**
-   * The type of the store file.
-   * @see {@link StoreFileType}
+   * The owner of the store file.
+   * If the region is `Region.PerX` then this is the user id, device id, or token id etc.
+   * @see {@link Region}
+   *
    */
-  type: StoreFileType;
+  readonly ownerId?: string;
 
   /**
    * The region where the store file is located.
    * @see {@link Region}
    */
-  region: Region;
+  readonly region: Region;
 
+  /**
+   * The type of the store file.
+   *
+   * @see {@link StoreFileType}
+   */
+  readonly type: StoreFileType;
+
+  /**
+   * The encoding used for the store file.
+   *
+   * @see {@link StoreFileEncoding}
+   */
+  readonly encoding: StoreFileEncoding;
+
+  /**
+   * The time-to-live (TTL) of the store file in memory.
+   *
+   * @see {@link StoreFileTTL}
+   */
+  readonly ttl: StoreFileTTL;
+
+  protected _raw = '';
+
+  constructor(public address: Readonly<StoreFileAddress>) {
+    this.id = address.id;
+    this.ownerId = address.ownerId;
+    this.region = address.region;
+    this.type = address.type;
+    this.encoding = address.encoding;
+    this.ttl = address.ttl;
+  }
+
+  /**
+   * The full path of the store file.
+   */
+  toString() {
+    if (!this._raw) {
+      this._raw = this.id
+      if (this.ownerId !== undefined) {
+        this._raw = `${this.id}/${this.ownerId}`;
+      }
+    }
+    return this._raw;
+  }
+}
+
+/**
+ * Represents the metadata of a store file.
+ */
+export interface StoreFileMeta extends StoreFileAddress {
   /**
    * The AlwatrStore engine version.
    */

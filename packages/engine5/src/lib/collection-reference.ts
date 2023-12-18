@@ -1,15 +1,15 @@
 import {createLogger} from '@alwatr/logger';
 
 import {logger} from './logger.js';
-import {
-  StoreFileType,
-  type CollectionContext,
-  type CollectionItem,
-  type CollectionItemMeta,
-  type Region,
-  type StoreFileMeta,
-  type StoreFileContext,
-  type StoreFileAddress,
+
+import type {
+  CollectionContext,
+  CollectionItem,
+  CollectionItemMeta,
+  StoreFileMeta,
+  StoreFileContext,
+  StoreFileId,
+  StoreFileAddress,
 } from '../type.js';
 
 logger.logModule?.('collection-reference');
@@ -28,30 +28,24 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
   /**
    * Creates a new empty collection context.
    *
-   * @param address the collection address.
-   * @param region the collection region.
+   * @param id the collection address.
    * @template TItem The collection item data type.
    *
    * @returns A new collection context.
    */
-  static newContext_<TItem extends Record<string, unknown>>(
-    address: StoreFileAddress,
-    region: Region,
-  ): CollectionContext<TItem> {
-    logger.logMethodArgs?.('coll.newContext', {address, region});
+  static newContext_<TItem extends Record<string, unknown>>(id: StoreFileId): CollectionContext<TItem> {
+    logger.logMethodArgs?.('coll.newContext', id);
     const now = Date.now();
     return {
       ok: true,
       meta: {
-        address,
-        region,
         rev: 1,
         updated: now,
         created: now,
-        type: StoreFileType.collection,
         ver: CollectionReference.version,
         fv: CollectionReference.fileFormatVersion,
         lastAutoId: 0,
+        ...id.address,
       },
       data: {},
     };
@@ -63,11 +57,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
    * @param context collection context
    */
   static migrateContext_(context: StoreFileContext<Record<string, unknown>>): void {
-    logger.logMethodArgs?.('coll.migrateContext_', {
-      address: context.meta.address,
-      ver: context.meta.ver,
-      fv: context.meta.fv,
-    });
+    logger.logMethodArgs?.('coll.migrateContext_', {meta: context.meta});
 
     // if (context.meta.fv === 1) migrate_to_2
 
@@ -81,9 +71,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
     }
   }
 
-  protected _logger = createLogger(
-    `coll:${this.context_.meta.address.name}:${this.context_.meta.address.ownerId}`.slice(0, 20)
-  );
+  protected _logger = createLogger(`coll:${this.context_.meta.id}:${this.context_.meta.ownerId}`.slice(0, 20));
 
   /**
    * Collection reference have methods to get, set, update and save the Alwatr Store Collection.
@@ -100,7 +88,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
    */
   constructor(
     protected context_: CollectionContext<TItem>,
-    protected updatedCallback_: (address: StoreFileAddress, context: CollectionContext<TItem>) => void,
+    protected updatedCallback_: (id: StoreFileAddress, context: CollectionContext<TItem>) => void,
   ) {
     this._logger.logMethodArgs?.('new', context_.meta);
   }
@@ -150,8 +138,8 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
   protected item_(id: string | number): CollectionItem<TItem> {
     const item = this.context_.data[id];
     if (item === undefined) {
-      this._logger.accident('item_', `collection_item_not_found`, {id});
-      throw new Error(`collection_item_not_found`, {cause: {id}});
+      this._logger.accident('item_', 'collection_item_not_found', {id});
+      throw new Error('collection_item_not_found', {cause: {id}});
     }
     return item;
   }
@@ -375,7 +363,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
   protected updated_(id?: string | number): void {
     this._logger.logMethod?.('_updated');
     this.updateMeta_(id);
-    this.updatedCallback_(this.context_.meta.address, this.context_);
+    this.updatedCallback_(this.context_.meta, this.context_);
   }
 
   /**
