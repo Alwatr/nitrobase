@@ -126,21 +126,13 @@ export enum StoreFileTTL {
 }
 
 /**
- * Represents the detailed statistics of a store file.
+ * Unique address of the store file.
  */
-export interface StoreFileStat {
-  [P: string]: unknown;
-
+export interface StoreFileAddress {
   /**
-   * The unique identifier of the store file.
+   * The name of the store file.
    */
-  id: string;
-
-  /**
-   * The region where the store file is located.
-   * @see {@link Region}
-   */
-  region: Region;
+  name: string;
 
   /**
    * The owner of the store file.
@@ -149,6 +141,25 @@ export interface StoreFileStat {
    *
    */
   ownerId?: string;
+}
+
+/**
+ * Represents the detailed statistics of a store file.
+ */
+export interface StoreFileStat {
+  [P: string]: unknown;
+
+  /**
+   * The unique address of the store file.
+   * @see {@link StoreFileAddress}
+   */
+  address: StoreFileAddress;
+
+  /**
+   * The region where the store file is located.
+   * @see {@link Region}
+   */
+  region: Region;
 
   /**
    * The type of the store file.
@@ -177,9 +188,10 @@ export interface StoreFileStat {
  */
 export interface StoreFileMeta {
   /**
-   * The unique identifier of the store file.
+   * The unique address of the store file.
+   * @see {@link StoreFileAddress}
    */
-  id: string;
+  address: StoreFileAddress;
 
   /**
    * The type of the store file.
@@ -219,14 +231,6 @@ export interface StoreFileMeta {
    * The Unix timestamp (in milliseconds since the epoch) for when the store file was created.
    */
   created: number;
-
-  /**
-   * The owner of the store file.
-   * If the region is `Region.PerX` then this is the user id, device id, or token id etc.
-   * @see {@link Region}
-   *
-   */
-  ownerId?: string;
 
   /**
    * Last auto increment id.

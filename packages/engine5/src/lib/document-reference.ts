@@ -1,7 +1,14 @@
 import {createLogger} from '@alwatr/logger';
 
 import {logger} from './logger.js';
-import {StoreFileType, type DocumentContext, type Region, type StoreFileMeta, type StoreFileContext} from '../type.js';
+import {
+  StoreFileType,
+  type DocumentContext,
+  type Region,
+  type StoreFileMeta,
+  type StoreFileContext,
+  type StoreFileAddress,
+} from '../type.js';
 
 logger.logModule?.('document-reference');
 
@@ -27,20 +34,18 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
    * @returns A new document context.
    */
   static newContext_<TDoc extends Record<string, unknown>>(
-    id: string,
+    address: StoreFileAddress,
     region: Region,
     data: TDoc,
-    ownerId?: string,
   ): DocumentContext<TDoc> {
-    logger.logMethodArgs?.('doc.newContext', {id, region});
+    logger.logMethodArgs?.('doc.newContext', {address, region});
 
     const now = Date.now();
     return {
       ok: true,
       meta: {
-        id,
+        address,
         region,
-        ownerId,
         rev: 1,
         updated: now,
         created: now,
@@ -58,7 +63,11 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
    * @param context document context
    */
   static migrateContext_(context: StoreFileContext<Record<string, unknown>>): void {
-    logger.logMethodArgs?.('doc.migrateContext_', {id: context.meta.id, ver: context.meta.ver, fv: context.meta.fv});
+    logger.logMethodArgs?.('doc.migrateContext_', {
+      address: context.meta.address,
+      ver: context.meta.ver,
+      fv: context.meta.fv,
+    });
 
     // if (context.meta.fv === 1) migrate_to_2
 
@@ -72,7 +81,9 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
     }
   }
 
-  protected _logger = createLogger(`doc:${this.context_.meta.id.slice(0, 20)}`);
+  protected _logger = createLogger(
+    `doc:${this.context_.meta.address.name}:${this.context_.meta.address.ownerId}`.slice(0, 20)
+  );
 
   /**
    * Create a new document reference.
@@ -84,7 +95,7 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
    */
   constructor(
     protected context_: DocumentContext<TDoc>,
-    protected updatedCallback_: (id: string, context: DocumentContext<TDoc>) => void,
+    protected updatedCallback_: (address: StoreFileAddress, context: DocumentContext<TDoc>) => void,
   ) {
     this._logger.logMethodArgs?.('new', context_.meta);
   }
@@ -182,6 +193,6 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
   protected updated_(): void {
     this._logger.logMethod?.('_updated');
     this.updateMeta_();
-    this.updatedCallback_(this.context_.meta.id, this.context_);
+    this.updatedCallback_(this.context_.meta.address, this.context_);
   }
 }
