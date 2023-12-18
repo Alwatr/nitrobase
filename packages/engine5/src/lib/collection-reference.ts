@@ -45,7 +45,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
         ver: CollectionReference.version,
         fv: CollectionReference.fileFormatVersion,
         lastAutoId: 0,
-        ...id.address,
+        ...id.value,
       },
       data: {},
     };
@@ -88,7 +88,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
    */
   constructor(
     protected context_: CollectionContext<TItem>,
-    protected updatedCallback_: (id: StoreFileAddress, context: CollectionContext<TItem>) => void,
+    protected updatedCallback_: (id: StoreFileId, context: CollectionContext<TItem>) => void,
   ) {
     this._logger.logMethodArgs?.('new', context_.meta);
   }

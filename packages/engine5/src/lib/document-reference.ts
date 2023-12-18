@@ -37,7 +37,7 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
         created: now,
         ver: DocumentReference.version,
         fv: DocumentReference.fileFormatVersion,
-        ...id.address,
+        ...id.value,
       },
       data,
     };
@@ -75,7 +75,7 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
    */
   constructor(
     protected context_: DocumentContext<TDoc>,
-    protected updatedCallback_: (id: StoreFileAddress, context: DocumentContext<TDoc>) => void,
+    protected updatedCallback_: (id: StoreFileId, context: DocumentContext<TDoc>) => void,
   ) {
     this._logger.logMethodArgs?.('new', context_.meta);
   }

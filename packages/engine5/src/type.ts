@@ -128,7 +128,7 @@ export enum StoreFileTTL {
 /**
  * Unique identifier of the store file.
  */
-export interface StoreFileAddress {
+export interface StoreFileAddress extends Record<string, unknown> {
   /**
    * The id of the store file.
    */
@@ -213,13 +213,13 @@ export class StoreFileId {
 
   protected _raw = '';
 
-  constructor(public address: Readonly<StoreFileAddress>) {
-    this.id = address.id;
-    this.ownerId = address.ownerId;
-    this.region = address.region;
-    this.type = address.type;
-    this.encoding = address.encoding;
-    this.ttl = address.ttl;
+  constructor(public value: Readonly<StoreFileAddress>) {
+    this.id = value.id;
+    this.ownerId = value.ownerId;
+    this.region = value.region;
+    this.type = value.type;
+    this.encoding = value.encoding;
+    this.ttl = value.ttl;
   }
 
   /**
