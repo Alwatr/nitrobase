@@ -4,7 +4,7 @@
   "editor.formatOnPaste": false,
   "editor.formatOnSave": false,
   "editor.codeActionsOnSave": {
-    "source.fixAll": true
+    "source.fixAll": "explicit"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "prettier.useEditorConfig": true,
