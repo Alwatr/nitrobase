@@ -58,8 +58,8 @@
     "watch:es": "yarn run build --watch"
   },
   "dependencies": {
-    "@alwatr/logger": "^2.3.2",
-    "@alwatr/util": "^1.3.3",
+    "@alwatr/logger": "^2.3.3",
+    "@alwatr/util": "^1.3.5",
     "exit-hook": "^4.0.0",
     "tslib": "^2.6.2"
   },
