@@ -11,7 +11,7 @@ import type {
 
 export {type AlwatrStorageConfig};
 
-definePackage('@alwatr/storage-sdk', '4.*');
+definePackage('storage-sdk', '4.*');
 
 /**
  * Extremely fast and compact JSON-based database that operates in memory, includes a JSON file backup.

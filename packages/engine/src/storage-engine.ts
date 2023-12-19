@@ -9,7 +9,7 @@ import type {AlwatrDocumentStorage, AlwatrDocumentObject, MaybePromise} from '@a
 
 export type {AlwatrDocumentObject, AlwatrDocumentStorage};
 
-definePackage('@alwatr/storage-engine', '4.*');
+definePackage('storage-engine', '4.*');
 
 /**
  * Extremely fast and compact JSON-based database that operates in memory, includes a JSON file backup.
