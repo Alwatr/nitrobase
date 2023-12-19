@@ -8,7 +8,7 @@ updates:
     reviewers:
       - AliMD
     schedule:
-      interval: daily
+      interval: weekly
       time: "00:30"
       day: "thursday"
     labels:
@@ -27,7 +27,7 @@ updates:
     reviewers:
       - AliMD
     schedule:
-      interval: daily
+      interval: weekly
       time: "00:30"
       day: "thursday"
     labels:
@@ -56,7 +56,7 @@ updates:
     reviewers:
       - AliMD
     schedule:
-      interval: daily
+      interval: weekly
       time: "00:30"
       day: "thursday"
     labels:
@@ -69,7 +69,7 @@ updates:
     reviewers:
       - AliMD
     schedule:
-      interval: daily
+      interval: weekly
       time: "00:30"
       day: "thursday"
     labels:
