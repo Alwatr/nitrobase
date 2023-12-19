@@ -71,7 +71,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
     }
   }
 
-  protected _logger = createLogger(`coll:${this.context_.meta.id}:${this.context_.meta.ownerId}`.slice(0, 20));
+  protected _logger = createLogger(`coll:${this.context_.meta.id}/${this.context_.meta.ownerId}`.slice(0, 20));
 
   /**
    * Collection reference have methods to get, set, update and save the Alwatr Store Collection.
@@ -88,7 +88,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
    */
   constructor(
     protected context_: CollectionContext<TItem>,
-    protected updatedCallback_: (id: StoreFileId, context: CollectionContext<TItem>) => void,
+    protected updatedCallback_: (id: StoreFileAddress, context: CollectionContext<TItem>) => void,
   ) {
     this._logger.logMethodArgs?.('new', context_.meta);
   }

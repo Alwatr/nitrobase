@@ -63,7 +63,7 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
     }
   }
 
-  protected _logger = createLogger(`doc:${this.context_.meta.id}:${this.context_.meta.ownerId}`.slice(0, 20));
+  protected _logger = createLogger(`doc:${this.context_.meta.id}/${this.context_.meta.ownerId}`.slice(0, 20));
 
   /**
    * Create a new document reference.
@@ -75,7 +75,7 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
    */
   constructor(
     protected context_: DocumentContext<TDoc>,
-    protected updatedCallback_: (id: StoreFileId, context: DocumentContext<TDoc>) => void,
+    protected updatedCallback_: (id: StoreFileAddress, context: DocumentContext<TDoc>) => void,
   ) {
     this._logger.logMethodArgs?.('new', context_.meta);
   }
