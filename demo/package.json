@@ -1,6 +1,6 @@
 {
   "name": "@alwatr/demo",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "main": "index.js",
   "author": "S. Ali Mihandoost <ali.mihandoost@gmail.com> (https://ali.mihandoost.com)",
   "type": "module",
