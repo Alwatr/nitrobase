@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.3](https://github.com/Alwatr/storage/compare/v4.0.2...v4.0.3) (2023-12-19)
+
+### Bug Fixes
+
+* **api:** dockerfile label ([f6c9d03](https://github.com/Alwatr/storage/commit/f6c9d034a91a3df3c85552f68092b312bb53304a)) by @AliMD
+* dockerfile labels ([289057c](https://github.com/Alwatr/storage/commit/289057c9cf979d9d33813c826943ede13e3c6a01)) by @AliMD
+
 ## [4.0.2](https://github.com/Alwatr/storage/compare/v4.0.1...v4.0.2) (2023-11-28)
 
 **Note:** Version bump only for package @alwatr/storage-api
