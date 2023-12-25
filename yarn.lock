@@ -70,6 +70,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@alwatr/nano-build@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "@alwatr/nano-build@npm:1.2.1"
+  dependencies:
+    esbuild: "npm:^0.19.10"
+  bin:
+    nano-build: nano-build.cjs
+  checksum: dd683718601b1cc240ef2da0d343cfceb9c058be25da786b2288bedd18f63a3634a2586d2af4d6c5b69399f1445e725e9c755d5a30bef755ffa6d0930b75c66f
+  languageName: node
+  linkType: hard
+
 "@alwatr/nano-server@npm:^1.2.7":
   version: 1.2.7
   resolution: "@alwatr/nano-server@npm:1.2.7"
@@ -110,13 +121,15 @@ __metadata:
   resolution: "@alwatr/storage-engine@workspace:packages/engine"
   dependencies:
     "@alwatr/logger": "npm:^2.4.1"
+    "@alwatr/nano-build": "npm:^1.2.1"
+    "@alwatr/prettier-config": "npm:^1.0.4"
+    "@alwatr/tsconfig-base": "npm:^1.0.5"
     "@alwatr/type": "npm:^1.2.4"
     "@alwatr/util": "npm:^1.4.1"
     "@types/node": "npm:^20.10.5"
     esbuild: "npm:^0.19.10"
     exit-hook: "npm:^4.0.0"
     npm-run-all: "npm:^4.1.5"
-    tslib: "npm:^2.6.2"
     typescript: "npm:^5.3.3"
   languageName: unknown
   linkType: soft
@@ -136,6 +149,13 @@ __metadata:
     typescript: "npm:^5.3.3"
   languageName: unknown
   linkType: soft
+
+"@alwatr/tsconfig-base@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "@alwatr/tsconfig-base@npm:1.0.5"
+  checksum: 5ef9c8bc91fd24dac416ac3599cd471dc7025fa4044aee6fe97910b83e84f11dbcea9251a03e7d142c4fd9e2cca92bbbc894433310fcbbe4405f402be3c1c56a
+  languageName: node
+  linkType: hard
 
 "@alwatr/type@npm:^1.2.4":
   version: 1.2.4
