@@ -1,13 +1,10 @@
 {
-  "extends": "../../tsconfig.base",
+  "extends": "@alwatr/tsconfig-base/tsconfig.json",
   "compilerOptions": {
-    "composite": true,
-    "tsBuildInfoFile": ".tsbuildinfo",
     "rootDir": "src",
-    "noEmit": true
+    // "outDir": "dist",
+    "noEmit": true,
   },
-
   "include": ["src/**/*.ts"],
-  "exclude": [],
   "references": [{"path": "../engine"}]
 }
