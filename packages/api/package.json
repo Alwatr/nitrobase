@@ -2,6 +2,8 @@
   "name": "@alwatr/storage-api",
   "version": "4.0.4",
   "description": "Extremely fast and compact JSON-based database that operates in memory, includes a JSON file backup, and serve over the highly accelerated Nginx.",
+  "author": "S. Ali Mihandoost <ali.mihandoost@gmail.com>",
+  "private": true,
   "type": "module",
   "keywords": [
     "database",
@@ -18,54 +20,52 @@
     "typescript",
     "alwatr"
   ],
-  "author": "S. Ali Mihandoost <ali.mihandoost@gmail.com> (https://ali.mihandoost.com)",
   "license": "MIT",
-  "private": true,
   "engines": {
     "node": ">=18.16.0",
     "yarn": ">=4.0.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Alwatr/storage",
+    "url": "https://github.com/Alwatr/store",
     "directory": "packages/api"
   },
-  "homepage": "https://github.com/Alwatr/storage#readme",
+  "homepage": "https://github.com/Alwatr/store#readme",
   "bugs": {
-    "url": "https://github.com/Alwatr/storage/issues"
+    "url": "https://github.com/Alwatr/store/issues"
   },
-  "esbuild": {
-    "entryPoints": [
-      "src/main.ts"
-    ],
-    "outbase": "src",
-    "outfile": "dist/main.mjs",
+  "prettier": "@alwatr/prettier-config",
+  "nano-build-development": {
     "sourcemap": true,
     "sourcesContent": true
   },
   "scripts": {
     "s": "yarn run start",
     "b": "yarn run build",
-    "w": "yarn run watch:es",
+    "w": "yarn run watch",
     "c": "yarn run clean",
-    "cb": "run-s clean build",
-    "start": "run-s clean build serve",
-    "build": "yarn node ./esbuild.mjs",
-    "clean": "rm -rfv dist .tsbuildinfo",
+    "cb": "yarn run clean && yarn run build",
+    "cw": "yarn run clean && yarn run watch",
+    "d": "yarn run build:es && ALWATR_DEBUG=1 yarn node",
+    "start": "yarn build && yarn serve",
+    "build": "nano-build --preset=microservice",
+    "watch": "yarn run build:es --watch",
+    "clean": "rm -rfv dist *.tsbuildinfo",
     "serve": "yarn node --enable-source-maps dist/main.mjs",
-    "serve:debug": "yarn node --inspect --enable-source-maps dist/index.js",
-    "watch:es": "yarn run build --watch"
+    "serve:debug": "yarn node --inspect --enable-source-maps dist/main.mjs"
   },
   "devDependencies": {
     "@alwatr/logger": "^2.4.1",
+    "@alwatr/nano-build": "^1.2.1",
     "@alwatr/nano-server": "^1.2.7",
+    "@alwatr/prettier-config": "^1.0.4",
     "@alwatr/storage-engine": "workspace:^",
+    "@alwatr/tsconfig-base": "^1.0.5",
     "@alwatr/type": "^1.2.4",
     "@alwatr/util": "^1.4.1",
     "@types/node": "^20.10.5",
     "esbuild": "^0.19.10",
     "npm-run-all": "^4.1.5",
-    "tslib": "^2.6.2",
     "typescript": "^5.3.3"
   }
 }
