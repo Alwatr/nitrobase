@@ -1,5 +1,7 @@
 export type MaybePromise<T> = T | Promise<T>;
 
+// *** Configs ***
+
 export interface AlwatrStoreConfig {
   /**
    * The root path of the storage.
@@ -14,6 +16,9 @@ export interface AlwatrStoreConfig {
    */
   saveDebounce: number;
 }
+
+
+// *** Store File ***
 
 /**
  * The subdirectory location for each store file.
@@ -62,17 +67,17 @@ export enum StoreFileType {
   /**
    * Type used for `single document` storage.
    */
-  document = 'doc',
+  Document = 'doc',
 
   /**
    * Type used for storing a `collection` of simpler documents, referred to as collection items.
    */
-  collection = 'col',
+  Collection = 'col',
 
   /**
    * Type used for storing a collection of items that are `append-only`.
    */
-  appendOnlyCollection = 'aoc',
+  AppendOnlyCollection = 'aoc',
 }
 
 /**
@@ -82,59 +87,21 @@ export enum StoreFileEncoding {
   /**
    * AlwatrStore JSON format.
    */
-  json = 'asj',
+  Json = 'asj',
 }
 
 /**
- * Store file time to live in memory.
+ * Unique identifier of the store file.
+ *
+ * Get from user for select store file.
  */
-export enum StoreFileTTL {
-  /**
-   * Store file will be removed from memory immediately after it is read.
-   */
-  zero = 0,
+export interface StoreFileId {
+  // [P: string]: unknown;
 
   /**
-   * Store file will be removed from memory after 1 minutes of inactivity.
+   * The store filename.
    */
-  veryShort = 60_000,
-
-  /**
-   * Store file will be removed from memory after 5 minutes of inactivity.
-   */
-  short = 300_000,
-
-  /**
-   * Store file will be removed from memory after 1 hour of inactivity.
-   */
-  medium = 3_600_000,
-
-  /**
-   * Store file will be removed from memory after 6 hour of inactivity.
-   */
-  long = 21_600_000,
-
-  /**
-   * Store file will be removed from memory after 24 hour of inactivity.
-   */
-  veryLong = 43_200_000,
-
-  /**
-   * Store file will not removed from memory until memory limit.
-   */
-  maximum = -1,
-}
-
-/**
- * Represents the detailed statistics of a store file.
- */
-export interface StoreFileStat {
-  [P: string]: unknown;
-
-  /**
-   * The unique identifier of the store file.
-   */
-  id: string;
+  name: string;
 
   /**
    * The region where the store file is located.
@@ -148,8 +115,13 @@ export interface StoreFileStat {
    * @see {@link Region}
    *
    */
-  ownerId?: string;
+  ownerId?: string
+}
 
+/**
+ * Store the complete metadata of the file in the root database.
+ */
+export interface StoreFileStat extends StoreFileId {
   /**
    * The type of the store file.
    *
@@ -166,33 +138,14 @@ export interface StoreFileStat {
 
   /**
    * The time-to-live (TTL) of the store file in memory.
-   *
-   * @see {@link StoreFileTTL}
    */
-  ttl: StoreFileTTL;
+  ttl: number;
 }
 
 /**
  * Represents the metadata of a store file.
  */
-export interface StoreFileMeta {
-  /**
-   * The unique identifier of the store file.
-   */
-  id: string;
-
-  /**
-   * The type of the store file.
-   * @see {@link StoreFileType}
-   */
-  type: StoreFileType;
-
-  /**
-   * The region where the store file is located.
-   * @see {@link Region}
-   */
-  region: Region;
-
+export interface StoreFileMeta extends StoreFileStat {
   /**
    * The AlwatrStore engine version.
    */
@@ -219,14 +172,6 @@ export interface StoreFileMeta {
    * The Unix timestamp (in milliseconds since the epoch) for when the store file was created.
    */
   created: number;
-
-  /**
-   * The owner of the store file.
-   * If the region is `Region.PerX` then this is the user id, device id, or token id etc.
-   * @see {@link Region}
-   *
-   */
-  ownerId?: string;
 
   /**
    * Last auto increment id.
@@ -263,13 +208,15 @@ export interface StoreFileContext<TData extends Record<string, unknown> = Record
  */
 export type StoreFileMetaOnlyContext = Omit<StoreFileContext<never>, 'data'>;
 
+// *** Documents ***
+
 /**
- * Document store item context type.
+ * StoreFileContext for document type.
  */
 export type DocumentContext<TDoc extends Record<string, unknown> = Record<string, unknown>> = StoreFileContext<TDoc>;
 
 
-// collections
+// *** Collections ***
 
 /**
  * The metadata of an item in a collection.
