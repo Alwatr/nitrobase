@@ -21,6 +21,7 @@ __metadata:
     "@alwatr/prettier-config": "npm:^1.0.4"
     "@alwatr/storage-engine": "workspace:^"
     "@alwatr/storage-sdk": "workspace:^"
+    "@alwatr/store-engine": "workspace:^"
     "@alwatr/tsconfig-base": "npm:^1.0.5"
     "@alwatr/type": "npm:^1.2.4"
     "@alwatr/util": "npm:^1.4.1"
@@ -148,6 +149,23 @@ __metadata:
     "@alwatr/type": "npm:^1.2.4"
     "@alwatr/util": "npm:^1.4.1"
     "@types/node": "npm:^20.10.5"
+    npm-run-all: "npm:^4.1.5"
+    typescript: "npm:^5.3.3"
+  languageName: unknown
+  linkType: soft
+
+"@alwatr/store-engine@workspace:^, @alwatr/store-engine@workspace:packages/engine5":
+  version: 0.0.0-use.local
+  resolution: "@alwatr/store-engine@workspace:packages/engine5"
+  dependencies:
+    "@alwatr/logger": "npm:^2.4.1"
+    "@alwatr/nano-build": "npm:^1.2.1"
+    "@alwatr/prettier-config": "npm:^1.0.4"
+    "@alwatr/tsconfig-base": "npm:^1.0.5"
+    "@alwatr/type": "npm:^1.2.4"
+    "@alwatr/util": "npm:^1.4.1"
+    "@types/node": "npm:^20.10.5"
+    exit-hook: "npm:^4.0.0"
     npm-run-all: "npm:^4.1.5"
     typescript: "npm:^5.3.3"
   languageName: unknown

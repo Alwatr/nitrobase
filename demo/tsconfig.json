@@ -1,11 +1,11 @@
 {
   "extends": "@alwatr/tsconfig-base/tsconfig.json",
   "compilerOptions": {
+    "composite": false,
     "rootDir": ".",
     "outDir": ".",
     "declarationMap": false,
     "declaration": false,
-    "composite": false,
     "sourceMap": false,
     "inlineSources": false
   },
