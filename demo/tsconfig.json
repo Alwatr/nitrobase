@@ -1,14 +1,15 @@
 {
-  "extends": "../tsconfig.base",
+  "extends": "@alwatr/tsconfig-base/tsconfig.json",
   "compilerOptions": {
-    "composite": true,
-    "tsBuildInfoFile": ".tsbuildinfo",
     "rootDir": ".",
     "outDir": ".",
     "declarationMap": false,
+    "declaration": false,
+    "composite": false,
+    "sourceMap": false,
+    "inlineSources": false
   },
-
   "include": ["**/*.ts"],
-  "exclude": ["*.d.ts", "node_modules"],
+  "exclude": ["*.d.ts"],
   "references": [{"path": "../packages/sdk"}, {"path": "../packages/engine"}]
 }
