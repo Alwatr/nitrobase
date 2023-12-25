@@ -1,5 +1,5 @@
 import {createLogger} from '@alwatr/logger';
-import {WriteFileMode, writeFile} from '@alwatr/store-engine/lib/util.js';
+import {WriteFileMode, writeFile} from '@alwatr/store-engine';
 
 const logger = createLogger('node-fs/demo', true);
 
