@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/Alwatr/store/compare/v4.0.4...v4.1.0) (2023-12-25)
+
+### Features
+
+* **engine:** support cjs build ([87970d4](https://github.com/Alwatr/store/commit/87970d4ddbf8ff89c27d0765cfe91b0febe9b978)) by @njfamirm
+
 ## [4.0.4](https://github.com/Alwatr/storage/compare/v4.0.3...v4.0.4) (2023-12-19)
 
 **Note:** Version bump only for package @alwatr/storage-engine

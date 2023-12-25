@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/Alwatr/store/compare/v4.0.4...v4.1.0) (2023-12-25)
+
+**Note:** Version bump only for package @alwatr/demo
+
 ## [4.0.4](https://github.com/Alwatr/store/compare/v4.0.3...v4.0.4) (2023-12-19)
 
 **Note:** Version bump only for package @alwatr/demo
