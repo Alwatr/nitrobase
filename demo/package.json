@@ -8,12 +8,11 @@
   "license": "MIT",
   "prettier": "@alwatr/prettier-config",
   "scripts": {
-    "d": "yarn run build && ALWATR_DEBUG=1 yarn node",
+    "d": "yarn run build:es && ALWATR_DEBUG=1 yarn node",
     "b": "yarn run build",
     "w": "yarn run watch",
     "c": "yarn run clean",
     "cb": "yarn run clean && yarn run build",
-    "d": "yarn run build:es && ALWATR_DEBUG=1 yarn node",
     "build": "yarn run build:ts",
     "build:ts": "tsc --build",
     "watch": "yarn run watch:ts & yarn run watch:es",
