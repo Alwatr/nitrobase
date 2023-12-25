@@ -13,9 +13,7 @@
       "changelog": true,
       "changelogPreset": "conventional-changelog-angular",
       "changelogIncludeCommitsClientLogin": " by @%l",
-      "ignoreChanges": [
-        "*.md"
-      ],
+      "ignoreChanges": ["*.md"],
       "message": "release:",
       "private": true,
       "forceGitTag": true,
