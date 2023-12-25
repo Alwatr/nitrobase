@@ -81,9 +81,9 @@ export enum StoreFileType {
 }
 
 /**
- * Store file encoding types.
+ * Store file extension (encode).
  */
-export enum StoreFileEncoding {
+export enum StoreFileExtension {
   /**
    * AlwatrStore JSON format.
    */
@@ -101,13 +101,13 @@ export interface StoreFileId {
   /**
    * The store filename.
    */
-  name: string;
+  readonly name: string;
 
   /**
    * The region where the store file is located.
    * @see {@link Region}
    */
-  region: Region;
+  readonly region: Region;
 
   /**
    * The owner of the store file.
@@ -115,7 +115,7 @@ export interface StoreFileId {
    * @see {@link Region}
    *
    */
-  ownerId?: string
+  readonly ownerId?: string
 }
 
 /**
@@ -127,19 +127,19 @@ export interface StoreFileStat extends StoreFileId {
    *
    * @see {@link StoreFileType}
    */
-  type: StoreFileType;
+  readonly type: StoreFileType;
 
   /**
-   * The encoding used for the store file.
+   * The extension used for the store file.
    *
-   * @see {@link StoreFileEncoding}
+   * @see {@link StoreFileExtension}
    */
-  encoding: StoreFileEncoding;
+  readonly extension: StoreFileExtension;
 
   /**
    * The time-to-live (TTL) of the store file in memory.
    */
-  ttl: number;
+  readonly ttl: number;
 }
 
 /**
