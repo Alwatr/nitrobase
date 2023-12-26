@@ -171,18 +171,18 @@ export interface StoreFileContext<TData extends Dictionary<unknown> = Dictionary
    *
    * if false, the Alwatr store throws an error.
    */
-  ok: true;
+  readonly ok: true;
 
   /**
    * The metadata of the store file.
    * @see {@link StoreFileMeta}
    */
-  meta: StoreFileMeta;
+  readonly meta: StoreFileMeta;
 
   /**
    * The data content of the store file.
    */
-  data: TData;
+  readonly data: TData;
 }
 
 /**
@@ -206,7 +206,7 @@ export interface CollectionItemMeta {
   /**
    * The unique identifier for the collection item.
    */
-  id: string | number;
+  readonly id: string | number;
 
   /**
    * The revision number for the collection item.
@@ -233,12 +233,12 @@ export interface CollectionItem<TItem> {
   /**
    * Collection item's metadata.
    */
-  meta: CollectionItemMeta;
+  readonly meta: CollectionItemMeta;
 
   /**
    * Collection item data.
    */
-  data: TItem;
+  readonly data: TItem;
 }
 
 /**
