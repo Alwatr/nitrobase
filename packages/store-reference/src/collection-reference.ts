@@ -50,6 +50,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
         rev: 1,
         updated: now,
         created: now,
+        lastAutoId: 0,
         type: StoreFileType.Collection,
         ver: CollectionReference.version,
         fv: CollectionReference.fileFormatVersion,
@@ -388,7 +389,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
     }
   }
 
-  getFullContext_(): Readonly<CollectionContext<TItem>> {
+  protected getFullContext_(): Readonly<CollectionContext<TItem>> {
     this.logger_.logMethod?.('getFullContext_');
     return this.context__;
   }
