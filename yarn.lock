@@ -63,6 +63,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@alwatr/flat-string@npm:^1.0.9":
+  version: 1.0.9
+  resolution: "@alwatr/flat-string@npm:1.0.9"
+  checksum: 3b05617358bed88d44be4ec541aff8d64f716ca10effa4f18d113342f7d83605594fbaddf7330dc937275f7757f77c47c86422c0ae5a3297bdbd37813e1f9458
+  languageName: node
+  linkType: hard
+
 "@alwatr/logger@npm:^2.4.1":
   version: 2.4.1
   resolution: "@alwatr/logger@npm:2.4.1"
@@ -174,7 +181,22 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alwatr/store-types@workspace:packages/types":
+"@alwatr/store-reference@workspace:packages/store-reference":
+  version: 0.0.0-use.local
+  resolution: "@alwatr/store-reference@workspace:packages/store-reference"
+  dependencies:
+    "@alwatr/flat-string": "npm:^1.0.9"
+    "@alwatr/logger": "npm:^2.4.1"
+    "@alwatr/nano-build": "npm:^1.2.1"
+    "@alwatr/prettier-config": "npm:^1.0.4"
+    "@alwatr/store-types": "workspace:^"
+    "@alwatr/tsconfig-base": "npm:^1.0.5"
+    "@types/node": "npm:^20.10.5"
+    typescript: "npm:^5.3.3"
+  languageName: unknown
+  linkType: soft
+
+"@alwatr/store-types@workspace:^, @alwatr/store-types@workspace:packages/types":
   version: 0.0.0-use.local
   resolution: "@alwatr/store-types@workspace:packages/types"
   dependencies:

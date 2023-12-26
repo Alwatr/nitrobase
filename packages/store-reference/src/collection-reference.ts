@@ -1,6 +1,4 @@
 import {createLogger} from '@alwatr/logger';
-
-import {logger} from '/Users/alimd/repo/alwatr/store/packages/engine5/src/logger.js';
 import {
   StoreFileType,
   type CollectionContext,
@@ -9,7 +7,10 @@ import {
   type Region,
   type StoreFileMeta,
   type StoreFileContext,
-} from '/Users/alimd/repo/alwatr/store/packages/engine5/src/type.js';
+} from '@alwatr/store-types';
+
+import {logger} from './logger.js';
+
 
 logger.logModule?.('collection-reference');
 
