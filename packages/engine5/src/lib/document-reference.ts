@@ -1,10 +1,22 @@
+import {flatString} from '@alwatr/flat-string';
 import {createLogger} from '@alwatr/logger';
 
-import {logger} from './logger.js';
-import {StoreFileType, type DocumentContext, type Region, type StoreFileMeta, type StoreFileContext} from '../type.js';
+import {logger} from '../logger.js';
+import {
+  StoreFileType,
+  type DocumentContext,
+  type StoreFileMeta,
+  StoreFileStat,
+  StoreFileId,
+  StoreFileExtension,
+} from '../type.js';
 
 logger.logModule?.('document-reference');
 
+/**
+ * Create a new document reference.
+ * Document reference have methods to get, set, update and save the AlwatrStore Document.
+ */
 export class DocumentReference<TDoc extends Record<string, unknown> = Record<string, unknown>> {
   /**
    * Alwatr store engine version string.
@@ -17,39 +29,55 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
   static readonly fileFormatVersion = 1;
 
   /**
-   * Creates a new empty document context.
+   * Creates new DocumentReference instance from stat and initial data.
    *
-   * @param id the document id.
-   * @param region the document region.
-   * @param data the document data.
+   * @param stat the document stat.
+   * @param initialData the document data.
+   * @param updatedCallback the callback to invoke when the document changed.
    * @template TDoc The document data type.
-   *
-   * @returns A new document context.
+   * @returns A new document reference class.
    */
-  static newContext_<TDoc extends Record<string, unknown>>(
-    id: string,
-    region: Region,
-    data: TDoc,
-    ownerId?: string,
-  ): DocumentContext<TDoc> {
-    logger.logMethodArgs?.('doc.newContext', {id, region});
+  static newRefFromData<TDoc extends Record<string, unknown>>(
+    stat: StoreFileId | StoreFileStat,
+    initialData: TDoc,
+    updatedCallback: (from: DocumentReference<TDoc>) => void,
+  ): DocumentReference<TDoc> {
+    logger.logMethodArgs?.('doc.newRefFromData', stat);
 
     const now = Date.now();
-    return {
+
+    const initialContext: DocumentContext<TDoc> = {
       ok: true,
       meta: {
-        id,
-        region,
-        ownerId,
+        extension: StoreFileExtension.Json,
+        ...stat,
         rev: 1,
         updated: now,
         created: now,
-        type: StoreFileType.document,
+        type: StoreFileType.Document,
         ver: DocumentReference.version,
         fv: DocumentReference.fileFormatVersion,
       },
-      data,
+      data: initialData,
     };
+
+    return new DocumentReference(initialContext, updatedCallback);
+  }
+
+  /**
+   * Creates new DocumentReference instance from DocumentContext.
+   *
+   * @param context the document context.
+   * @param updatedCallback the callback to invoke when the document changed.
+   * @template TDoc The document data type.
+   * @returns A new document reference class.
+   */
+  static newRefFromContext<TDoc extends Record<string, unknown>>(
+    context: DocumentContext<TDoc>,
+    updatedCallback: (from: DocumentReference<TDoc>) => void,
+  ): DocumentReference<TDoc> {
+    logger.logMethodArgs?.('doc.newRefFromContext', context.meta);
+    return new DocumentReference(context, updatedCallback);
   }
 
   /**
@@ -57,36 +85,60 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
    *
    * @param context document context
    */
-  static migrateContext_(context: StoreFileContext<Record<string, unknown>>): void {
-    logger.logMethodArgs?.('doc.migrateContext_', {id: context.meta.id, ver: context.meta.ver, fv: context.meta.fv});
+  static migrateContext_(context: DocumentContext<Record<string, unknown>>): void {
+    if (context.meta.ver === DocumentReference.version) return;
 
-    // if (context.meta.fv === 1) migrate_to_2
+    logger.logMethodArgs?.('doc.migrateContext_', {
+      name: context.meta.name,
+      ver: context.meta.ver,
+      fv: context.meta.fv,
+    });
 
     if (context.meta.fv > DocumentReference.fileFormatVersion) {
       logger.accident('doc.migrateContext_', 'store_version_incompatible', context.meta);
       throw new Error('store_version_incompatible', {cause: context.meta});
     }
 
-    if (context.meta.ver !== DocumentReference.version) {
-      context.meta.ver = DocumentReference.version;
-    }
+    // if (context.meta.fv === 1) migrate_to_2
+
+    context.meta.ver = DocumentReference.version;
   }
 
-  protected _logger = createLogger(`doc:${this.context_.meta.id.slice(0, 20)}`);
+  public readonly id: string;
+  public readonly path: string;
+
+  protected logger_;
 
   /**
    * Create a new document reference.
    * Document reference have methods to get, set, update and save the AlwatrStore Document.
    *
-   * @param context_ Document's context filled from the Alwatr Store (parent).
-   * @param updatedCallback_ updated callback to invoke when the document is updated from the Alwatr Store (parent).
+   * @param context__ Document's context filled from the Alwatr Store (parent).
+   * @param updatedCallback__ updated callback to invoke when the document is updated from the Alwatr Store (parent).
    * @template TDoc The document data type.
    */
   constructor(
-    protected context_: DocumentContext<TDoc>,
-    protected updatedCallback_: (id: string, context: DocumentContext<TDoc>) => void,
+    private readonly context__: DocumentContext<TDoc>,
+    private readonly updatedCallback__: (from: DocumentReference<TDoc>) => void,
   ) {
-    this._logger.logMethodArgs?.('new', context_.meta);
+    const meta = this.context__.meta;
+    let id = meta.region + '/' + meta.name;
+    if (meta.ownerId !== undefined) {
+      id += '/' + meta.ownerId;
+    }
+    this.id = flatString(id);
+
+    let path: string = meta.region;
+    if (meta.ownerId !== undefined) {
+      path += '/' + meta.ownerId.slice(0, 3) + '/' + meta.ownerId;
+    }
+    path += `/${meta.name}.${meta.type}.${meta.extension}`;
+    this.path = flatString(path);
+
+    this.logger_ = createLogger(`doc:${this.id.slice(0, 20)}`);
+
+    this.logger_.logMethodArgs?.('new', {path});
+    DocumentReference.migrateContext_(this.context__);
   }
 
   /**
@@ -100,8 +152,8 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
    * ```
    */
   get(): TDoc {
-    this._logger.logMethod?.('get');
-    return this.context_.data;
+    this.logger_.logMethod?.('get');
+    return this.context__.data;
   }
 
   /**
@@ -115,8 +167,8 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
    * ```
    */
   meta(): Readonly<StoreFileMeta> {
-    this._logger.logMethod?.('meta');
-    return this.context_.meta;
+    this.logger_.logMethod?.('meta');
+    return this.context__.meta;
   }
 
   /**
@@ -130,8 +182,8 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
    * ```
    */
   set(data: TDoc): void {
-    this._logger.logMethodArgs?.('set', data);
-    this.context_.data = data;
+    this.logger_.logMethodArgs?.('set', data);
+    this.context__.data = data;
     this.updated_();
   }
 
@@ -147,8 +199,8 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
    * ```
    */
   update(data: Partial<TDoc>): void {
-    this._logger.logMethodArgs?.('update', data);
-    Object.assign(this.context_.data, data);
+    this.logger_.logMethodArgs?.('update', data);
+    Object.assign(this.context__.data, data);
     this.updated_();
   }
 
@@ -162,17 +214,13 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
    * ```
    */
   save(): void {
-    this._logger.logMethod?.('save');
+    this.logger_.logMethod?.('save');
     this.updated_();
   }
 
-  /**
-   * Updates the document's metadata.
-   */
-  protected updateMeta_(): void {
-    this._logger.logMethod?.('_updateMeta');
-    this.context_.meta.updated = Date.now();
-    this.context_.meta.rev++;
+  getFullContext_(): Readonly<DocumentContext<TDoc>> {
+    this.logger_.logMethod?.('getFullContext_');
+    return this.context__;
   }
 
   /**
@@ -180,8 +228,20 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
    * Alwatr Store saves the document to the storage based on the throttling.
    */
   protected updated_(): void {
-    this._logger.logMethod?.('_updated');
-    this.updateMeta_();
-    this.updatedCallback_(this.context_.meta.id, this.context_);
+    // TODO: debounce
+    this.logger_.logMethod?.('_updated');
+    this.updateMeta__();
+    this.updatedCallback__.call(null, this);
   }
+
+  /**
+   * Updates the document's metadata.
+   */
+  private updateMeta__(): void {
+    this.logger_.logMethod?.('_updateMeta');
+    this.context__.meta.updated = Date.now();
+    this.context__.meta.rev++;
+  }
+
+
 }
