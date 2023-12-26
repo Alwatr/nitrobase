@@ -34,7 +34,7 @@
     "publish": "lerna publish from-package"
   },
   "devDependencies": {
-    "@alwatr/eslint-config": "^1.0.5",
+    "@alwatr/eslint-config": "^1.0.6",
     "@alwatr/prettier-config": "^1.0.4",
     "@lerna-lite/changed": "^3.1.0",
     "@lerna-lite/cli": "^3.1.0",
@@ -43,8 +43,8 @@
     "@lerna-lite/publish": "^3.1.0",
     "@lerna-lite/run": "^3.1.0",
     "@lerna-lite/version": "^3.1.0",
-    "@typescript-eslint/eslint-plugin": "^6.15.0",
-    "@typescript-eslint/parser": "^6.15.0",
+    "@typescript-eslint/eslint-plugin": "^6.16.0",
+    "@typescript-eslint/parser": "^6.16.0",
     "eslint": "^8.56.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",

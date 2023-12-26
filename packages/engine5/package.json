@@ -60,7 +60,7 @@
     "clean": "rm -rfv dist *.tsbuildinfo"
   },
   "dependencies": {
-    "@alwatr/flat-string": "^1.0.8",
+    "@alwatr/flat-string": "^1.0.9",
     "@alwatr/logger": "^2.4.1",
     "@alwatr/util": "^1.4.1",
     "exit-hook": "^4.0.0"
