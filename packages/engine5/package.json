@@ -60,6 +60,7 @@
     "clean": "rm -rfv dist *.tsbuildinfo"
   },
   "dependencies": {
+    "@alwatr/flat-string": "^1.0.8",
     "@alwatr/logger": "^2.4.1",
     "@alwatr/util": "^1.4.1",
     "exit-hook": "^4.0.0"
@@ -70,7 +71,6 @@
     "@alwatr/tsconfig-base": "^1.0.5",
     "@alwatr/type": "^1.2.4",
     "@types/node": "^20.10.5",
-    "npm-run-all": "^4.1.5",
     "typescript": "^5.3.3"
   }
 }
