@@ -1,7 +1,7 @@
 import {flatString} from '@alwatr/flat-string';
 import {createLogger} from '@alwatr/logger';
 
-import {logger} from '../logger.js';
+import {logger} from '/Users/alimd/repo/alwatr/store/packages/engine5/src/logger.js';
 import {
   StoreFileType,
   type DocumentContext,
@@ -9,7 +9,7 @@ import {
   StoreFileStat,
   StoreFileId,
   StoreFileExtension,
-} from '../type.js';
+} from '/Users/alimd/repo/alwatr/store/packages/engine5/src/type.js';
 
 logger.logModule?.('document-reference');
 

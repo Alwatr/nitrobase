@@ -1,6 +1,6 @@
 import {createLogger} from '@alwatr/logger';
 
-import {logger} from './logger.js';
+import {logger} from '/Users/alimd/repo/alwatr/store/packages/engine5/src/logger.js';
 import {
   StoreFileType,
   type CollectionContext,
@@ -9,7 +9,7 @@ import {
   type Region,
   type StoreFileMeta,
   type StoreFileContext,
-} from '../type.js';
+} from '/Users/alimd/repo/alwatr/store/packages/engine5/src/type.js';
 
 logger.logModule?.('collection-reference');
 
@@ -49,7 +49,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
         rev: 1,
         updated: now,
         created: now,
-        type: StoreFileType.collection,
+        type: StoreFileType.Collection,
         ver: CollectionReference.version,
         fv: CollectionReference.fileFormatVersion,
         lastAutoId: 0,
