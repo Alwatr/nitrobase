@@ -1,23 +1,18 @@
 import {flatString} from '@alwatr/flat-string';
 import {createLogger} from '@alwatr/logger';
-import {
-  StoreFileType,
-  StoreFileStat,
-  StoreFileId,
-  StoreFileExtension,
-  type DocumentContext,
-  type StoreFileMeta,
-} from '@alwatr/store-types';
+import {StoreFileType, StoreFileStat, StoreFileId, StoreFileExtension, type DocumentContext, type StoreFileMeta} from '@alwatr/store-types';
 
 import {logger} from './logger.js';
+
+import type {Dictionary} from '@alwatr/type-helper';
 
 logger.logModule?.('document-reference');
 
 /**
- * Create a new document reference.
- * Document reference have methods to get, set, update and save the AlwatrStore Document.
+ * Represents a reference to a document of the AlwatrStore.
+ * Provides methods to interact with the document, such as get, set, update and save.
  */
-export class DocumentReference<TDoc extends Record<string, unknown> = Record<string, unknown>> {
+export class DocumentReference<TDoc extends Dictionary = Dictionary> {
   /**
    * Alwatr store engine version string.
    */
@@ -37,7 +32,7 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
    * @template TDoc The document data type.
    * @returns A new document reference class.
    */
-  static newRefFromData<TDoc extends Record<string, unknown>>(
+  static newRefFromData<TDoc extends Dictionary>(
     stat: StoreFileId | StoreFileStat,
     initialData: TDoc,
     updatedCallback: (from: DocumentReference<TDoc>) => void,
@@ -72,7 +67,7 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
    * @template TDoc The document data type.
    * @returns A new document reference class.
    */
-  static newRefFromContext<TDoc extends Record<string, unknown>>(
+  static newRefFromContext<TDoc extends Dictionary>(
     context: DocumentContext<TDoc>,
     updatedCallback: (from: DocumentReference<TDoc>) => void,
   ): DocumentReference<TDoc> {
@@ -85,7 +80,7 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
    *
    * @param context document context
    */
-  static migrateContext_(context: DocumentContext<Record<string, unknown>>): void {
+  static migrateContext_(context: DocumentContext<Dictionary>): void {
     if (context.meta.ver === DocumentReference.version) return;
 
     logger.logMethodArgs?.('doc.migrateContext_', {
@@ -242,6 +237,4 @@ export class DocumentReference<TDoc extends Record<string, unknown> = Record<str
     this.context__.meta.updated = Date.now();
     this.context__.meta.rev++;
   }
-
-
 }
