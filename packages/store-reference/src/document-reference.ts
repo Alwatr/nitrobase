@@ -178,7 +178,7 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
    */
   set(data: TDoc): void {
     this.logger_.logMethodArgs?.('set', data);
-    this.context__.data = data;
+    (this.context__.data as unknown) = data;
     this.updated_();
   }
 
