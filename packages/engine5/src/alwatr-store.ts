@@ -48,11 +48,10 @@ export class AlwatrStore {
    * The root store file stat.
    */
   protected static readonly rootDbStat_: StoreFileStat = {
-    id: '.store',
+    name: '.store',
     region: Region.Secret,
     type: StoreFileType.Collection,
     extension: StoreFileExtension.Json,
-    ttl: StoreFileTTL.maximum,
   };
 
   /**
@@ -138,10 +137,9 @@ export class AlwatrStore {
    * }
    * ```
    */
-  exists(id: string, ownerId?: string): boolean {
-    if (ownerId) id += `/${ownerId}`;
-    const exists = this.rootDb_.exists(id);
-    logger.logMethodFull?.('exists', id, exists);
+  exists(stat: StoreFileStatModel): boolean {
+    const exists = this.rootDb_.exists(stat.id);
+    logger.logMethodFull?.('exists', stat.id, exists);
     return exists;
   }
 
@@ -183,21 +181,11 @@ export class AlwatrStore {
    * });
    * ```
    */
-  defineDocument<TDoc extends Record<string, unknown>>(
-    config: Pick<StoreFileStat, 'id' | 'region' | 'ttl' | 'ownerId'>,
-    initialData: TDoc,
-  ): Promise<void> {
-    logger.logMethodArgs?.('defineDocument', config);
-    const stat: StoreFileStat = {
-      ...config,
-      type: StoreFileType.Document,
-      extension: StoreFileExtension.Json,
-    };
+  defineDocument<TDoc extends Record<string, unknown>>(stat: StoreFileStatModel, initialData: TDoc): Promise<void> {
+    logger.logMethodArgs?.('defineDocument', stat.value);
     this.addStoreFile_(stat);
-    return this.writeContext_(
-      stat.id,
-      DocumentReference.newContext_(config.id, config.region, initialData, stat.ownerId),
-    );
+    const docRef = DocumentReference.newRefFromData(stat.value, initialData, this.writeContext_.bind(this))
+    return this.writeContext_(stat.id, docRef.getFullContext_());
   }
 
   /**
@@ -214,15 +202,11 @@ export class AlwatrStore {
    * });
    * ```
    */
-  defineCollection(config: Pick<StoreFileStat, 'id' | 'region' | 'ttl' | 'ownerId'>): Promise<void> {
-    logger.logMethodArgs?.('defineCollection', config);
-    const stat: StoreFileStat = {
-      ...config,
-      type: StoreFileType.Collection,
-      extension: StoreFileExtension.Json,
-    };
+  defineCollection(stat: StoreFileStatModel): Promise<void> {
+    logger.logMethodArgs?.('defineCollection', stat.value);
     this.addStoreFile_(stat);
-    return this.writeContext_(stat.id, CollectionReference.newContext_(config.id, config.region, stat.ownerId));
+    const colRef = CollectionReference.newRefFromData(stat.value, this.writeContext_.bind(this))
+    return this.writeContext_(colRef);
   }
 
   /**
@@ -238,22 +222,19 @@ export class AlwatrStore {
    * doc.update({name: 'ali'});
    * ```
    */
-  async doc<TDoc extends Record<string, unknown>>(id: string, ownerId?: string): Promise<DocumentReference<TDoc>> {
-    if (ownerId) id += `/${ownerId}`;
-    logger.logMethodArgs?.('doc', id);
-    if (!this.exists(id)) {
-      logger.accident('doc', 'document_not_found', {id});
-      throw new Error('document_not_found', {cause: {id}});
+  async doc<TDoc extends Record<string, unknown>>(stat: StoreFileStatModel): Promise<DocumentReference<TDoc>> {
+    logger.logMethodArgs?.('doc', stat.id);
+    if (!this.exists(stat)) {
+      logger.accident('doc', 'document_not_found', stat.id);
+      throw new Error('document_not_found', {cause: stat.id});
     }
-    const stat = this.stat(id);
-    if (stat.type != StoreFileType.Document) {
+    if (stat.value.type != StoreFileType.Document) {
       logger.accident('doc', 'document_wrong_type', stat);
       throw new Error('document_not_found', {cause: stat});
     }
-    return new DocumentReference(
-      (await this.getContext_(stat)) as DocumentContext<TDoc>,
-      this.writeContext_.bind(this),
-    );
+
+    const context = await this.getContext_(stat) as DocumentContext<TDoc>;
+    return DocumentReference.newRefFromContext<TDoc>(context, this.writeContext_.bind(this));
   }
 
   /**
@@ -269,25 +250,19 @@ export class AlwatrStore {
    * collection.add({name: 'order 1'});
    * ```
    */
-  async collection<TItem extends Record<string, unknown>>(
-    id: string,
-    ownerId?: string,
-  ): Promise<CollectionReference<TItem>> {
-    if (ownerId) id += `/${ownerId}`;
-    logger.logMethodArgs?.('collection', id);
-    if (this.exists(id) === false) {
-      logger.accident('collection', 'collection_not_found', {id});
-      throw new Error('collection_not_found', {cause: {id}});
+  async collection<TItem extends Record<string, unknown>>(stat: StoreFileStatModel): Promise<CollectionReference<TItem>> {
+    logger.logMethodArgs?.('collection', stat.id);
+    if (this.exists(stat) === false) {
+      logger.accident('collection', 'collection_not_found', stat.id);
+      throw new Error('collection_not_found', {cause: stat.id});
     }
-    const stat = this.stat(id);
-    if (stat.type != StoreFileType.Collection) {
+    if (stat.value.type != StoreFileType.Collection) {
       logger.accident('collection', 'collection_wrong_type', stat);
       throw new Error('collection_not_found', {cause: stat});
     }
-    return new CollectionReference(
-      (await this.getContext_(stat)) as CollectionContext<TItem>,
-      this.writeContext_.bind(this),
-    );
+
+    const context = await this.getContext_(stat) as CollectionContext<TItem>;
+    return CollectionReference.newRefFromContext<TItem>(context, this.writeContext_.bind(this));
   }
 
   /**
@@ -300,11 +275,10 @@ export class AlwatrStore {
    * alwatrStore.exists('user1/orders'); // true
    * ```
    */
-  unload(id: string, ownerId?: string): void {
-    if (ownerId) id += `/${ownerId}`;
-    logger.logMethodArgs?.('unload', id);
+  unload(stat: StoreFileStatModel): void {
+    logger.logMethodArgs?.('unload', stat.id);
     // TODO: this.save_(id);
-    delete this.memoryContextRecord_[id];
+    delete this.memoryContextRecord_[stat.id];
   }
 
   /**
@@ -317,15 +291,14 @@ export class AlwatrStore {
    * alwatrStore.exists('user1/orders'); // false
    * ```
    */
-  deleteFile(id: string, ownerId?: string): void {
-    if (ownerId) id += `/${ownerId}`;
-    logger.logMethodArgs?.('deleteFile', id);
-    delete this.memoryContextRecord_[id]; // direct unload to prevent save
-    const path = this.storeFilePath_(this.stat(id));
+  deleteFile(stat: StoreFileStatModel): void {
+    logger.logMethodArgs?.('deleteFile', stat.id);
+    delete this.memoryContextRecord_[stat.id]; // direct unload to prevent save
+    const path = this.storeFilePath_(this.stat(stat.id));
     unlink(path).catch((err) => {
       logger.accident?.('deleteFile', 'delete_file_failed', err);
     });
-    this.rootDb_.delete(id);
+    this.rootDb_.delete(stat.id);
   }
 
   /**
@@ -347,17 +320,16 @@ export class AlwatrStore {
    * console.log(context.data.name); // ali
    * ```
    */
-  protected async getContext_(stat: StoreFileStat): Promise<StoreFileContext> {
+  protected async getContext_(stat: StoreFileStatModel): Promise<StoreFileContext> {
     logger.logMethodArgs?.('getContext_', stat.id);
     return this.memoryContextRecord_[stat.id] ?? this.readContext_(stat);
   }
 
-  protected async readContext_(stat: StoreFileStat): Promise<StoreFileContext> {
+  protected async readContext_(stat: StoreFileStatModel): Promise<StoreFileContext> {
     logger.logMethodArgs?.('readContext_', stat.id);
     logger.time?.(`readContextTime(${stat.id})`);
-    const path = this.storeFilePath_(stat);
-    const context = (await readJsonFile(path)) as StoreFileContext;
-    AlwatrStore.validateStoreFile_(context);
+    const context = (await readJsonFile(stat.path)) as StoreFileContext;
+    // AlwatrStore.validateStoreFile_(context);
     this.memoryContextRecord_[stat.id] = context;
     logger.timeEnd?.(`readContextTime(${stat.id})`);
     return context;
@@ -374,15 +346,13 @@ export class AlwatrStore {
    * await this.writeContext_('user1/profile', {data: {name: 'ali'}});
    * ```
    */
-  protected async writeContext_(id: string, context: StoreFileContext, sync = false): Promise<void> {
-    logger.logMethodArgs?.('writeContext', id);
-    logger.time?.(`writeContextTime(${id})`);
-    const stat = id === AlwatrStore.rootDbStat_.id ? AlwatrStore.rootDbStat_ : this.stat(id);
-    const path = this.storeFilePath_(stat);
-    this.memoryContextRecord_[id] = context;
-    await writeJsonFile(path, context, WriteFileMode.Rename, sync);
-    logger.timeEnd?.(`writeContextTime(${id})`);
-    logger.logOther?.('writeContextDone', id);
+  protected async writeContext_(from: DocumentReference | CollectionReference, sync = false): Promise<void> {
+    logger.logMethodArgs?.('writeContext', from.id);
+    logger.time?.(`writeContextTime(${from.id})`);
+    this.memoryContextRecord_[from.id] = from.getFullContext_();
+    await writeJsonFile(from.path, from.getFullContext_(), WriteFileMode.Rename, sync);
+    logger.timeEnd?.(`writeContextTime(${from.id})`);
+    logger.logOther?.('writeContextDone', from.id);
   }
 
   /**
@@ -415,20 +385,22 @@ export class AlwatrStore {
   protected loadRootDb_(): CollectionReference<StoreFileStat> {
     logger.logMethod?.('loadRootDb_');
     const path = this.storeFilePath_(AlwatrStore.rootDbStat_);
-    let context;
+    let colRef;
     if (existsSync(path)) {
-      context = readJsonFile(path, true) as CollectionContext<StoreFileStat>;
-      AlwatrStore.validateStoreFile_(context);
+      const context = readJsonFile(path, true) as CollectionContext<StoreFileStat>;
+      colRef = CollectionReference.newRefFromContext(context, this.writeContext_.bind(this));
     }
     else {
       logger.banner('Initialize new alwatr-store');
-      context = CollectionReference.newContext_<StoreFileStat>(
-        AlwatrStore.rootDbStat_.id,
-        AlwatrStore.rootDbStat_.region,
-      );
-      this.writeContext_(AlwatrStore.rootDbStat_.id, context, true);
+      colRef = CollectionReference.newRefFromData({
+        name: AlwatrStore.rootDbStat_.name,
+        region: AlwatrStore.rootDbStat_.region,
+        extension: StoreFileExtension.Json,
+        type: StoreFileType.Collection,
+      }, this.writeContext_.bind(this));
     }
-    return new CollectionReference(context, this.writeContext_.bind(this));
+
+    return colRef
   }
 
   /**
@@ -436,9 +408,8 @@ export class AlwatrStore {
    *
    * Adds a new store file to the root storeFilesCollection.
    */
-  protected addStoreFile_(stat: StoreFileStat) {
-    if (stat.ownerId) stat.id += `/${stat.ownerId}`;
-    logger.logMethodArgs?.('_addStoreFile', stat);
-    this.rootDb_.create(stat.id, stat);
+  protected addStoreFile_(stat: StoreFileStatModel) {
+    logger.logMethodArgs?.('_addStoreFile', stat.value);
+    this.rootDb_.create(stat.id, stat.value);
   }
 }
