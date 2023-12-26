@@ -1,6 +1,6 @@
 import {flatString} from '@alwatr/flat-string';
 
-import {StoreFileStat} from '../type';
+import type {StoreFileStat} from '@alwatr/store-types';
 
 export class StoreFileStatModel {
   public readonly id: string;
