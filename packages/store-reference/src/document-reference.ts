@@ -1,15 +1,15 @@
 import {flatString} from '@alwatr/flat-string';
 import {createLogger} from '@alwatr/logger';
-
-import {logger} from '/Users/alimd/repo/alwatr/store/packages/engine5/src/logger.js';
 import {
   StoreFileType,
-  type DocumentContext,
-  type StoreFileMeta,
   StoreFileStat,
   StoreFileId,
   StoreFileExtension,
-} from '/Users/alimd/repo/alwatr/store/packages/engine5/src/type.js';
+  type DocumentContext,
+  type StoreFileMeta,
+} from '@alwatr/store-types';
+
+import {logger} from './logger.js';
 
 logger.logModule?.('document-reference');
 
