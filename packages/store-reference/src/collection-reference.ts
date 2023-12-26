@@ -10,12 +10,19 @@ import {
   type CollectionItemMeta,
   type StoreFileMeta,
 } from '@alwatr/store-types';
+import {Dictionary} from '@alwatr/type-helper';
 
 import {logger} from './logger.js';
 
 logger.logModule?.('collection-reference');
 
-export class CollectionReference<TItem extends Record<string, unknown> = Record<string, unknown>> {
+/**
+ * Represents a reference to a collection of the AlwatrStore.
+ * Provides methods to interact with the collection, such as retrieving, creating, updating, and deleting items.
+ *
+ * @template TItem - The data type of the collection items.
+ */
+export class CollectionReference<TItem extends Dictionary = Dictionary> {
   /**
    * Alwatr store engine version string.
    */
@@ -30,12 +37,14 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
    * Creates new CollectionReference instance from stat.
    *
    * @param stat the collection stat.
+   * @param initialData the collection data.
    * @param updatedCallback the callback to invoke when the collection changed.
    * @template TItem The collection item data type.
    * @returns A new collection reference class.
    */
-  static newRefFromData<TItem extends Record<string, unknown>>(
+  static newRefFromData<TItem extends Dictionary>(
     stat: StoreFileId | StoreFileStat,
+    initialData: CollectionContext<TItem>['data'] | null,
     updatedCallback: (from: CollectionReference<TItem>) => void,
   ): CollectionReference<TItem> {
     logger.logMethodArgs?.('col.newRefFromData', stat);
@@ -55,7 +64,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
         ver: CollectionReference.version,
         fv: CollectionReference.fileFormatVersion,
       },
-      data: {},
+      data: initialData ?? {},
     };
 
     return new CollectionReference(initialContext, updatedCallback);
@@ -69,11 +78,11 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
    * @template TItem The collection item data type.
    * @returns A new collection reference class.
    */
-  static newRefFromContext<TItem extends Record<string, unknown>>(
+  static newRefFromContext<TItem extends Dictionary>(
     context: CollectionContext<TItem>,
     updatedCallback: (from: CollectionReference<TItem>) => void,
   ): CollectionReference<TItem> {
-    logger.logMethodArgs?.('doc.newRefFromContext', context.meta);
+    logger.logMethodArgs?.('col.newRefFromContext', context.meta);
     return new CollectionReference(context, updatedCallback);
   }
 
@@ -82,11 +91,11 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
    *
    * @param context collection context
    */
-  static migrateContext_(context: CollectionContext<Record<string, unknown>>): void {
+  static migrateContext_(context: CollectionContext<Dictionary>): void {
     if (context.meta.ver === CollectionReference.version) return;
 
     logger.logMethodArgs?.('coll.migrateContext_', {
-      id: context.meta.name,
+      name: context.meta.name,
       ver: context.meta.ver,
       fv: context.meta.fv,
     });
@@ -223,6 +232,24 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
   }
 
   /**
+   * Direct access to an item.
+   * If the item does not exist, `undefined` is returned.
+   * **USE WITH CAUTION!**
+   *
+   * @param id - The ID of the item.
+   * @returns The data of the item with the given ID or `undefined` if the item does not exist.
+   *
+   * @example
+   * ```typescript
+   * collectionRef.access_('item1')?.data.name = 'test2';
+   * ```
+   */
+  access_(id: string | number): CollectionItem<TItem> | undefined {
+    this.logger_.logMethodArgs?.('access_', id);
+    return this.context__.data[id];
+  }
+
+  /**
    * Creates a new item in the collection. If an item with the given ID already exists, an error is thrown.
    *
    * @param id - The ID of the item to create.
@@ -242,18 +269,30 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
     this.context__.data[id] = {
       meta: {
         id,
+        // other prop calc in updateMeta__
         rev: 0,
-        created: 0, // calc in _updated
+        created: 0,
         updated: 0,
       },
       data,
     };
-    this.updated_(id);
+    this.updated__(id);
   }
 
+  /**
+   * Appends the given data to the collection with auto increment ID.
+   *
+   * @param data - The data to append.
+   * @returns The ID of the appended item.
+   *
+   * @example
+   * ```typescript
+   * const newId = collectionRef.append({ key: 'value' });
+   * ```
+   */
   append(data: TItem): string | number {
     this.logger_.logMethodArgs?.('append', data);
-    const id = this.nextAutoIncrementId_();
+    const id = this.nextAutoIncrementId__();
     this.create(id, data);
     return id;
   }
@@ -271,7 +310,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
   delete(id: string | number): void {
     this.logger_.logMethodArgs?.('delete', id);
     delete this.context__.data[id];
-    this.updated_();
+    this.updated__();
   }
 
   /**
@@ -288,7 +327,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
   set(id: string | number, data: TItem): void {
     this.logger_.logMethodArgs?.('set', {id, data});
     this.item_(id).data = data;
-    this.updated_(id);
+    this.updated__(id);
   }
 
   /**
@@ -305,7 +344,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
   update(id: string | number, data: Partial<TItem>): void {
     this.logger_.logMethodArgs?.('update', data);
     Object.assign(this.item_(id).data, data);
-    this.updated_(id);
+    this.updated__(id);
   }
 
   /**
@@ -321,7 +360,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
    */
   save(id: string | number): void {
     this.logger_.logMethodArgs?.('save', id);
-    this.updated_(id);
+    this.updated__(id);
   }
 
   /**
@@ -389,7 +428,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
     }
   }
 
-  protected getFullContext_(): Readonly<CollectionContext<TItem>> {
+  getFullContext_(): Readonly<CollectionContext<TItem>> {
     this.logger_.logMethod?.('getFullContext_');
     return this.context__;
   }
@@ -399,7 +438,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
    *
    * @param id - The ID of the item to update.
    */
-  protected updated_(id?: string | number): void {
+  private updated__(id?: string | number): void {
     this.logger_.logMethod?.('updated_');
     this.updateMeta__(id);
     this.updatedCallback__.call(null, this);
@@ -410,7 +449,7 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
    *
    * @param id - The ID of the item to update.
    */
-  protected updateMeta__(id?: string | number): void {
+  private updateMeta__(id?: string | number): void {
     this.logger_.logMethod?.('updateMeta__');
     const now = Date.now();
     this.context__.meta.rev++;
@@ -431,10 +470,11 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
    * const nextId = this.nextAutoIncrementId_();
    * ```
    */
-  protected nextAutoIncrementId_(): number {
+  private nextAutoIncrementId__(): number {
+    const meta = this.context__.meta as Required<StoreFileMeta>;
     do {
-      this.context__.meta.lastAutoId!++;
-    } while (this.context__.meta.lastAutoId! in this.context__.data);
-    return this.context__.meta.lastAutoId!;
+      meta.lastAutoId++;
+    } while (meta.lastAutoId in this.context__.data);
+    return meta.lastAutoId;
   }
 }
