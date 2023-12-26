@@ -1,3 +1,5 @@
+import {Dictionary} from '@alwatr/type-helper';
+
 // *** Store File ***
 
 /**
@@ -95,7 +97,7 @@ export interface StoreFileId {
    * @see {@link Region}
    *
    */
-  readonly ownerId?: string
+  readonly ownerId?: string;
 }
 
 /**
@@ -163,7 +165,7 @@ export interface StoreFileMeta extends StoreFileStat {
  * Represents the context of a store file.
  * @template TData The type of the data content in the store file.
  */
-export interface StoreFileContext<TData extends Record<string, unknown> = Record<string, unknown>> {
+export interface StoreFileContext<TData extends Dictionary<unknown> = Dictionary<unknown>> {
   /**
    * The status of the store file.
    *
@@ -193,8 +195,7 @@ export type StoreFileMetaOnlyContext = Omit<StoreFileContext<never>, 'data'>;
 /**
  * StoreFileContext for document type.
  */
-export type DocumentContext<TDoc extends Record<string, unknown> = Record<string, unknown>> = StoreFileContext<TDoc>;
-
+export type DocumentContext<TDoc extends Dictionary<unknown> = Dictionary<unknown>> = StoreFileContext<TDoc>;
 
 // *** Collections ***
 
@@ -229,7 +230,7 @@ export interface CollectionItemMeta {
  * Collection item context type.
  */
 export interface CollectionItem<TItem> {
-/**
+  /**
    * Collection item's metadata.
    */
   meta: CollectionItemMeta;
@@ -243,6 +244,6 @@ export interface CollectionItem<TItem> {
 /**
  * Collection item context type.
  */
-export type CollectionContext<TItem extends Record<string, unknown> = Record<string, unknown>> = StoreFileContext<
-  Record<string | number, CollectionItem<TItem>>
+export type CollectionContext<TItem extends Dictionary<unknown> = Dictionary<unknown>> = StoreFileContext<
+  Dictionary<CollectionItem<TItem>>
 >;
