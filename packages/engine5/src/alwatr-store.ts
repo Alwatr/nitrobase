@@ -1,10 +1,10 @@
 import {CollectionReference} from './lib/collection-reference.js';
 import {DocumentReference} from './lib/document-reference.js';
-import {logger} from './lib/logger.js';
 import {WriteFileMode, existsSync, readJsonFile, resolve, unlink, writeJsonFile} from './lib/util.js';
+import {logger} from './logger.js';
 import {
   StoreFileType,
-  StoreFileEncoding,
+  StoreFileExtension,
   Region,
   StoreFileTTL,
   type StoreFileStat,
@@ -17,6 +17,21 @@ import {
 export {Region, StoreFileTTL};
 
 logger.logModule?.('alwatr-store');
+
+export interface AlwatrStoreConfig {
+  /**
+   * The root path of the storage.
+   * This is where the AlwatrStore will store its data.
+   */
+  rootPath: string;
+
+  /**
+   * The save debounce timeout in milliseconds for minimal disk I/O usage.
+   * This is used to limit the frequency of disk writes for performance reasons.
+   * The recommended value is `50`.
+   */
+  saveDebounce: number;
+}
 
 /**
  * AlwatrStore engine.
@@ -38,8 +53,8 @@ export class AlwatrStore {
   protected static readonly rootDbStat_: StoreFileStat = {
     id: '.store',
     region: Region.Secret,
-    type: StoreFileType.collection,
-    encoding: StoreFileEncoding.json,
+    type: StoreFileType.Collection,
+    extension: StoreFileExtension.Json,
     ttl: StoreFileTTL.maximum,
   };
 
@@ -63,12 +78,12 @@ export class AlwatrStore {
       });
 
       switch (context.meta?.type) {
-        case StoreFileType.document: {
+        case StoreFileType.Document: {
           DocumentReference.migrateContext_(context);
           break;
         }
 
-        case StoreFileType.collection: {
+        case StoreFileType.Collection: {
           CollectionReference.migrateContext_(context);
           break;
         }
@@ -178,8 +193,8 @@ export class AlwatrStore {
     logger.logMethodArgs?.('defineDocument', config);
     const stat: StoreFileStat = {
       ...config,
-      type: StoreFileType.document,
-      encoding: StoreFileEncoding.json,
+      type: StoreFileType.Document,
+      extension: StoreFileExtension.Json,
     };
     this.addStoreFile_(stat);
     return this.writeContext_(
@@ -206,8 +221,8 @@ export class AlwatrStore {
     logger.logMethodArgs?.('defineCollection', config);
     const stat: StoreFileStat = {
       ...config,
-      type: StoreFileType.collection,
-      encoding: StoreFileEncoding.json,
+      type: StoreFileType.Collection,
+      extension: StoreFileExtension.Json,
     };
     this.addStoreFile_(stat);
     return this.writeContext_(stat.id, CollectionReference.newContext_(config.id, config.region, stat.ownerId));
@@ -234,7 +249,7 @@ export class AlwatrStore {
       throw new Error('document_not_found', {cause: {id}});
     }
     const stat = this.stat(id);
-    if (stat.type != StoreFileType.document) {
+    if (stat.type != StoreFileType.Document) {
       logger.accident('doc', 'document_wrong_type', stat);
       throw new Error('document_not_found', {cause: stat});
     }
@@ -268,7 +283,7 @@ export class AlwatrStore {
       throw new Error('collection_not_found', {cause: {id}});
     }
     const stat = this.stat(id);
-    if (stat.type != StoreFileType.collection) {
+    if (stat.type != StoreFileType.Collection) {
       logger.accident('collection', 'collection_wrong_type', stat);
       throw new Error('collection_not_found', {cause: stat});
     }
@@ -394,7 +409,7 @@ export class AlwatrStore {
     if (stat.ownerId !== undefined) {
       regionPath += `/${stat.ownerId.slice(0, 3)}/${stat.ownerId}`;
     }
-    return resolve(this.config_.rootPath, regionPath, `${stat.id}.${stat.type}.${stat.encoding}`);
+    return resolve(this.config_.rootPath, regionPath, `${stat.id}.${stat.type}.${stat.extension}`);
   }
 
   /**
