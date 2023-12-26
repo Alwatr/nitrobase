@@ -120,8 +120,8 @@ export class CollectionReference<TItem extends Record<string, unknown> = Record<
    * ```
    */
   constructor(
-    protected context__: CollectionContext<TItem>,
-    protected updatedCallback__: (from: CollectionReference<TItem>) => void,
+    private context__: CollectionContext<TItem>,
+    private updatedCallback__: (from: CollectionReference<TItem>) => void,
   ) {
     const meta = this.context__.meta;
     let id = meta.region + '/' + meta.name;
