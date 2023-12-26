@@ -326,7 +326,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    */
   set(id: string | number, data: TItem): void {
     this.logger_.logMethodArgs?.('set', {id, data});
-    this.item_(id).data = data;
+    (this.item_(id).data as unknown) = data;
     this.updated__(id);
   }
 
