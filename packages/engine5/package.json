@@ -60,13 +60,13 @@
     "clean": "rm -rfv dist *.tsbuildinfo"
   },
   "dependencies": {
-    "@alwatr/flat-string": "^1.0.9",
+    "@alwatr/flat-string": "^1.0.10",
     "@alwatr/logger": "^2.4.1",
     "@alwatr/util": "^1.4.1",
     "exit-hook": "^4.0.0"
   },
   "devDependencies": {
-    "@alwatr/nano-build": "^1.2.1",
+    "@alwatr/nano-build": "^1.2.2",
     "@alwatr/prettier-config": "^1.0.4",
     "@alwatr/store-reference": "workspace:^",
     "@alwatr/store-types": "workspace:^",

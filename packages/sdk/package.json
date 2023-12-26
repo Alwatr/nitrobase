@@ -64,7 +64,7 @@
     "@alwatr/logger": "^2.4.1"
   },
   "devDependencies": {
-    "@alwatr/nano-build": "^1.2.1",
+    "@alwatr/nano-build": "^1.2.2",
     "@alwatr/prettier-config": "^1.0.4",
     "@alwatr/tsconfig-base": "^1.0.5",
     "@alwatr/type": "^1.2.4",
