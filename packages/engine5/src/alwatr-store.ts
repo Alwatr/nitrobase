@@ -1,20 +1,17 @@
-import {CollectionReference} from './lib/collection-reference.js';
-import {DocumentReference} from './lib/document-reference.js';
-import {WriteFileMode, existsSync, readJsonFile, resolve, unlink, writeJsonFile} from './lib/util.js';
-import {logger} from './logger.js';
+import {CollectionReference, DocumentReference} from '@alwatr/store-reference';
 import {
   StoreFileType,
   StoreFileExtension,
   Region,
-  StoreFileTTL,
   type StoreFileStat,
-  type AlwatrStoreConfig,
   type StoreFileContext,
   type CollectionContext,
-  type DocumentContext,
-} from './type.js';
+  DocumentContext,
+} from '@alwatr/store-types';
 
-export {Region, StoreFileTTL};
+import {StoreFileStatModel} from './lib/store-file-stat.js'
+import {WriteFileMode, existsSync, readJsonFile, resolve, unlink, writeJsonFile} from './lib/util.js';
+import {logger} from './logger.js';
 
 logger.logModule?.('alwatr-store');
 

@@ -68,6 +68,8 @@
   "devDependencies": {
     "@alwatr/nano-build": "^1.2.1",
     "@alwatr/prettier-config": "^1.0.4",
+    "@alwatr/store-reference": "workspace:^",
+    "@alwatr/store-types": "workspace:^",
     "@alwatr/tsconfig-base": "^1.0.5",
     "@alwatr/type": "^1.2.4",
     "@types/node": "^20.10.5",
