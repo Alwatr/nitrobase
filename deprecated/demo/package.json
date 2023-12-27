@@ -23,8 +23,6 @@
   "dependencies": {
     "@alwatr/logger": "^2.4.1",
     "@alwatr/math": "^1.3.1",
-    "@alwatr/storage-engine": "workspace:^",
-    "@alwatr/storage-sdk": "workspace:^",
     "@alwatr/store-engine": "workspace:^",
     "@alwatr/util": "^1.4.1",
     "tslib": "^2.6.2"

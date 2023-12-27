@@ -19,8 +19,6 @@ __metadata:
     "@alwatr/logger": "npm:^2.4.1"
     "@alwatr/math": "npm:^1.3.1"
     "@alwatr/prettier-config": "npm:^1.0.4"
-    "@alwatr/storage-engine": "workspace:^"
-    "@alwatr/storage-sdk": "workspace:^"
     "@alwatr/store-engine": "workspace:^"
     "@alwatr/tsconfig-base": "npm:^1.0.5"
     "@alwatr/type": "npm:^1.2.4"
@@ -43,16 +41,6 @@ __metadata:
     eslint-import-resolver-typescript: ">3.0.0"
     eslint-plugin-import: ">2.0.0"
   checksum: 833be9002e9360f3920df31fc56bab46bfe121e7c7029abf6ae0c25090b818b6deb9ca81f0f022ee02ae529d6a9ad9daa66577f1dcff2410381116713712c4a0
-  languageName: node
-  linkType: hard
-
-"@alwatr/fetch@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "@alwatr/fetch@npm:2.2.1"
-  dependencies:
-    "@alwatr/logger": "npm:^2.4.1"
-    "@alwatr/util": "npm:^1.4.1"
-  checksum: 9dd03ac5ea8d00317b38666fd72220575e7943f6d5c14e59d626af6f6f8807f457c1da684f563570ec250e9e0665b5ddd1d6f5e9dba4103c93e4c8f96d7062ab
   languageName: node
   linkType: hard
 
@@ -90,17 +78,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alwatr/nano-server@npm:^1.2.7":
-  version: 1.2.7
-  resolution: "@alwatr/nano-server@npm:1.2.7"
-  dependencies:
-    "@alwatr/logger": "npm:^2.4.1"
-    "@alwatr/math": "npm:^1.3.1"
-    "@alwatr/util": "npm:^1.4.1"
-  checksum: 2ef1514a54e50443907cfb0ceefa9ef26d055f47599cdd534d02ec3cb01e80250bd2c35eb142dde35f95a9a4c6044479ff21fc59dfe656891645bcf46605387c
-  languageName: node
-  linkType: hard
-
 "@alwatr/prettier-config@npm:^1.0.4":
   version: 1.0.4
   resolution: "@alwatr/prettier-config@npm:1.0.4"
@@ -108,58 +85,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alwatr/storage-api@workspace:packages/api":
+"@alwatr/store-engine@workspace:^, @alwatr/store-engine@workspace:packages/engine":
   version: 0.0.0-use.local
-  resolution: "@alwatr/storage-api@workspace:packages/api"
-  dependencies:
-    "@alwatr/logger": "npm:^2.4.1"
-    "@alwatr/nano-build": "npm:^1.2.2"
-    "@alwatr/nano-server": "npm:^1.2.7"
-    "@alwatr/prettier-config": "npm:^1.0.4"
-    "@alwatr/storage-engine": "workspace:^"
-    "@alwatr/tsconfig-base": "npm:^1.0.5"
-    "@alwatr/type": "npm:^1.2.4"
-    "@alwatr/util": "npm:^1.4.1"
-    "@types/node": "npm:^20.10.5"
-    typescript: "npm:^5.3.3"
-  languageName: unknown
-  linkType: soft
-
-"@alwatr/storage-engine@workspace:^, @alwatr/storage-engine@workspace:packages/engine":
-  version: 0.0.0-use.local
-  resolution: "@alwatr/storage-engine@workspace:packages/engine"
-  dependencies:
-    "@alwatr/logger": "npm:^2.4.1"
-    "@alwatr/nano-build": "npm:^1.2.2"
-    "@alwatr/prettier-config": "npm:^1.0.4"
-    "@alwatr/tsconfig-base": "npm:^1.0.5"
-    "@alwatr/type": "npm:^1.2.4"
-    "@alwatr/util": "npm:^1.4.1"
-    "@types/node": "npm:^20.10.5"
-    exit-hook: "npm:^4.0.0"
-    typescript: "npm:^5.3.3"
-  languageName: unknown
-  linkType: soft
-
-"@alwatr/storage-sdk@workspace:^, @alwatr/storage-sdk@workspace:packages/sdk":
-  version: 0.0.0-use.local
-  resolution: "@alwatr/storage-sdk@workspace:packages/sdk"
-  dependencies:
-    "@alwatr/fetch": "npm:^2.2.1"
-    "@alwatr/logger": "npm:^2.4.1"
-    "@alwatr/nano-build": "npm:^1.2.2"
-    "@alwatr/prettier-config": "npm:^1.0.4"
-    "@alwatr/tsconfig-base": "npm:^1.0.5"
-    "@alwatr/type": "npm:^1.2.4"
-    "@alwatr/util": "npm:^1.4.1"
-    "@types/node": "npm:^20.10.5"
-    typescript: "npm:^5.3.3"
-  languageName: unknown
-  linkType: soft
-
-"@alwatr/store-engine@workspace:^, @alwatr/store-engine@workspace:packages/engine5":
-  version: 0.0.0-use.local
-  resolution: "@alwatr/store-engine@workspace:packages/engine5"
+  resolution: "@alwatr/store-engine@workspace:packages/engine"
   dependencies:
     "@alwatr/flat-string": "npm:^1.0.10"
     "@alwatr/logger": "npm:^2.4.1"
