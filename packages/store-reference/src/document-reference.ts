@@ -102,7 +102,7 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
   public readonly id: string;
   public readonly path: string;
 
-  protected logger_;
+  private logger__;
 
   /**
    * Create a new document reference.
@@ -130,9 +130,9 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
     path += `/${meta.name}.${meta.type}.${meta.extension}`;
     this.path = flatString(path);
 
-    this.logger_ = createLogger(`doc:${this.id.slice(0, 20)}`);
+    this.logger__ = createLogger(`doc:${this.id.slice(0, 20)}`);
 
-    this.logger_.logMethodArgs?.('new', {path});
+    this.logger__.logMethodArgs?.('new', {path});
     DocumentReference.migrateContext_(this.context__);
   }
 
@@ -147,7 +147,7 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
    * ```
    */
   get(): TDoc {
-    this.logger_.logMethod?.('get');
+    this.logger__.logMethod?.('get');
     return this.context__.data;
   }
 
@@ -162,7 +162,7 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
    * ```
    */
   meta(): Readonly<StoreFileMeta> {
-    this.logger_.logMethod?.('meta');
+    this.logger__.logMethod?.('meta');
     return this.context__.meta;
   }
 
@@ -177,9 +177,9 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
    * ```
    */
   set(data: TDoc): void {
-    this.logger_.logMethodArgs?.('set', data);
+    this.logger__.logMethodArgs?.('set', data);
     (this.context__.data as unknown) = data;
-    this.updated_();
+    this.updated__();
   }
 
   /**
@@ -194,9 +194,9 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
    * ```
    */
   update(data: Partial<TDoc>): void {
-    this.logger_.logMethodArgs?.('update', data);
+    this.logger__.logMethodArgs?.('update', data);
     Object.assign(this.context__.data, data);
-    this.updated_();
+    this.updated__();
   }
 
   /**
@@ -209,22 +209,28 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
    * ```
    */
   save(): void {
-    this.logger_.logMethod?.('save');
-    this.updated_();
+    this.logger__.logMethod?.('save');
+    this.updated__();
   }
 
   getFullContext_(): Readonly<DocumentContext<TDoc>> {
-    this.logger_.logMethod?.('getFullContext_');
+    this.logger__.logMethod?.('getFullContext_');
     return this.context__;
   }
 
+  private updateDelayed__ = false;
+
   /**
-   * Notifies the Alwatr Store (parent) that the document is updated.
-   * Alwatr Store saves the document to the storage based on the throttling.
+   * Update the document metadata and invoke the updated callback.
+   * This method is throttled to prevent multiple updates in a short time.
    */
-  protected updated_(): void {
-    // TODO: debounce
-    this.logger_.logMethod?.('_updated');
+  private async updated__(): Promise<void> {
+    this.logger__.logMethodArgs?.('updated__', {delayed: this.updateDelayed__});
+    if (this.updateDelayed__) return;
+    // else
+    this.updateDelayed__ = true;
+    await new Promise((resolve) => setImmediate(resolve));
+    this.updateDelayed__ = false;
     this.updateMeta__();
     this.updatedCallback__.call(null, this);
   }
@@ -233,7 +239,7 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
    * Updates the document's metadata.
    */
   private updateMeta__(): void {
-    this.logger_.logMethod?.('_updateMeta');
+    this.logger__.logMethod?.('updateMeta__');
     this.context__.meta.updated = Date.now();
     this.context__.meta.rev++;
   }

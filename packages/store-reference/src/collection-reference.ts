@@ -113,7 +113,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
   public readonly id: string;
   public readonly path: string;
 
-  protected logger_;
+  private logger__;
 
   /**
    * Collection reference have methods to get, set, update and save the Alwatr Store Collection.
@@ -146,9 +146,9 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
     path += `/${meta.name}.${meta.type}.${meta.extension}`;
     this.path = flatString(path);
 
-    this.logger_ = createLogger(`col:${this.id.slice(0, 20)}`);
+    this.logger__ = createLogger(`col:${this.id.slice(0, 20)}`);
 
-    this.logger_.logMethodArgs?.('new', {path});
+    this.logger__.logMethodArgs?.('new', {path});
     CollectionReference.migrateContext_(this.context__);
   }
 
@@ -169,7 +169,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    */
   exists(id: string | number): boolean {
     const exists = id in this.context__.data;
-    this.logger_.logMethodFull?.('exists', id, exists);
+    this.logger__.logMethodFull?.('exists', id, exists);
     return exists;
   }
 
@@ -184,7 +184,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * ```
    */
   stat(): Readonly<StoreFileMeta> {
-    this.logger_.logMethodFull?.('meta', undefined, this.context__.meta);
+    this.logger__.logMethodFull?.('meta', undefined, this.context__.meta);
     return this.context__.meta;
   }
 
@@ -194,10 +194,10 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * @param id - The ID of the item.
    * @returns The item with the given ID.
    */
-  protected item_(id: string | number): CollectionItem<TItem> {
+  private item__(id: string | number): CollectionItem<TItem> {
     const item = this.context__.data[id];
     if (item === undefined) {
-      this.logger_.accident('item_', 'collection_item_not_found', {id});
+      this.logger__.accident('item_', 'collection_item_not_found', {id});
       throw new Error('collection_item_not_found', {cause: {id}});
     }
     return item;
@@ -210,8 +210,8 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * @returns The metadata of the item with the given ID.
    */
   meta(id: string | number): Readonly<CollectionItemMeta> {
-    const meta = this.item_(id).meta;
-    this.logger_.logMethodFull?.('meta', id, meta);
+    const meta = this.item__(id).meta;
+    this.logger__.logMethodFull?.('meta', id, meta);
     return meta;
   }
 
@@ -227,8 +227,8 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * ```
    */
   get(id: string | number): TItem {
-    this.logger_.logMethodArgs?.('get', id);
-    return this.item_(id).data;
+    this.logger__.logMethodArgs?.('get', id);
+    return this.item__(id).data;
   }
 
   /**
@@ -245,7 +245,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * ```
    */
   access_(id: string | number): CollectionItem<TItem> | undefined {
-    this.logger_.logMethodArgs?.('access_', id);
+    this.logger__.logMethodArgs?.('access_', id);
     return this.context__.data[id];
   }
 
@@ -261,9 +261,9 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * ```
    */
   create(id: string | number, data: TItem): void {
-    this.logger_.logMethodArgs?.('create', {id, data});
+    this.logger__.logMethodArgs?.('create', {id, data});
     if (this.exists(id)) {
-      this.logger_.accident('create', 'collection_item_exist', {id});
+      this.logger__.accident('create', 'collection_item_exist', {id});
       throw new Error('collection_item_exist', {cause: {id}});
     }
     this.context__.data[id] = {
@@ -291,7 +291,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * ```
    */
   append(data: TItem): string | number {
-    this.logger_.logMethodArgs?.('append', data);
+    this.logger__.logMethodArgs?.('append', data);
     const id = this.nextAutoIncrementId__();
     this.create(id, data);
     return id;
@@ -308,7 +308,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * ```
    */
   delete(id: string | number): void {
-    this.logger_.logMethodArgs?.('delete', id);
+    this.logger__.logMethodArgs?.('delete', id);
     delete this.context__.data[id];
     this.updated__();
   }
@@ -325,8 +325,8 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * ```
    */
   set(id: string | number, data: TItem): void {
-    this.logger_.logMethodArgs?.('set', {id, data});
-    (this.item_(id).data as unknown) = data;
+    this.logger__.logMethodArgs?.('set', {id, data});
+    (this.item__(id).data as unknown) = data;
     this.updated__(id);
   }
 
@@ -342,8 +342,8 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * ```
    */
   update(id: string | number, data: Partial<TItem>): void {
-    this.logger_.logMethodArgs?.('update', data);
-    Object.assign(this.item_(id).data, data);
+    this.logger__.logMethodArgs?.('update', data);
+    Object.assign(this.item__(id).data, data);
     this.updated__(id);
   }
 
@@ -351,15 +351,15 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * Requests the Alwatr Store to save the collection.
    * Saving may take some time in Alwatr Store due to the use of throttling.
    *
-   * @param id - The ID of the item to save.
+   * @param id - The ID of the item to update the metadata.
    *
    * @example
    * ```typescript
    * collectionRef.save('item1');
    * ```
    */
-  save(id: string | number): void {
-    this.logger_.logMethodArgs?.('save', id);
+  save(id?: string | number): void {
+    this.logger__.logMethodArgs?.('save', id);
     this.updated__(id);
   }
 
@@ -429,20 +429,29 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
   }
 
   getFullContext_(): Readonly<CollectionContext<TItem>> {
-    this.logger_.logMethod?.('getFullContext_');
+    this.logger__.logMethod?.('getFullContext_');
     return this.context__;
   }
 
+  private updateDelayed__ = false;
+
   /**
-   * Updates the collection's metadata and invokes the updated callback.
+   * Update the document metadata and invoke the updated callback.
+   * This method is throttled to prevent multiple updates in a short time.
    *
    * @param id - The ID of the item to update.
    */
-  private updated__(id?: string | number): void {
-    this.logger_.logMethod?.('updated_');
+  private async updated__(id?: string | number): Promise<void> {
+    this.logger__.logMethodArgs?.('updated__', {delayed: this.updateDelayed__});
     this.updateMeta__(id);
+    if (this.updateDelayed__) return;
+    // else
+    this.updateDelayed__ = true;
+    await new Promise((resolve) => setImmediate(resolve));
+    this.updateDelayed__ = false;
     this.updatedCallback__.call(null, this);
   }
+
 
   /**
    * Updates the collection's metadata.
@@ -450,12 +459,12 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * @param id - The ID of the item to update.
    */
   private updateMeta__(id?: string | number): void {
-    this.logger_.logMethod?.('updateMeta__');
+    this.logger__.logMethod?.('updateMeta__');
     const now = Date.now();
     this.context__.meta.rev++;
     this.context__.meta.updated = now;
     if (id !== undefined) {
-      const itemMeta = this.item_(id).meta;
+      const itemMeta = this.item__(id).meta;
       itemMeta.rev++;
       itemMeta.updated = now;
     }
