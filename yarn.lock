@@ -27,7 +27,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alwatr/flat-string@npm:^1.0.10":
+"@alwatr/fetch@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "@alwatr/fetch@npm:2.2.1"
+  dependencies:
+    "@alwatr/logger": "npm:^2.4.1"
+    "@alwatr/util": "npm:^1.4.1"
+  checksum: 9dd03ac5ea8d00317b38666fd72220575e7943f6d5c14e59d626af6f6f8807f457c1da684f563570ec250e9e0665b5ddd1d6f5e9dba4103c93e4c8f96d7062ab
+  languageName: node
+  linkType: hard
+
+"@alwatr/flat-string@npm:^1.0.10, @alwatr/flat-string@npm:^1.0.9":
   version: 1.0.10
   resolution: "@alwatr/flat-string@npm:1.0.10"
   checksum: de7926a5f577124bcc309e0760c532b4526302e84210823fae002812844bcbf9080d7064497d725ca5a89f168ba07f781aa2af48ee516fcaafcb17776b92bab9
@@ -50,7 +60,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alwatr/nano-build@npm:^1.2.2":
+"@alwatr/nano-build@npm:^1.2.1, @alwatr/nano-build@npm:^1.2.2":
   version: 1.2.2
   resolution: "@alwatr/nano-build@npm:1.2.2"
   dependencies:
@@ -67,6 +77,25 @@ __metadata:
   checksum: 3b3a3c24e656497c754190819ea0cefc6b19d4d1261e0a9a804e8233c99bf1e6925301b3b2354176918391fe88649d267b3fefd623d18323924654d599f20826
   languageName: node
   linkType: hard
+
+"@alwatr/store-admin-sdk@workspace:packages/admin-sdk":
+  version: 0.0.0-use.local
+  resolution: "@alwatr/store-admin-sdk@workspace:packages/admin-sdk"
+  dependencies:
+    "@alwatr/fetch": "npm:^2.2.1"
+    "@alwatr/flat-string": "npm:^1.0.9"
+    "@alwatr/logger": "npm:^2.4.1"
+    "@alwatr/nano-build": "npm:^1.2.1"
+    "@alwatr/prettier-config": "npm:^1.0.4"
+    "@alwatr/store-reference": "workspace:^"
+    "@alwatr/store-types": "workspace:^"
+    "@alwatr/tsconfig-base": "npm:^1.0.5"
+    "@alwatr/type": "npm:^1.2.4"
+    "@alwatr/type-helper": "npm:^1.0.0-beta.1"
+    "@types/node": "npm:^20.10.5"
+    typescript: "npm:^5.3.3"
+  languageName: unknown
+  linkType: soft
 
 "@alwatr/store-engine@workspace:packages/engine":
   version: 0.0.0-use.local
@@ -120,6 +149,13 @@ __metadata:
   version: 1.0.5
   resolution: "@alwatr/tsconfig-base@npm:1.0.5"
   checksum: 5ef9c8bc91fd24dac416ac3599cd471dc7025fa4044aee6fe97910b83e84f11dbcea9251a03e7d142c4fd9e2cca92bbbc894433310fcbbe4405f402be3c1c56a
+  languageName: node
+  linkType: hard
+
+"@alwatr/type-helper@npm:^1.0.0-beta.1":
+  version: 1.0.0-beta.1
+  resolution: "@alwatr/type-helper@npm:1.0.0-beta.1"
+  checksum: e7c68158ea133810f813078862f2e3efd5610f39214b4d949a0c1358e19eb44daf4e15f7b537777cc5fb835f3e5c24e64447bdc5201515ec2587d4f7444e2320
   languageName: node
   linkType: hard
 
