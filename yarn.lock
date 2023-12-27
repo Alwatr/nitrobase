@@ -12,23 +12,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alwatr/demo@workspace:demo":
-  version: 0.0.0-use.local
-  resolution: "@alwatr/demo@workspace:demo"
-  dependencies:
-    "@alwatr/logger": "npm:^2.4.1"
-    "@alwatr/math": "npm:^1.3.1"
-    "@alwatr/prettier-config": "npm:^1.0.4"
-    "@alwatr/store-engine": "workspace:^"
-    "@alwatr/tsconfig-base": "npm:^1.0.5"
-    "@alwatr/type": "npm:^1.2.4"
-    "@alwatr/util": "npm:^1.4.1"
-    "@types/node": "npm:^20.10.5"
-    tslib: "npm:^2.6.2"
-    typescript: "npm:^5.3.3"
-  languageName: unknown
-  linkType: soft
-
 "@alwatr/eslint-config@npm:^1.0.6":
   version: 1.0.6
   resolution: "@alwatr/eslint-config@npm:1.0.6"
@@ -85,7 +68,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alwatr/store-engine@workspace:^, @alwatr/store-engine@workspace:packages/engine":
+"@alwatr/store-engine@workspace:packages/engine":
   version: 0.0.0-use.local
   resolution: "@alwatr/store-engine@workspace:packages/engine"
   dependencies:
@@ -114,7 +97,7 @@ __metadata:
     "@alwatr/prettier-config": "npm:^1.0.4"
     "@alwatr/store-types": "workspace:^"
     "@alwatr/tsconfig-base": "npm:^1.0.5"
-    "@alwatr/type-helper": "npm:^1.0.0-beta.1"
+    "@alwatr/type-helper": "npm:^1.0.1"
     "@types/node": "npm:^20.10.5"
     typescript: "npm:^5.3.3"
   languageName: unknown
@@ -127,7 +110,7 @@ __metadata:
     "@alwatr/nano-build": "npm:^1.2.2"
     "@alwatr/prettier-config": "npm:^1.0.4"
     "@alwatr/tsconfig-base": "npm:^1.0.5"
-    "@alwatr/type-helper": "npm:^1.0.0-beta.1"
+    "@alwatr/type-helper": "npm:^1.0.1"
     "@types/node": "npm:^20.10.5"
     typescript: "npm:^5.3.3"
   languageName: unknown
@@ -140,10 +123,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alwatr/type-helper@npm:^1.0.0-beta.1":
-  version: 1.0.0-beta.1
-  resolution: "@alwatr/type-helper@npm:1.0.0-beta.1"
-  checksum: e7c68158ea133810f813078862f2e3efd5610f39214b4d949a0c1358e19eb44daf4e15f7b537777cc5fb835f3e5c24e64447bdc5201515ec2587d4f7444e2320
+"@alwatr/type-helper@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@alwatr/type-helper@npm:1.0.1"
+  checksum: 3574430df88f3c0a7dcc4accfe9d5ee3cc642d5ecb3d8380bfb4b437a1eec50d3d6768799a33d758f471e1089fcfaf8706c839184863fe56d806a22316058df2
   languageName: node
   linkType: hard
 
@@ -4596,9 +4579,9 @@ __metadata:
   linkType: hard
 
 "p-map@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "p-map@npm:7.0.0"
-  checksum: 1f3c546142bdcc711b94176f122be94d4f0ecf00dfd413cf0fc64b61d4f19cd6c5cd036d0bc5e021c022dfffbc3d8caa8c424fb29e823959bd2bced5cc0aa2b3
+  version: 7.0.1
+  resolution: "p-map@npm:7.0.1"
+  checksum: c8ffa481d52e38a8d3e48c0628a63afd1fe8510d8d3feb0f0693351a52338c750e105bf74ff171dd7e6aed1ad26c2dd03aa1f8cfd86552cb5cbbc5054d311d74
   languageName: node
   linkType: hard
 
@@ -5622,7 +5605,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.1.0, tslib@npm:^2.6.2":
+"tslib@npm:^2.1.0":
   version: 2.6.2
   resolution: "tslib@npm:2.6.2"
   checksum: e03a8a4271152c8b26604ed45535954c0a45296e32445b4b87f8a5abdb2421f40b59b4ca437c4346af0f28179780d604094eb64546bee2019d903d01c6c19bdb
