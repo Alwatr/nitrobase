@@ -29,12 +29,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: storage-api
-            path: ./packages/api
-            context: .
-          - name: storage-nginx
+          - name: store-nginx
             path: ./packages/nginx
             context: ./packages/nginx
+          # - name: store-api
+          #   path: ./packages/api
+          #   context: .
 
     permissions:
       contents: read
