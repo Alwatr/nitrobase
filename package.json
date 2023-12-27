@@ -11,8 +11,7 @@
     "yarn": ">=4.0.0"
   },
   "workspaces": [
-    "packages/*",
-    "demo"
+    "packages/*"
   ],
   "prettier": "@alwatr/prettier-config",
   "scripts": {
