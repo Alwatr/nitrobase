@@ -59,9 +59,11 @@
     "watch:ts": "yarn run build:ts --watch --preserveWatchOutput",
     "clean": "rm -rfv dist *.tsbuildinfo"
   },
-  "devDependencies": {
+  "dependencies": {
     "@alwatr/flat-string": "^1.0.10",
-    "@alwatr/logger": "^2.4.1",
+    "@alwatr/logger": "^2.4.1"
+  },
+  "devDependencies": {
     "@alwatr/nano-build": "^1.2.2",
     "@alwatr/prettier-config": "^1.0.4",
     "@alwatr/store-types": "workspace:^",
