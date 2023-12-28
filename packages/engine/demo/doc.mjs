@@ -1,6 +1,6 @@
 import {createLogger} from '@alwatr/logger';
 
-import {AlwatrStore, Region, StoreFileExtension, StoreFileType} from '../src/alwatr-store.js';
+import {AlwatrStore, Region, StoreFileExtension, StoreFileType} from '@alwatr/store-engine';
 
 const logger = createLogger('AlwatrStore/Demo', true);
 logger.banner('AlwatrStore/Demo');
@@ -27,7 +27,7 @@ async function quickstart() {
     // Define a new document store file.
     alwatrStore.defineStoreFile({
       ...docId,
-      type: StoreFileType.Collection,
+      type: StoreFileType.Document,
       extension: StoreFileExtension.Json,
     }, {
       title: 'new title',
