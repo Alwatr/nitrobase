@@ -30,9 +30,9 @@ export interface AlwatrStoreConfig {
   /**
    * The save debounce timeout in milliseconds for minimal disk I/O usage.
    * This is used to limit the frequency of disk writes for performance reasons.
-   * The recommended value is `50`.
+   * The recommended value is `40`.
    */
-  saveDebounce: number;
+  defaultChangeDebounce: number;
 }
 
 /**
@@ -49,6 +49,8 @@ export class AlwatrStore {
    */
   static readonly version = __package_version;
 
+  static getStoreId = getStoreId;
+
   /**
    * The root store file stat.
    */
@@ -57,6 +59,7 @@ export class AlwatrStore {
     region: Region.Secret,
     type: StoreFileType.Collection,
     extension: StoreFileExtension.Json,
+    changeDebounce: 40,
   };
 
   /**
@@ -128,9 +131,11 @@ export class AlwatrStore {
    */
   defineStoreFile<T extends Dictionary<unknown> = Dictionary<unknown>>(
     stat: StoreFileStat,
-    initialData: DocumentContext<T>['data'] | CollectionContext<T>['data'],
+    initialData: DocumentContext<T>['data'] | CollectionContext<T>['data'] | null = null,
   ): void {
     logger.logMethodArgs?.('defineStoreFile', stat);
+
+    (stat.changeDebounce as number) ??= this.config__.defaultChangeDebounce;
 
     let fileStoreRef: DocumentReference | CollectionReference;
     if (stat.type === StoreFileType.Document) {

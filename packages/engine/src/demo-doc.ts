@@ -9,7 +9,7 @@ logger.banner('AlwatrStore/Demo');
 // Create a new store instance
 const alwatrStore = new AlwatrStore({
   rootPath: './db',
-  saveDebounce: 5_000, // for demo
+  defaultChangeDebounce: 5_000, // for demo
 });
 
 interface Post {
