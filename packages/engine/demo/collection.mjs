@@ -1,6 +1,6 @@
 import {createLogger} from '@alwatr/logger';
 
-import {AlwatrStore, Region, StoreFileId, StoreFileExtension, StoreFileType} from '@alwatr/store-engine';
+import {AlwatrStore, Region, StoreFileExtension, StoreFileType} from '@alwatr/store-engine';
 
 const logger = createLogger('AlwatrStore/Demo', true);
 logger.banner('AlwatrStore/Demo');
@@ -38,7 +38,7 @@ async function quickstart() {
   });
 
   // Get a collection reference.
-  const postsCollection = await alwatrStore.collection<Post>(postsCollectionId);
+  const postsCollection = await alwatrStore.collection(postsCollectionId);
 
   const post1Id = 'intro-to-alwatr-store';
   const post2Id = 'intro-to-alwatr-collections';
