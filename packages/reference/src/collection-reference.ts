@@ -9,6 +9,7 @@ import {
   type StoreFileMeta,
 } from '@alwatr/store-types';
 import {Dictionary} from '@alwatr/type-helper';
+import { waitForTimeout } from '@alwatr/wait';
 
 import {logger} from './logger';
 import {getStoreId, getStorePath} from './util';
@@ -469,11 +470,16 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
   private async updated__(id?: string | number): Promise<void> {
     this.logger__.logMethodArgs?.('updated__', {delayed: this.updateDelayed__});
     this.updateMeta__(id);
-    if (this.updateDelayed__) return;
+
+    if (this.updateDelayed__ === true) return;
     // else
-    this.updateDelayed__ = true;
-    await new Promise((resolve) => setImmediate(resolve));
-    this.updateDelayed__ = false;
+
+    if (this.context__.meta.changeDebounce !== undefined) {
+      this.updateDelayed__ = true;
+      await waitForTimeout(this.context__.meta.changeDebounce);
+      this.updateDelayed__ = false;
+    }
+
     this.updatedCallback__.call(null, this);
   }
 

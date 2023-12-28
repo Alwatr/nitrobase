@@ -61,7 +61,8 @@
   },
   "dependencies": {
     "@alwatr/flat-string": "^1.0.10",
-    "@alwatr/logger": "^2.4.1"
+    "@alwatr/logger": "^2.4.1",
+    "@alwatr/wait": "^1.1.1"
   },
   "devDependencies": {
     "@alwatr/nano-build": "^1.2.2",

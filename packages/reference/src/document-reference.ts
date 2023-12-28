@@ -1,5 +1,6 @@
 import {createLogger} from '@alwatr/logger';
 import {StoreFileType, StoreFileId, StoreFileExtension, type DocumentContext, type StoreFileMeta} from '@alwatr/store-types';
+import {waitForTimeout} from '@alwatr/wait';
 
 import {logger} from './logger';
 import { getStoreId, getStorePath } from './util';
@@ -249,11 +250,15 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
    */
   private async updated__(): Promise<void> {
     this.logger__.logMethodArgs?.('updated__', {delayed: this.updateDelayed__});
-    if (this.updateDelayed__) return;
+    if (this.updateDelayed__ === true) return;
     // else
-    this.updateDelayed__ = true;
-    await new Promise((resolve) => setImmediate(resolve));
-    this.updateDelayed__ = false;
+
+    if (this.context__.meta.changeDebounce !== undefined) {
+      this.updateDelayed__ = true;
+      await waitForTimeout(this.context__.meta.changeDebounce);
+      this.updateDelayed__ = false;
+    }
+
     this.updateMeta__();
     this.updatedCallback__.call(null, this);
   }

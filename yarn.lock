@@ -85,9 +85,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alwatr/store-reference@workspace:^, @alwatr/store-reference@workspace:packages/store-reference":
+"@alwatr/store-reference@workspace:^, @alwatr/store-reference@workspace:packages/reference":
   version: 0.0.0-use.local
-  resolution: "@alwatr/store-reference@workspace:packages/store-reference"
+  resolution: "@alwatr/store-reference@workspace:packages/reference"
   dependencies:
     "@alwatr/flat-string": "npm:^1.0.10"
     "@alwatr/logger": "npm:^2.4.1"
@@ -96,6 +96,7 @@ __metadata:
     "@alwatr/store-types": "workspace:^"
     "@alwatr/tsconfig-base": "npm:^1.0.5"
     "@alwatr/type-helper": "npm:^1.0.1"
+    "@alwatr/wait": "npm:^1.1.1"
     "@types/node": "npm:^20.10.5"
     typescript: "npm:^5.3.3"
   languageName: unknown
