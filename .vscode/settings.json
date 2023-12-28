@@ -6,7 +6,7 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnPaste": false,
   "editor.formatOnSave": false,
-  "editor.wordWrapColumn": 120,
+  "editor.wordWrapColumn": 140,
   "eslint.nodePath": ".yarn/sdks",
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
