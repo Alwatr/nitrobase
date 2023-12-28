@@ -63,6 +63,7 @@
     "@alwatr/flat-string": "^1.0.10",
     "@alwatr/logger": "^2.4.1",
     "@alwatr/store-reference": "workspace:^",
+    "@alwatr/wait": "^1.1.1",
     "exit-hook": "^4.0.0"
   },
   "devDependencies": {

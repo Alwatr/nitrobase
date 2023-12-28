@@ -34,6 +34,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@alwatr/global-scope@npm:^1.1.6":
+  version: 1.1.6
+  resolution: "@alwatr/global-scope@npm:1.1.6"
+  checksum: 51be1def68ce9e88d1c0db6d285aeb5a53331bebd3d2adc373d41384f6b0c4b893c0b6aef52c3bb2f85a6a2d4605c6acbc0bd59014df038318d4b5404ab178a4
+  languageName: node
+  linkType: hard
+
 "@alwatr/logger@npm:^2.4.1":
   version: 2.4.1
   resolution: "@alwatr/logger@npm:2.4.1"
@@ -71,6 +78,7 @@ __metadata:
     "@alwatr/store-types": "workspace:^"
     "@alwatr/tsconfig-base": "npm:^1.0.5"
     "@alwatr/type-helper": "npm:^1.0.1"
+    "@alwatr/wait": "npm:^1.1.1"
     "@types/node": "npm:^20.10.5"
     exit-hook: "npm:^4.0.0"
     typescript: "npm:^5.3.3"
@@ -117,6 +125,15 @@ __metadata:
   version: 1.0.1
   resolution: "@alwatr/type-helper@npm:1.0.1"
   checksum: 3574430df88f3c0a7dcc4accfe9d5ee3cc642d5ecb3d8380bfb4b437a1eec50d3d6768799a33d758f471e1089fcfaf8706c839184863fe56d806a22316058df2
+  languageName: node
+  linkType: hard
+
+"@alwatr/wait@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@alwatr/wait@npm:1.1.1"
+  dependencies:
+    "@alwatr/global-scope": "npm:^1.1.6"
+  checksum: 0e8d1172ac51810d9ebb63d46d75f1eed019cfb5ef1ccfdf3380aed4c69d7c3a8aa4c0cdc7d17071eaa25b655edd85fb277c68f17250fb4bf0f6e5965e15cc85
   languageName: node
   linkType: hard
 
