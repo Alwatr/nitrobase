@@ -32,7 +32,7 @@ export interface AlwatrStoreConfig {
    * This is used to limit the frequency of disk writes for performance reasons.
    * The recommended value is `40`.
    */
-  defaultChangeDebounce: number;
+  defaultChangeDebounce?: number;
 }
 
 /**
@@ -81,12 +81,13 @@ export class AlwatrStore {
    * ```typescript
    * const alwatrStore = new AlwatrStore({
    *   rootPath: './db',
-   *   saveDebounce: 100,
+   *   saveDebounce: 40,
    * });
    * ```
    */
   constructor(private readonly config__: AlwatrStoreConfig) {
     logger.logMethodArgs?.('new', config__);
+    this.config__.defaultChangeDebounce ??= 40;
     this.rootDb__ = this.loadRootDb__();
   }
 
@@ -135,7 +136,7 @@ export class AlwatrStore {
   ): void {
     logger.logMethodArgs?.('defineStoreFile', stat);
 
-    (stat.changeDebounce as number) ??= this.config__.defaultChangeDebounce;
+    (stat.changeDebounce as number | undefined) ??= this.config__.defaultChangeDebounce;
 
     let fileStoreRef: DocumentReference | CollectionReference;
     if (stat.type === StoreFileType.Document) {
@@ -157,7 +158,8 @@ export class AlwatrStore {
     this.rootDb__.create(fileStoreRef.id, stat);
     this.cacheReferences__[fileStoreRef.id] = fileStoreRef;
 
-    fileStoreRef.save();
+    // fileStoreRef.save();
+    this.storeChanged__(fileStoreRef);
   }
 
   // TODO: defineDocument and defineCollection
@@ -288,7 +290,7 @@ export class AlwatrStore {
     this.rootDb__.delete(id);
     await waitForTimeout(0);
     try {
-      await unlink(path);
+      await unlink(resolve(this.config__.rootPath, path));
     }
     catch (error) {
       logger.error('deleteFile', 'delete_file_failed', {id, path, error});

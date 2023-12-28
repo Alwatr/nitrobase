@@ -8,7 +8,7 @@ logger.banner('AlwatrStore/Demo');
 // Create a new store instance
 const alwatrStore = new AlwatrStore({
   rootPath: './db',
-  defaultChangeDebounce: 5_000, // for demo
+  defaultChangeDebounce: 2_000, // for demo
 });
 
 async function quickstart() {
