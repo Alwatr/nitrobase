@@ -1,29 +1,47 @@
-import {random} from '@alwatr/math';
-import {AlwatrStorageEngine} from '../dist/main';
+import {createLogger} from '@alwatr/logger';
+import {AlwatrStore, StoreFileExtension, StoreFileType, Region} from '@alwatr/store-engine';
 
-const db = new AlwatrStorageEngine({
-  name: 'junk-data',
-  path: 'db',
-  saveBeautiful: false,
-  devMode: false,
+const logger = createLogger('AlwatrStore/Demo', true);
+logger.banner('AlwatrStore/Demo');
+
+// Create a new storage instance
+const alwatrStore = new AlwatrStore({
+  rootPath: './db',
+  saveDebounce: 50, // for demo
 });
+
+const colId = {
+  name: 'junk',
+  region: Region.Public,
+};
+
+if (alwatrStore.exists(colId)) {
+  await alwatrStore.deleteFile(colId);
+}
+
+alwatrStore.defineStoreFile({
+  ...colId,
+  extension: StoreFileExtension.Json,
+  type: StoreFileType.Collection,
+});
+
+const col = await alwatrStore.collection(colId);
 
 console.time('set all items');
 
-const max = 100_000;
+const max = 1000;
 for (let i = 0; i < max; i++) {
-  db.set({
-    id: 'user_' + i,
-    fname: random.string(4, 16),
-    lname: random.string(4, 32),
-    email: random.string(8, 32),
-    token: random.string(16),
+  col.append({
+    fname: Math.random() + '',
+    lname: Math.random() + '',
+    email: Math.random() + '',
+    token: Math.random() + '',
   });
 }
 
 console.timeEnd('set all items');
 
 console.time('get item');
-const item = db.get('user_' + max / 2);
+const item = col.get(500);
 console.timeEnd('get item');
 console.dir(item);
