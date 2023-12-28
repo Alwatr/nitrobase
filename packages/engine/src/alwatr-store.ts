@@ -323,7 +323,7 @@ export class AlwatrStore {
     if (typeof path !== 'string') path = getStorePath(path);
     logger.logMethodArgs?.('writeContext__', path);
     logger.time?.(`writeContext__time(${path})`);
-    await writeJsonFile(path, context, WriteFileMode.Rename);
+    await writeJsonFile(resolve(this.config__.rootPath, path), context, WriteFileMode.Rename);
     logger.timeEnd?.(`writeContext__time(${path})`);
   }
 
@@ -336,7 +336,7 @@ export class AlwatrStore {
    */
   protected storeChanged__<T extends Dictionary<unknown>>(from: DocumentReference<T> | CollectionReference<T>): void {
     logger.logMethodArgs?.('storeChanged__', from.id);
-    this.writeContext__(from.id, from.getFullContext_()).catch((error) => {
+    this.writeContext__(from.path, from.getFullContext_()).catch((error) => {
       logger.error('storeChanged__', 'write_context_failed', {id: from.id, error});
     });
   }
