@@ -368,7 +368,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * ```
    */
   update(id: string | number, data: Partial<TItem>): void {
-    this.logger__.logMethodArgs?.('update', data);
+    this.logger__.logMethodArgs?.('update', {id, data});
     Object.assign(this.item__(id).data, data);
     this.updated__(id);
   }
@@ -400,6 +400,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * ```
    */
   keys(): string[] {
+    this.logger__.logMethod?.('keys');
     return Object.keys(this.context__.data);
   }
 
@@ -416,6 +417,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * ```
    */
   values(): CollectionItem<TItem>[] {
+    this.logger__.logMethod?.('values');
     return Object.values(this.context__.data);
   }
 
@@ -432,6 +434,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * ```
    */
   *ids(): Generator<string, void, void> {
+    this.logger__.logMethod?.('ids');
     for (const id in this.context__.data) {
       yield id;
     }
@@ -449,6 +452,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * }
    */
   *items(): Generator<CollectionItem<TItem>, void, void> {
+    this.logger__.logMethod?.('items');
     for (const id in this.context__.data) {
       yield this.context__.data[id];
     }
@@ -510,6 +514,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * ```
    */
   private nextAutoIncrementId__(): number {
+    this.logger__.logMethod?.('nextAutoIncrementId__');
     const meta = this.context__.meta as Required<StoreFileMeta>;
     do {
       meta.lastAutoId++;
