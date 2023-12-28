@@ -1,45 +1,15 @@
-import {
-  existsSync,
-  readFileSync as readFileSync_,
-  writeFileSync as writeFileSync_,
-  mkdirSync,
-  copyFileSync,
-  renameSync,
-} from 'node:fs';
+import {existsSync, readFileSync as readFileSync_, writeFileSync as writeFileSync_, mkdirSync, copyFileSync, renameSync} from 'node:fs';
 import {copyFile, mkdir, readFile as readFile_, rename, writeFile as writeFile_, unlink} from 'node:fs/promises';
 import {dirname} from 'node:path';
 
+import {flatString} from '@alwatr/flat-string';
+
 import {logger} from '../logger.js';
-import {MaybePromise} from '../type.js';
+
+import type {MaybePromise} from '@alwatr/type-helper';
 
 export {resolve} from 'node:path';
 export {unlink, existsSync};
-
-/**
- * Deep clones an object.
- */
-export function deepClone<T>(obj: T): T;
-
-/**
- * Deep clones an object.
- *
- * if the object is null or undefined, it returns null.
- */
-export function deepClone<T>(obj: T | null | undefined): T | null;
-
-export function deepClone<T>(obj: T | null | undefined): T | null {
-  if (obj == null) return null;
-  return JSON.parse(JSON.stringify(obj));
-}
-
-/**
- * Flattens the underlying C structures of a concatenated JavaScript string.
- */
-export const flatStr = (s: string): string => {
-  // @ts-expect-error because it alters wrong compilation errors.
-  s | 0;
-  return s;
-};
 
 /**
  * Parse json string.
@@ -134,7 +104,7 @@ export function readFile(path: string, sync = false): MaybePromise<string> {
   // if (!existsSync(path)) throw new Error('file_not_found');
   if (sync === true) {
     try {
-      return flatStr(readFileSync_(path, {encoding: 'utf-8', flag: 'r'}));
+      return flatString(readFileSync_(path, {encoding: 'utf-8', flag: 'r'}));
     }
     catch (err) {
       logger.error('readFile', 'read_file_failed', err);
@@ -143,7 +113,7 @@ export function readFile(path: string, sync = false): MaybePromise<string> {
   }
   // else, async mode
   return readFile_(path, {encoding: 'utf-8', flag: 'r'})
-    .then((content) => flatStr(content))
+    .then((content) => flatString(content))
     .catch((err) => {
       logger.error('readFile', 'read_file_failed', err);
       throw new Error('read_file_failed', {cause: (err as Error).cause});
@@ -454,5 +424,5 @@ export function writeJsonFile(path: string, data: unknown, mode: WriteFileMode, 
  */
 export function writeJsonFile(path: string, data: unknown, mode: WriteFileMode, sync = false): MaybePromise<void> {
   logger.logMethodArgs?.('writeJsonFile', {path, mode, sync});
-  return writeFile(path, flatStr(jsonStringify(data)), mode, sync);
+  return writeFile(path, flatString(jsonStringify(data)), mode, sync);
 }
