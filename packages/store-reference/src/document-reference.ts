@@ -2,7 +2,7 @@ import {createLogger} from '@alwatr/logger';
 import {StoreFileType, StoreFileId, StoreFileExtension, type DocumentContext, type StoreFileMeta} from '@alwatr/store-types';
 
 import {logger} from './logger';
-import { getStoreId, getStorePath } from './util.ts';
+import { getStoreId, getStorePath } from './util';
 
 import type {Dictionary} from '@alwatr/type-helper';
 

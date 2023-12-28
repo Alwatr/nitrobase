@@ -11,7 +11,7 @@ import {
 import {Dictionary} from '@alwatr/type-helper';
 
 import {logger} from './logger';
-import {getStoreId, getStorePath} from './util.ts';
+import {getStoreId, getStorePath} from './util';
 
 logger.logModule?.('collection-reference');
 
