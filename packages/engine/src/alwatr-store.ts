@@ -6,8 +6,8 @@ import {
   type StoreFileStat,
   type StoreFileContext,
   type CollectionContext,
-  DocumentContext,
-  StoreFileId,
+  type DocumentContext,
+  type StoreFileId,
 } from '@alwatr/store-types';
 import {Dictionary} from '@alwatr/type-helper';
 import {waitForTimeout} from '@alwatr/wait';
