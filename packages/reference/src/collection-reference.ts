@@ -155,6 +155,11 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
   readonly path: string;
 
   /**
+   * Indicates whether the collection has unsaved changes.
+   */
+  hasUnprocessedChanges_ = false;
+
+  /**
    * Logger instance for this collection.
    */
   private logger__;
@@ -483,6 +488,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    */
   private async updated__(id?: string | number): Promise<void> {
     this.logger__.logMethodArgs?.('updated__', {delayed: this.updateDelayed__});
+    this.hasUnprocessedChanges_ = true;
     this.updateMeta__(id);
 
     if (this.updateDelayed__ === true) return;
@@ -494,7 +500,10 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
       this.updateDelayed__ = false;
     }
 
-    this.updatedCallback__.call(null, this);
+    if (this.hasUnprocessedChanges_ === true) {
+      this.hasUnprocessedChanges_ = false;
+      this.updatedCallback__.call(null, this);
+    }
   }
 
   /**

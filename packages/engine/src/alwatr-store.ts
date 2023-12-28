@@ -11,6 +11,7 @@ import {
 } from '@alwatr/store-types';
 import {Dictionary} from '@alwatr/type-helper';
 import {waitForTimeout} from '@alwatr/wait';
+import exitHook from 'exit-hook'
 
 import {WriteFileMode, existsSync, readJsonFile, resolve, unlink, writeJsonFile} from './lib/node-fs.js';
 import {logger} from './logger.js';
@@ -89,6 +90,7 @@ export class AlwatrStore {
     logger.logMethodArgs?.('new', config__);
     this.config__.defaultChangeDebounce ??= 40;
     this.rootDb__ = this.loadRootDb__();
+    exitHook(this.exitHook__.bind(this));
   }
 
   /**
@@ -356,5 +358,19 @@ export class AlwatrStore {
     // else
     const context = readJsonFile(fullPath, true) as CollectionContext<StoreFileStat>;
     return CollectionReference.newRefFromContext(context, this.storeChanged__.bind(this), 'root-db');
+  }
+
+  /**
+   * Save all store files.
+   */
+  private exitHook__(): void {
+    logger.logMethod?.('exitHook__');
+    for (const ref of Object.values(this.cacheReferences__)) {
+      if (ref.hasUnprocessedChanges_ === true) {
+        ref.hasUnprocessedChanges_ = false;
+        logger.incident?.('exitHook__', 'rescue_unsaved_context', {id: ref.id});
+        writeJsonFile(resolve(this.config__.rootPath, ref.path), ref.getFullContext_(), WriteFileMode.Rename, true);
+      }
+    }
   }
 }
