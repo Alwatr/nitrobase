@@ -78,7 +78,7 @@ export enum StoreFileExtension {
  * Get from user for select store file.
  */
 export interface StoreFileId {
-  // [P: string]: unknown;
+  [P: string]: unknown;
 
   /**
    * The store filename.
