@@ -239,7 +239,7 @@ export class AlwatrStore {
 
     const storeStat = this.rootDb__.get(id);
 
-    if (storeStat.type != StoreFileType.Document) {
+    if (storeStat.type != StoreFileType.Collection) {
       logger.accident('doc', 'collection_wrong_type', id);
       throw new Error('collection_not_found', {cause: id});
     }
@@ -355,6 +355,6 @@ export class AlwatrStore {
     }
     // else
     const context = readJsonFile(fullPath, true) as CollectionContext<StoreFileStat>;
-    return CollectionReference.newRefFromContext(context, this.storeChanged__.bind(this));
+    return CollectionReference.newRefFromContext(context, this.storeChanged__.bind(this), 'root-db');
   }
 }
