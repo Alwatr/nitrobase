@@ -488,6 +488,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    */
   private async updated__(id?: string | number): Promise<void> {
     this.logger__.logMethodArgs?.('updated__', {delayed: this.updateDelayed__});
+
     this.hasUnprocessedChanges_ = true;
     this.updateMeta__(id);
 

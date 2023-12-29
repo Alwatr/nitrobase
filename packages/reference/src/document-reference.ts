@@ -141,6 +141,11 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
   readonly path: string;
 
   /**
+   * Indicates whether the collection has unsaved changes.
+   */
+  hasUnprocessedChanges_ = false;
+
+  /**
    * Logger instance for this document.
    */
   private logger__;
@@ -259,6 +264,9 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
    */
   private async updated__(): Promise<void> {
     this.logger__.logMethodArgs?.('updated__', {delayed: this.updateDelayed__});
+
+    this.hasUnprocessedChanges_ = true;
+
     if (this.updateDelayed__ === true) return;
     // else
 
@@ -269,7 +277,10 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
     }
 
     this.updateMeta__();
-    this.updatedCallback__.call(null, this);
+    if (this.hasUnprocessedChanges_ === true) {
+      this.hasUnprocessedChanges_ = false;
+      this.updatedCallback__.call(null, this);
+    }
   }
 
   /**
