@@ -1,6 +1,6 @@
 import {createLogger} from '@alwatr/logger';
 import {StoreFileType, StoreFileId, StoreFileExtension, type DocumentContext, type StoreFileMeta} from '@alwatr/store-types';
-import {waitForTimeout} from '@alwatr/wait';
+import {waitForImmediate, waitForTimeout} from '@alwatr/wait';
 
 import {logger} from './logger';
 import {getStoreId, getStorePath} from './util';
@@ -141,6 +141,11 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
   readonly path: string;
 
   /**
+   * Indicates whether the collection has unsaved changes.
+   */
+  hasUnprocessedChanges_ = false;
+
+  /**
    * Logger instance for this document.
    */
   private logger__;
@@ -236,14 +241,16 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
    * Requests the Alwatr Store to save the document.
    * Saving may take some time in Alwatr Store due to the use of throttling.
    *
+   * @param immediate If true, the document will be saved immediately.
+   *
    * @example
    * ```typescript
    * documentRef.save();
    * ```
    */
-  save(): void {
+  save(immediate = false): void {
     this.logger__.logMethod?.('save');
-    this.updated__();
+    this.updated__(immediate);
   }
 
   getFullContext_(): Readonly<DocumentContext<TDoc>> {
@@ -251,22 +258,31 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
     return this.context__;
   }
 
-  private updateDelayed__ = false;
+  updateDelayed_ = false;
 
   /**
    * Update the document metadata and invoke the updated callback.
    * This method is throttled to prevent multiple updates in a short time.
    */
-  private async updated__(): Promise<void> {
-    this.logger__.logMethodArgs?.('updated__', {delayed: this.updateDelayed__});
-    if (this.updateDelayed__ === true) return;
+  private async updated__(force = false): Promise<void> {
+    this.logger__.logMethodArgs?.('updated__', {delayed: this.updateDelayed_});
+
+    this.hasUnprocessedChanges_ = true;
+
+    if (force !== true && this.updateDelayed_ === true) return;
     // else
 
-    if (this.context__.meta.changeDebounce !== undefined) {
-      this.updateDelayed__ = true;
-      await waitForTimeout(this.context__.meta.changeDebounce);
-      this.updateDelayed__ = false;
+    this.updateDelayed_ = true;
+
+    if (force === true || this.context__.meta.changeDebounce === undefined) {
+      await waitForImmediate();
     }
+    else {
+      await waitForTimeout(this.context__.meta.changeDebounce);
+    }
+
+    if (this.updateDelayed_ !== true) return; // another parallel update finished!
+    this.updateDelayed_ = false;
 
     this.updateMeta__();
     this.updatedCallback__.call(null, this);
