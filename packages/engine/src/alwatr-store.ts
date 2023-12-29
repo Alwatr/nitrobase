@@ -11,7 +11,7 @@ import {
 } from '@alwatr/store-types';
 import {Dictionary} from '@alwatr/type-helper';
 import {waitForTimeout} from '@alwatr/wait';
-import exitHook from 'exit-hook'
+import exitHook from 'exit-hook';
 
 import {WriteFileMode, existsSync, readJsonFile, resolve, unlink, writeJsonFile} from './lib/node-fs.js';
 import {logger} from './logger.js';
@@ -201,11 +201,13 @@ export class AlwatrStore {
 
     if (storeStat.type != StoreFileType.Document) {
       logger.accident('doc', 'document_wrong_type', id);
-      throw new Error('document_not_found', {cause: id});
+      throw new Error('document_wrong_type', {cause: id});
     }
 
     const context = await this.readContext__<DocumentContext<TDoc>>(storeStat);
-    return DocumentReference.newRefFromContext(context, this.storeChanged__.bind(this));
+    const docRef = DocumentReference.newRefFromContext(context, this.storeChanged__.bind(this));
+    this.cacheReferences__[id] = docRef as unknown as DocumentReference;
+    return docRef;
   }
 
   /**
@@ -247,7 +249,9 @@ export class AlwatrStore {
     }
 
     const context = await this.readContext__<CollectionContext<TItem>>(storeStat);
-    return CollectionReference.newRefFromContext(context, this.storeChanged__.bind(this));
+    const colRef = CollectionReference.newRefFromContext(context, this.storeChanged__.bind(this));
+    this.cacheReferences__[id] = colRef as unknown as DocumentReference;
+    return colRef;
   }
 
   /**
@@ -338,11 +342,19 @@ export class AlwatrStore {
    * @param context The store file context. If not provided, it will be loaded from memory.
    * @param sync If true, the file will be written synchronously.
    */
-  protected storeChanged__<T extends Dictionary<unknown>>(from: DocumentReference<T> | CollectionReference<T>): void {
+  protected async storeChanged__<T extends Dictionary<unknown>>(from: DocumentReference<T> | CollectionReference<T>): Promise<void> {
     logger.logMethodArgs?.('storeChanged__', from.id);
-    this.writeContext__(from.path, from.getFullContext_()).catch((error) => {
+    const rev = from.meta().rev;
+    try {
+      await this.writeContext__(from.path, from.getFullContext_());
+      if (rev === from.meta().rev) {
+        // Context not changed during saving
+        from.hasUnprocessedChanges_ = false;
+      }
+    }
+    catch (error) {
       logger.error('storeChanged__', 'write_context_failed', {id: from.id, error});
-    });
+    }
   }
 
   /**
@@ -366,10 +378,11 @@ export class AlwatrStore {
   private exitHook__(): void {
     logger.logMethod?.('exitHook__');
     for (const ref of Object.values(this.cacheReferences__)) {
+      logger.logProperty?.(`StoreFile.${ref.id}.hasUnprocessedChanges`, ref.hasUnprocessedChanges_);
       if (ref.hasUnprocessedChanges_ === true) {
-        ref.hasUnprocessedChanges_ = false;
         logger.incident?.('exitHook__', 'rescue_unsaved_context', {id: ref.id});
         writeJsonFile(resolve(this.config__.rootPath, ref.path), ref.getFullContext_(), WriteFileMode.Rename, true);
+        ref.hasUnprocessedChanges_ = false;
       }
     }
   }
