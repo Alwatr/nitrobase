@@ -7,4 +7,4 @@ declare global {
 
 definePackage('store-engine', __package_version);
 
-export const logger = createLogger('store-engine');
+export const logger = createLogger('store-engine', true);
