@@ -9,7 +9,7 @@ import {
   type StoreFileMeta,
 } from '@alwatr/store-types';
 import {Dictionary} from '@alwatr/type-helper';
-import {waitForTimeout} from '@alwatr/wait';
+import {waitForImmediate, waitForTimeout} from '@alwatr/wait';
 
 import {logger} from './logger';
 import {getStoreId, getStorePath} from './util';
@@ -351,7 +351,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
   delete(id: string | number): void {
     this.logger__.logMethodArgs?.('delete', id);
     delete this.context__.data[id];
-    this.updated__();
+    this.updated__(null);
   }
 
   /**
@@ -393,15 +393,16 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * Saving may take some time in Alwatr Store due to the use of throttling.
    *
    * @param id - The ID of the item to update the metadata.
+   * @param immediate - If `true`, the Alwatr Store will save the collection immediately.
    *
    * @example
    * ```typescript
    * collectionRef.save('item1');
    * ```
    */
-  save(id?: string | number): void {
+  save(id: string | number | null, immediate = false): void {
     this.logger__.logMethodArgs?.('save', id);
-    this.updated__(id);
+    this.updated__(id, immediate);
   }
 
   /**
@@ -486,17 +487,25 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    *
    * @param id - The ID of the item to update.
    */
-  private async updated__(id?: string | number): Promise<void> {
+  private async updated__(id: string | number | null, force = false): Promise<void> {
     this.logger__.logMethodArgs?.('updated__', {delayed: this.updateDelayed__});
 
     this.hasUnprocessedChanges_ = true;
     this.updateMeta__(id);
 
-    if (this.updateDelayed__ === true) return;
+    if (force === false && this.updateDelayed__ === true) return;
     // else
 
     this.updateDelayed__ = true;
-    await waitForTimeout(this.context__.meta.changeDebounce ?? 0);
+
+    if (force === true || this.context__.meta.changeDebounce === undefined) {
+      await waitForImmediate();
+    }
+    else {
+      await waitForTimeout(this.context__.meta.changeDebounce);
+    }
+
+    if (this.updateDelayed__ !== true) return; // another parallel update finished!
     this.updateDelayed__ = false;
 
     this.updatedCallback__.call(null, this);
@@ -507,12 +516,12 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    *
    * @param id - The ID of the item to update.
    */
-  private updateMeta__(id?: string | number): void {
+  private updateMeta__(id: string | number | null): void {
     this.logger__.logMethodArgs?.('updateMeta__', {id});
     const now = Date.now();
     this.context__.meta.rev++;
     this.context__.meta.updated = now;
-    if (id !== undefined) {
+    if (id !== null) {
       const itemMeta = this.item__(id).meta;
       itemMeta.rev++;
       itemMeta.updated = now;
