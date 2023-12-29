@@ -304,6 +304,24 @@ export class AlwatrStore {
   }
 
   /**
+   * Saves all changes in the store.
+   * @returns A Promise that resolves when all changes are saved.
+   * @example
+   * ```typescript
+   * await alwatrStore.saveAll();
+   * ```
+   */
+  async saveAll(): Promise<void> {
+    logger.logMethod?.('saveAll');
+    for (const ref of Object.values(this.cacheReferences__)) {
+      if (ref.hasUnprocessedChanges_ === true) {
+        ref.updateDelayed_ = false;
+        await this.storeChanged__(ref);
+      }
+    }
+  }
+
+  /**
    * Reads the context from a given path or StoreFileStat object.
    *
    * @param path The path or StoreFileStat object from which to read the context.
