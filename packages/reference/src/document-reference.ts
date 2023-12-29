@@ -270,17 +270,12 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
     if (this.updateDelayed__ === true) return;
     // else
 
-    if (this.context__.meta.changeDebounce !== undefined) {
-      this.updateDelayed__ = true;
-      await waitForTimeout(this.context__.meta.changeDebounce);
-      this.updateDelayed__ = false;
-    }
+    this.updateDelayed__ = true;
+    await waitForTimeout(this.context__.meta.changeDebounce ?? 0);
+    this.updateDelayed__ = false;
 
     this.updateMeta__();
-    if (this.hasUnprocessedChanges_ === true) {
-      this.hasUnprocessedChanges_ = false;
-      this.updatedCallback__.call(null, this);
-    }
+    this.updatedCallback__.call(null, this);
   }
 
   /**

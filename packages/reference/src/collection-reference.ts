@@ -225,7 +225,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * ```
    */
   meta(): Readonly<StoreFileMeta> {
-    this.logger__.logMethodFull?.('meta', undefined, this.context__.meta);
+    this.logger__.logMethod?.('meta');
     return this.context__.meta;
   }
 
@@ -495,16 +495,11 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
     if (this.updateDelayed__ === true) return;
     // else
 
-    if (this.context__.meta.changeDebounce !== undefined) {
-      this.updateDelayed__ = true;
-      await waitForTimeout(this.context__.meta.changeDebounce);
-      this.updateDelayed__ = false;
-    }
+    this.updateDelayed__ = true;
+    await waitForTimeout(this.context__.meta.changeDebounce ?? 0);
+    this.updateDelayed__ = false;
 
-    if (this.hasUnprocessedChanges_ === true) {
-      this.hasUnprocessedChanges_ = false;
-      this.updatedCallback__.call(null, this);
-    }
+    this.updatedCallback__.call(null, this);
   }
 
   /**
@@ -513,7 +508,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * @param id - The ID of the item to update.
    */
   private updateMeta__(id?: string | number): void {
-    this.logger__.logMethod?.('updateMeta__');
+    this.logger__.logMethodArgs?.('updateMeta__', {id});
     const now = Date.now();
     this.context__.meta.rev++;
     this.context__.meta.updated = now;
