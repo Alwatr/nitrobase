@@ -9,7 +9,7 @@ import {
   type StoreFileMeta,
 } from '@alwatr/store-types';
 import {Dictionary} from '@alwatr/type-helper';
-import { waitForTimeout } from '@alwatr/wait';
+import {waitForTimeout} from '@alwatr/wait';
 
 import {logger} from './logger';
 import {getStoreId, getStorePath} from './util';
@@ -46,6 +46,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
     stat: StoreFileId,
     initialData: CollectionContext<TItem>['data'] | null,
     updatedCallback: (from: CollectionReference<TItem>) => void,
+    debugDomain?: string,
   ): CollectionReference<TItem> {
     logger.logMethodArgs?.('col.newRefFromData', stat);
 
@@ -66,7 +67,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
       data: initialData ?? {},
     };
 
-    return new CollectionReference(initialContext, updatedCallback);
+    return new CollectionReference(initialContext, updatedCallback, debugDomain);
   }
 
   /**
@@ -80,9 +81,10 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
   static newRefFromContext<TItem extends Dictionary>(
     context: CollectionContext<TItem>,
     updatedCallback: (from: CollectionReference<TItem>) => void,
+    debugDomain?: string,
   ): CollectionReference<TItem> {
     logger.logMethodArgs?.('col.newRefFromContext', context.meta);
-    return new CollectionReference(context, updatedCallback);
+    return new CollectionReference(context, updatedCallback, debugDomain);
   }
 
   /**
@@ -145,17 +147,17 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
   /**
    * The ID of the collection store file.
    */
-  readonly id = getStoreId(this.context__.meta);
+  readonly id: string;
 
   /**
    * The location path of the collection store file.
    */
-  readonly path = getStorePath(this.context__.meta);
+  readonly path: string;
 
   /**
    * Logger instance for this collection.
    */
-  private logger__ = createLogger(`col:${this.id.slice(0, 20)}`);
+  private logger__;
 
   /**
    * Collection reference have methods to get, set, update and save the Alwatr Store Collection.
@@ -173,9 +175,17 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
   constructor(
     private context__: CollectionContext<TItem>,
     private updatedCallback__: (from: CollectionReference<TItem>) => void,
+    debugDomain?: string,
   ) {
-    this.logger__.logMethodArgs?.('new', {path: this.path});
     CollectionReference.validateContext__(this.context__);
+
+    this.id = getStoreId(this.context__.meta);
+    this.path = getStorePath(this.context__.meta);
+
+    debugDomain ??= this.id.slice(0, 20);
+    this.logger__ = createLogger(`col:${debugDomain}`);
+
+    this.logger__.logMethodArgs?.('new', {id: this.id});
   }
 
   /**

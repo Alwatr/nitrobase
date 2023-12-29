@@ -3,7 +3,7 @@ import {StoreFileType, StoreFileId, StoreFileExtension, type DocumentContext, ty
 import {waitForTimeout} from '@alwatr/wait';
 
 import {logger} from './logger';
-import { getStoreId, getStorePath } from './util';
+import {getStoreId, getStorePath} from './util';
 
 import type {Dictionary} from '@alwatr/type-helper';
 
@@ -37,6 +37,7 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
     statId: StoreFileId,
     initialData: TDoc,
     updatedCallback: (from: DocumentReference<TDoc>) => unknown,
+    debugDomain?: string,
   ): DocumentReference<TDoc> {
     logger.logMethodArgs?.('doc.newRefFromData', statId);
 
@@ -56,7 +57,7 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
       data: initialData,
     };
 
-    return new DocumentReference(initialContext, updatedCallback);
+    return new DocumentReference(initialContext, updatedCallback, debugDomain);
   }
 
   /**
@@ -70,9 +71,10 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
   static newRefFromContext<TDoc extends Dictionary>(
     context: DocumentContext<TDoc>,
     updatedCallback: (from: DocumentReference<TDoc>) => unknown,
+    debugDomain?: string,
   ): DocumentReference<TDoc> {
     logger.logMethodArgs?.('doc.newRefFromContext', context.meta);
-    return new DocumentReference(context, updatedCallback);
+    return new DocumentReference(context, updatedCallback, debugDomain);
   }
 
   /**
@@ -93,7 +95,7 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
       throw new Error('store_meta_undefined', {cause: context});
     }
 
-    if(context.meta.type !== StoreFileType.Document) {
+    if (context.meta.type !== StoreFileType.Document) {
       logger.accident?.('doc.validateContext__', 'document_type_invalid', context.meta);
       throw new Error('document_type_invalid', {cause: context.meta});
     }
@@ -126,23 +128,22 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
       logger.accident('doc.migrateContext__', 'store_version_incompatible', context.meta);
       throw new Error('store_version_incompatible', {cause: context.meta});
     }
-
   }
 
   /**
    * The ID of the document store file.
    */
-  readonly id = getStoreId(this.context__.meta);
+  readonly id: string;
 
   /**
    * The location path of the document store file.
    */
-  readonly path = getStorePath(this.context__.meta);
+  readonly path: string;
 
   /**
    * Logger instance for this document.
    */
-  private logger__ = createLogger(`doc:${this.id.slice(0, 20)}`);
+  private logger__;
 
   /**
    * Create a new document reference.
@@ -155,9 +156,17 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
   constructor(
     private readonly context__: DocumentContext<TDoc>,
     private readonly updatedCallback__: (from: DocumentReference<TDoc>) => unknown,
+    debugDomain?: string,
   ) {
-    this.logger__.logMethodArgs?.('new', {path: this.path});
     DocumentReference.validateContext__(this.context__);
+
+    this.id = getStoreId(this.context__.meta);
+    this.path = getStorePath(this.context__.meta);
+
+    debugDomain ??= this.id.slice(0, 20);
+    this.logger__ = createLogger(`doc:${debugDomain}`);
+
+    this.logger__.logMethodArgs?.('new', {path: this.path});
   }
 
   /**
