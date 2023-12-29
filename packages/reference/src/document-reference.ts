@@ -258,21 +258,21 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
     return this.context__;
   }
 
-  private updateDelayed__ = false;
+  updateDelayed_ = false;
 
   /**
    * Update the document metadata and invoke the updated callback.
    * This method is throttled to prevent multiple updates in a short time.
    */
   private async updated__(force = false): Promise<void> {
-    this.logger__.logMethodArgs?.('updated__', {delayed: this.updateDelayed__});
+    this.logger__.logMethodArgs?.('updated__', {delayed: this.updateDelayed_});
 
     this.hasUnprocessedChanges_ = true;
 
-    if (force !== true && this.updateDelayed__ === true) return;
+    if (force !== true && this.updateDelayed_ === true) return;
     // else
 
-    this.updateDelayed__ = true;
+    this.updateDelayed_ = true;
 
     if (force === true || this.context__.meta.changeDebounce === undefined) {
       await waitForImmediate();
@@ -281,8 +281,8 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
       await waitForTimeout(this.context__.meta.changeDebounce);
     }
 
-    if (this.updateDelayed__ !== true) return; // another parallel update finished!
-    this.updateDelayed__ = false;
+    if (this.updateDelayed_ !== true) return; // another parallel update finished!
+    this.updateDelayed_ = false;
 
     this.updateMeta__();
     this.updatedCallback__.call(null, this);
