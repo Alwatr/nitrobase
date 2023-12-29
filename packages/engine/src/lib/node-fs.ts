@@ -1,45 +1,15 @@
-import {
-  existsSync,
-  readFileSync as readFileSync_,
-  writeFileSync as writeFileSync_,
-  mkdirSync,
-  copyFileSync,
-  renameSync,
-} from 'node:fs';
+import {existsSync, readFileSync as readFileSync_, writeFileSync as writeFileSync_, mkdirSync, copyFileSync, renameSync} from 'node:fs';
 import {copyFile, mkdir, readFile as readFile_, rename, writeFile as writeFile_, unlink} from 'node:fs/promises';
 import {dirname} from 'node:path';
 
+import {flatString} from '@alwatr/flat-string';
+
 import {logger} from '../logger.js';
-import {MaybePromise} from '../type.js';
+
+import type {MaybePromise} from '@alwatr/type-helper';
 
 export {resolve} from 'node:path';
 export {unlink, existsSync};
-
-/**
- * Deep clones an object.
- */
-export function deepClone<T>(obj: T): T;
-
-/**
- * Deep clones an object.
- *
- * if the object is null or undefined, it returns null.
- */
-export function deepClone<T>(obj: T | null | undefined): T | null;
-
-export function deepClone<T>(obj: T | null | undefined): T | null {
-  if (obj == null) return null;
-  return JSON.parse(JSON.stringify(obj));
-}
-
-/**
- * Flattens the underlying C structures of a concatenated JavaScript string.
- */
-export const flatStr = (s: string): string => {
-  // @ts-expect-error because it alters wrong compilation errors.
-  s | 0;
-  return s;
-};
 
 /**
  * Parse json string.
@@ -130,11 +100,11 @@ export function readFile(path: string, sync: boolean): MaybePromise<string>;
  * ```
  */
 export function readFile(path: string, sync = false): MaybePromise<string> {
-  logger.logMethodArgs?.('readFile', {path, sync});
+  logger.logMethodArgs?.('readFile', {path: path.slice(-32), sync});
   // if (!existsSync(path)) throw new Error('file_not_found');
   if (sync === true) {
     try {
-      return flatStr(readFileSync_(path, {encoding: 'utf-8', flag: 'r'}));
+      return flatString(readFileSync_(path, {encoding: 'utf-8', flag: 'r'}));
     }
     catch (err) {
       logger.error('readFile', 'read_file_failed', err);
@@ -143,7 +113,7 @@ export function readFile(path: string, sync = false): MaybePromise<string> {
   }
   // else, async mode
   return readFile_(path, {encoding: 'utf-8', flag: 'r'})
-    .then((content) => flatStr(content))
+    .then((content) => flatString(content))
     .catch((err) => {
       logger.error('readFile', 'read_file_failed', err);
       throw new Error('read_file_failed', {cause: (err as Error).cause});
@@ -197,7 +167,7 @@ export function readJsonFile(path: string, sync: boolean): MaybePromise<unknown>
  * ```
  */
 export function readJsonFile(path: string, sync = false): MaybePromise<unknown> {
-  logger.logMethodArgs?.('readJsonFile', {path, sync});
+  logger.logMethodArgs?.('readJsonFile', {path: path.slice(-32), sync});
   if (sync === true) {
     return parseJson(readFile(path, true));
   }
@@ -265,13 +235,13 @@ export function writeFile(path: string, content: string, mode: WriteFileMode, sy
  * ```
  */
 export function writeFile(path: string, content: string, mode: WriteFileMode, sync = false): MaybePromise<void> {
-  logger.logMethodArgs?.('writeFile', {path, mode, sync});
+  logger.logMethodArgs?.('writeFile', {path: path.slice(-32), mode, sync});
   if (sync === true) {
     handleExistsFile(path, mode, true);
     try {
-      logger.logOther?.('write_file_start', {path, sync});
+      logger.logOther?.('write_file_start', {path: path.slice(-32), sync});
       writeFileSync_(path, content, {encoding: 'utf-8', flag: 'w'});
-      logger.logOther?.('write_file_success', {path, sync});
+      logger.logOther?.('write_file_success', {path: path.slice(-32), sync});
       return;
     }
     catch (err) {
@@ -282,11 +252,11 @@ export function writeFile(path: string, content: string, mode: WriteFileMode, sy
   // else, async mode
   return handleExistsFile(path, mode)
     .then(() => {
-      logger.logOther?.('write_file_start', {path, sync});
+      logger.logOther?.('write_file_start', {path: path.slice(-32), sync});
       return writeFile_(path, content, {encoding: 'utf-8', flag: 'w'});
     })
     .then(() => {
-      logger.logOther?.('write_file_success', {path, sync});
+      logger.logOther?.('write_file_success', {path: path.slice(-32), sync});
     })
     .catch((err) => {
       logger.error('writeFile', 'write_file_failed', err);
@@ -342,7 +312,7 @@ export function handleExistsFile(path: string, mode: WriteFileMode, sync: boolea
  * ```
  */
 export function handleExistsFile(path: string, mode: WriteFileMode, sync = false): MaybePromise<void> {
-  logger.logMethodArgs?.('handleExistsFile', {path, mode, sync});
+  logger.logMethodArgs?.('handleExistsFile', {path: path.slice(-32), mode, sync});
   if (sync === true) {
     if (existsSync(path)) {
       if (mode === WriteFileMode.Copy) {
@@ -453,6 +423,6 @@ export function writeJsonFile(path: string, data: unknown, mode: WriteFileMode, 
  * ```
  */
 export function writeJsonFile(path: string, data: unknown, mode: WriteFileMode, sync = false): MaybePromise<void> {
-  logger.logMethodArgs?.('writeJsonFile', {path, mode, sync});
-  return writeFile(path, flatStr(jsonStringify(data)), mode, sync);
+  logger.logMethodArgs?.('writeJsonFile', {path: path.slice(-32), mode, sync});
+  return writeFile(path, flatString(jsonStringify(data)), mode, sync);
 }

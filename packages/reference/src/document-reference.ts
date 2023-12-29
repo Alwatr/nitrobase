@@ -1,8 +1,9 @@
-import {flatString} from '@alwatr/flat-string';
 import {createLogger} from '@alwatr/logger';
-import {StoreFileType, StoreFileStat, StoreFileId, StoreFileExtension, type DocumentContext, type StoreFileMeta} from '@alwatr/store-types';
+import {StoreFileType, StoreFileId, StoreFileExtension, type DocumentContext, type StoreFileMeta} from '@alwatr/store-types';
+import {waitForTimeout} from '@alwatr/wait';
 
-import {logger} from './logger.js';
+import {logger} from './logger';
+import {getStoreId, getStorePath} from './util';
 
 import type {Dictionary} from '@alwatr/type-helper';
 
@@ -26,37 +27,37 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
   /**
    * Creates new DocumentReference instance from stat and initial data.
    *
-   * @param stat the document stat.
+   * @param statId the document stat.
    * @param initialData the document data.
    * @param updatedCallback the callback to invoke when the document changed.
    * @template TDoc The document data type.
    * @returns A new document reference class.
    */
   static newRefFromData<TDoc extends Dictionary>(
-    stat: StoreFileId | StoreFileStat,
+    statId: StoreFileId,
     initialData: TDoc,
-    updatedCallback: (from: DocumentReference<TDoc>) => void,
+    updatedCallback: (from: DocumentReference<TDoc>) => unknown,
+    debugDomain?: string,
   ): DocumentReference<TDoc> {
-    logger.logMethodArgs?.('doc.newRefFromData', stat);
+    logger.logMethodArgs?.('doc.newRefFromData', statId);
 
     const now = Date.now();
-
     const initialContext: DocumentContext<TDoc> = {
       ok: true,
       meta: {
-        extension: StoreFileExtension.Json,
-        ...stat,
+        ...statId,
         rev: 1,
         updated: now,
         created: now,
         type: StoreFileType.Document,
+        extension: StoreFileExtension.Json,
         ver: DocumentReference.version,
         fv: DocumentReference.fileFormatVersion,
       },
       data: initialData,
     };
 
-    return new DocumentReference(initialContext, updatedCallback);
+    return new DocumentReference(initialContext, updatedCallback, debugDomain);
   }
 
   /**
@@ -69,10 +70,44 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
    */
   static newRefFromContext<TDoc extends Dictionary>(
     context: DocumentContext<TDoc>,
-    updatedCallback: (from: DocumentReference<TDoc>) => void,
+    updatedCallback: (from: DocumentReference<TDoc>) => unknown,
+    debugDomain?: string,
   ): DocumentReference<TDoc> {
     logger.logMethodArgs?.('doc.newRefFromContext', context.meta);
-    return new DocumentReference(context, updatedCallback);
+    return new DocumentReference(context, updatedCallback, debugDomain);
+  }
+
+  /**
+   * Validates the document context and try to migrate it to the latest version.
+   *
+   * @param context document context
+   */
+  private static validateContext__(context: DocumentContext<Dictionary>): void {
+    logger.logMethodArgs?.('doc.validateContext__', {name: context.meta?.name});
+
+    if (context.ok !== true) {
+      logger.accident?.('doc.validateContext__', 'store_not_ok', context);
+      throw new Error('store_not_ok', {cause: context});
+    }
+
+    if (context.meta === undefined) {
+      logger.accident?.('doc.validateContext__', 'store_meta_undefined', context);
+      throw new Error('store_meta_undefined', {cause: context});
+    }
+
+    if (context.meta.type !== StoreFileType.Document) {
+      logger.accident?.('doc.validateContext__', 'document_type_invalid', context.meta);
+      throw new Error('document_type_invalid', {cause: context.meta});
+    }
+
+    if (context.meta.ver !== DocumentReference.version) {
+      logger.incident?.('doc.validateContext__', 'store_version_incompatible', {
+        fileVersion: context.meta.ver,
+        currentVersion: DocumentReference.version,
+      });
+
+      DocumentReference.migrateContext__(context);
+    }
   }
 
   /**
@@ -80,28 +115,34 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
    *
    * @param context document context
    */
-  static migrateContext_(context: DocumentContext<Dictionary>): void {
+  private static migrateContext__(context: DocumentContext<Dictionary>): void {
     if (context.meta.ver === DocumentReference.version) return;
 
-    logger.logMethodArgs?.('doc.migrateContext_', {
+    logger.logMethodArgs?.('doc.migrateContext__', {
       name: context.meta.name,
       ver: context.meta.ver,
       fv: context.meta.fv,
     });
 
     if (context.meta.fv > DocumentReference.fileFormatVersion) {
-      logger.accident('doc.migrateContext_', 'store_version_incompatible', context.meta);
+      logger.accident('doc.migrateContext__', 'store_version_incompatible', context.meta);
       throw new Error('store_version_incompatible', {cause: context.meta});
     }
-
-    // if (context.meta.fv === 1) migrate_to_2
-
-    context.meta.ver = DocumentReference.version;
   }
 
-  public readonly id: string;
-  public readonly path: string;
+  /**
+   * The ID of the document store file.
+   */
+  readonly id: string;
 
+  /**
+   * The location path of the document store file.
+   */
+  readonly path: string;
+
+  /**
+   * Logger instance for this document.
+   */
   private logger__;
 
   /**
@@ -114,26 +155,18 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
    */
   constructor(
     private readonly context__: DocumentContext<TDoc>,
-    private readonly updatedCallback__: (from: DocumentReference<TDoc>) => void,
+    private readonly updatedCallback__: (from: DocumentReference<TDoc>) => unknown,
+    debugDomain?: string,
   ) {
-    const meta = this.context__.meta;
-    let id = meta.region + '/' + meta.name;
-    if (meta.ownerId !== undefined) {
-      id += '/' + meta.ownerId;
-    }
-    this.id = flatString(id);
+    DocumentReference.validateContext__(this.context__);
 
-    let path: string = meta.region;
-    if (meta.ownerId !== undefined) {
-      path += '/' + meta.ownerId.slice(0, 3) + '/' + meta.ownerId;
-    }
-    path += `/${meta.name}.${meta.type}.${meta.extension}`;
-    this.path = flatString(path);
+    this.id = getStoreId(this.context__.meta);
+    this.path = getStorePath(this.context__.meta);
 
-    this.logger__ = createLogger(`doc:${this.id.slice(0, 20)}`);
+    debugDomain ??= this.id.slice(0, 20);
+    this.logger__ = createLogger(`doc:${debugDomain}`);
 
-    this.logger__.logMethodArgs?.('new', {path});
-    DocumentReference.migrateContext_(this.context__);
+    this.logger__.logMethodArgs?.('new', {path: this.path});
   }
 
   /**
@@ -226,11 +259,15 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
    */
   private async updated__(): Promise<void> {
     this.logger__.logMethodArgs?.('updated__', {delayed: this.updateDelayed__});
-    if (this.updateDelayed__) return;
+    if (this.updateDelayed__ === true) return;
     // else
-    this.updateDelayed__ = true;
-    await new Promise((resolve) => setImmediate(resolve));
-    this.updateDelayed__ = false;
+
+    if (this.context__.meta.changeDebounce !== undefined) {
+      this.updateDelayed__ = true;
+      await waitForTimeout(this.context__.meta.changeDebounce);
+      this.updateDelayed__ = false;
+    }
+
     this.updateMeta__();
     this.updatedCallback__.call(null, this);
   }

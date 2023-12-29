@@ -1,18 +1,18 @@
-import {flatString} from '@alwatr/flat-string';
 import {createLogger} from '@alwatr/logger';
 import {
   StoreFileType,
   StoreFileExtension,
   type StoreFileId,
-  type StoreFileStat,
   type CollectionContext,
   type CollectionItem,
   type CollectionItemMeta,
   type StoreFileMeta,
 } from '@alwatr/store-types';
 import {Dictionary} from '@alwatr/type-helper';
+import {waitForTimeout} from '@alwatr/wait';
 
-import {logger} from './logger.js';
+import {logger} from './logger';
+import {getStoreId, getStorePath} from './util';
 
 logger.logModule?.('collection-reference');
 
@@ -43,31 +43,31 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * @returns A new collection reference class.
    */
   static newRefFromData<TItem extends Dictionary>(
-    stat: StoreFileId | StoreFileStat,
+    stat: StoreFileId,
     initialData: CollectionContext<TItem>['data'] | null,
     updatedCallback: (from: CollectionReference<TItem>) => void,
+    debugDomain?: string,
   ): CollectionReference<TItem> {
     logger.logMethodArgs?.('col.newRefFromData', stat);
 
     const now = Date.now();
-
     const initialContext: CollectionContext<TItem> = {
       ok: true,
       meta: {
-        extension: StoreFileExtension.Json,
         ...stat,
         rev: 1,
         updated: now,
         created: now,
         lastAutoId: 0,
         type: StoreFileType.Collection,
+        extension: StoreFileExtension.Json,
         ver: CollectionReference.version,
         fv: CollectionReference.fileFormatVersion,
       },
       data: initialData ?? {},
     };
 
-    return new CollectionReference(initialContext, updatedCallback);
+    return new CollectionReference(initialContext, updatedCallback, debugDomain);
   }
 
   /**
@@ -81,9 +81,43 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
   static newRefFromContext<TItem extends Dictionary>(
     context: CollectionContext<TItem>,
     updatedCallback: (from: CollectionReference<TItem>) => void,
+    debugDomain?: string,
   ): CollectionReference<TItem> {
     logger.logMethodArgs?.('col.newRefFromContext', context.meta);
-    return new CollectionReference(context, updatedCallback);
+    return new CollectionReference(context, updatedCallback, debugDomain);
+  }
+
+  /**
+   * Validates the collection context and try to migrate it to the latest version.
+   *
+   * @param context collection context
+   */
+  private static validateContext__(context: CollectionContext<Dictionary>): void {
+    logger.logMethodArgs?.('col.validateContext__', {name: context.meta?.name});
+
+    if (context.ok !== true) {
+      logger.accident?.('col.validateContext__', 'store_not_ok', context);
+      throw new Error('store_not_ok', {cause: context});
+    }
+
+    if (context.meta === undefined) {
+      logger.accident?.('col.validateContext__', 'store_meta_undefined', context);
+      throw new Error('store_meta_undefined', {cause: context});
+    }
+
+    if (context.meta.type !== StoreFileType.Collection) {
+      logger.accident?.('col.validateContext__', 'collection_type_invalid', context.meta);
+      throw new Error('collection_type_invalid', {cause: context.meta});
+    }
+
+    if (context.meta.ver !== CollectionReference.version) {
+      logger.incident?.('col.validateContext__', 'store_version_incompatible', {
+        fileVersion: context.meta.ver,
+        currentVersion: CollectionReference.version,
+      });
+
+      CollectionReference.migrateContext__(context);
+    }
   }
 
   /**
@@ -91,17 +125,17 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    *
    * @param context collection context
    */
-  static migrateContext_(context: CollectionContext<Dictionary>): void {
+  private static migrateContext__(context: CollectionContext<Dictionary>): void {
     if (context.meta.ver === CollectionReference.version) return;
 
-    logger.logMethodArgs?.('coll.migrateContext_', {
+    logger.logMethodArgs?.('coll.migrateContext__', {
       name: context.meta.name,
       ver: context.meta.ver,
       fv: context.meta.fv,
     });
 
     if (context.meta.fv > CollectionReference.fileFormatVersion) {
-      logger.accident('coll.migrateContext_', 'store_version_incompatible', context.meta);
+      logger.accident('coll.migrateContext__', 'store_version_incompatible', context.meta);
       throw new Error('store_version_incompatible', {cause: context.meta});
     }
 
@@ -110,9 +144,19 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
     context.meta.ver = CollectionReference.version;
   }
 
-  public readonly id: string;
-  public readonly path: string;
+  /**
+   * The ID of the collection store file.
+   */
+  readonly id: string;
 
+  /**
+   * The location path of the collection store file.
+   */
+  readonly path: string;
+
+  /**
+   * Logger instance for this collection.
+   */
   private logger__;
 
   /**
@@ -131,25 +175,17 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
   constructor(
     private context__: CollectionContext<TItem>,
     private updatedCallback__: (from: CollectionReference<TItem>) => void,
+    debugDomain?: string,
   ) {
-    const meta = this.context__.meta;
-    let id = meta.region + '/' + meta.name;
-    if (meta.ownerId !== undefined) {
-      id += '/' + meta.ownerId;
-    }
-    this.id = flatString(id);
+    CollectionReference.validateContext__(this.context__);
 
-    let path: string = meta.region;
-    if (meta.ownerId !== undefined) {
-      path += '/' + meta.ownerId.slice(0, 3) + '/' + meta.ownerId;
-    }
-    path += `/${meta.name}.${meta.type}.${meta.extension}`;
-    this.path = flatString(path);
+    this.id = getStoreId(this.context__.meta);
+    this.path = getStorePath(this.context__.meta);
 
-    this.logger__ = createLogger(`col:${this.id.slice(0, 20)}`);
+    debugDomain ??= this.id.slice(0, 20);
+    this.logger__ = createLogger(`col:${debugDomain}`);
 
-    this.logger__.logMethodArgs?.('new', {path});
-    CollectionReference.migrateContext_(this.context__);
+    this.logger__.logMethodArgs?.('new', {id: this.id});
   }
 
   /**
@@ -168,7 +204,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * ```
    */
   exists(id: string | number): boolean {
-    const exists = id in this.context__.data;
+    const exists = Object.hasOwn(this.context__.data, id);
     this.logger__.logMethodFull?.('exists', id, exists);
     return exists;
   }
@@ -180,10 +216,10 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    *
    * @example
    * ```typescript
-   * const metadata = collectionRef.stat();
+   * const metadata = collectionRef.meta();
    * ```
    */
-  stat(): Readonly<StoreFileMeta> {
+  meta(): Readonly<StoreFileMeta> {
     this.logger__.logMethodFull?.('meta', undefined, this.context__.meta);
     return this.context__.meta;
   }
@@ -209,7 +245,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * @param id - The ID of the item.
    * @returns The metadata of the item with the given ID.
    */
-  meta(id: string | number): Readonly<CollectionItemMeta> {
+  metaItem(id: string | number): Readonly<CollectionItemMeta> {
     const meta = this.item__(id).meta;
     this.logger__.logMethodFull?.('meta', id, meta);
     return meta;
@@ -342,7 +378,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * ```
    */
   update(id: string | number, data: Partial<TItem>): void {
-    this.logger__.logMethodArgs?.('update', data);
+    this.logger__.logMethodArgs?.('update', {id, data});
     Object.assign(this.item__(id).data, data);
     this.updated__(id);
   }
@@ -374,6 +410,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * ```
    */
   keys(): string[] {
+    this.logger__.logMethod?.('keys');
     return Object.keys(this.context__.data);
   }
 
@@ -390,6 +427,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * ```
    */
   values(): CollectionItem<TItem>[] {
+    this.logger__.logMethod?.('values');
     return Object.values(this.context__.data);
   }
 
@@ -406,6 +444,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * ```
    */
   *ids(): Generator<string, void, void> {
+    this.logger__.logMethod?.('ids');
     for (const id in this.context__.data) {
       yield id;
     }
@@ -423,6 +462,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * }
    */
   *items(): Generator<CollectionItem<TItem>, void, void> {
+    this.logger__.logMethod?.('items');
     for (const id in this.context__.data) {
       yield this.context__.data[id];
     }
@@ -444,14 +484,18 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
   private async updated__(id?: string | number): Promise<void> {
     this.logger__.logMethodArgs?.('updated__', {delayed: this.updateDelayed__});
     this.updateMeta__(id);
-    if (this.updateDelayed__) return;
+
+    if (this.updateDelayed__ === true) return;
     // else
-    this.updateDelayed__ = true;
-    await new Promise((resolve) => setImmediate(resolve));
-    this.updateDelayed__ = false;
+
+    if (this.context__.meta.changeDebounce !== undefined) {
+      this.updateDelayed__ = true;
+      await waitForTimeout(this.context__.meta.changeDebounce);
+      this.updateDelayed__ = false;
+    }
+
     this.updatedCallback__.call(null, this);
   }
-
 
   /**
    * Updates the collection's metadata.
@@ -480,6 +524,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * ```
    */
   private nextAutoIncrementId__(): number {
+    this.logger__.logMethod?.('nextAutoIncrementId__');
     const meta = this.context__.meta as Required<StoreFileMeta>;
     do {
       meta.lastAutoId++;

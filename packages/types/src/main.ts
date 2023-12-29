@@ -78,7 +78,7 @@ export enum StoreFileExtension {
  * Get from user for select store file.
  */
 export interface StoreFileId {
-  // [P: string]: unknown;
+  [P: string]: unknown;
 
   /**
    * The store filename.
@@ -119,9 +119,17 @@ export interface StoreFileStat extends StoreFileId {
   readonly extension: StoreFileExtension;
 
   /**
+   * The save debounce timeout in milliseconds for minimal disk I/O usage.
+   * This is used to limit the frequency of disk writes for performance reasons.
+   * The recommended value is `40`.
+   * If not specified, the default value get from AlwatrStore `defaultChangeDebounce`.
+   */
+  readonly changeDebounce?: number;
+
+  /**
    * The time-to-live (TTL) of the store file in memory.
    */
-  readonly ttl?: number;
+  // readonly ttl?: number;
 }
 
 /**

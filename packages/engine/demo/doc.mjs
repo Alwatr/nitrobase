@@ -1,7 +1,6 @@
 import {createLogger} from '@alwatr/logger';
 
-import {AlwatrStore} from './alwatr-store.js';
-import {Region, StoreFileTTL} from './type.js';
+import {AlwatrStore, Region, StoreFileExtension, StoreFileType} from '@alwatr/store-engine';
 
 const logger = createLogger('AlwatrStore/Demo', true);
 logger.banner('AlwatrStore/Demo');
@@ -9,17 +8,14 @@ logger.banner('AlwatrStore/Demo');
 // Create a new store instance
 const alwatrStore = new AlwatrStore({
   rootPath: './db',
-  saveDebounce: 5_000, // for demo
+  defaultChangeDebounce: 2_000, // for demo
 });
 
-interface Post {
-  [P: string]: string;
-  title: string;
-  body: string;
-}
-
 async function quickstart() {
-  const docId = 'posts/intro-to-alwatr-store';
+  const docId = {
+    name: 'posts/intro-to-alwatr-store',
+    region: Region.Authenticated,
+  };
 
   logger.logProperty?.('docId', docId);
 
@@ -29,24 +25,18 @@ async function quickstart() {
 
   if (!exists) {
     // Define a new document store file.
-    await alwatrStore.defineDocument(
-      {
-        id: docId,
-        region: Region.Public,
-        ttl: StoreFileTTL.veryShort, // for demo
-      },
-      {
-        title: 'new title',
-        body: '',
-      },
-    );
+    alwatrStore.defineStoreFile({
+      ...docId,
+      type: StoreFileType.Document,
+      extension: StoreFileExtension.Json,
+    }, {
+      title: 'new title',
+      body: '',
+    });
   }
 
-  // Check the document stat.
-  logger.logProperty?.('stat', alwatrStore.stat(docId));
-
   // Create new document reference of specific id.
-  const myPost = await alwatrStore.doc<Post>(docId);
+  const myPost = await alwatrStore.doc(docId);
 
   // Read the document meta information.
   logger.logProperty?.('doc.meta', myPost.meta());

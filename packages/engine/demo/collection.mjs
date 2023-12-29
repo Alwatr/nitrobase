@@ -1,7 +1,6 @@
 import {createLogger} from '@alwatr/logger';
 
-import {AlwatrStore} from './alwatr-store.js';
-import {Region, StoreFileTTL} from './type.js';
+import {AlwatrStore, Region, StoreFileExtension, StoreFileType} from '@alwatr/store-engine';
 
 const logger = createLogger('AlwatrStore/Demo', true);
 logger.banner('AlwatrStore/Demo');
@@ -9,17 +8,15 @@ logger.banner('AlwatrStore/Demo');
 // Create a new storage instance
 const alwatrStore = new AlwatrStore({
   rootPath: './db',
-  saveDebounce: 5_000, // for demo
+  defaultChangeDebounce: 2_000, // for demo
 });
 
-interface Post {
-  [P: string]: string;
-  title: string;
-  body: string;
-}
-
 async function quickstart() {
-  const postsCollectionId = 'post-list';
+  const postsCollectionId = {
+    name: 'post',
+    region: Region.PerUser,
+    ownerId: 'user_123'
+  };
 
   logger.logProperty?.('collectionId', postsCollectionId);
 
@@ -34,17 +31,14 @@ async function quickstart() {
   }
 
   // Create a new collection.
-  await alwatrStore.defineCollection({
-    id: postsCollectionId,
-    region: Region.Public,
-    ttl: StoreFileTTL.veryShort, // for demo
+  alwatrStore.defineStoreFile({
+    ...postsCollectionId,
+    type: StoreFileType.Collection,
+    extension: StoreFileExtension.Json,
   });
 
-  // Check the collection stat.
-  logger.logProperty?.('stat', alwatrStore.stat(postsCollectionId));
-
   // Get a collection reference.
-  const postsCollection = await alwatrStore.collection<Post>(postsCollectionId);
+  const postsCollection = await alwatrStore.collection(postsCollectionId);
 
   const post1Id = 'intro-to-alwatr-store';
   const post2Id = 'intro-to-alwatr-collections';
@@ -56,7 +50,7 @@ async function quickstart() {
   });
 
   // Read the collection item meta information.
-  logger.logProperty?.('collection.meta', postsCollection.meta(post1Id));
+  logger.logProperty?.('collection.meta', postsCollection.metaItem(post1Id));
 
   // Read the collection item.
   logger.logProperty?.('context1', postsCollection.get(post1Id));
@@ -75,8 +69,8 @@ async function quickstart() {
   });
   logger.logProperty?.('context2', postsCollection.get(post1Id));
 
-  logger.logProperty?.('collection.meta1', postsCollection.meta(post1Id));
-  logger.logProperty?.('collection.meta2', postsCollection.meta(post2Id));
+  logger.logProperty?.('collection.meta1', postsCollection.metaItem(post1Id));
+  logger.logProperty?.('collection.meta2', postsCollection.metaItem(post2Id));
 
   // Unload the collection from memory.
   alwatrStore.unload(postsCollectionId);

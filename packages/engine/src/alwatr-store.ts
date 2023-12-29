@@ -1,4 +1,4 @@
-import {CollectionReference, DocumentReference} from '@alwatr/store-reference';
+import {CollectionReference, DocumentReference, getStoreId, getStorePath} from '@alwatr/store-reference';
 import {
   StoreFileType,
   StoreFileExtension,
@@ -6,15 +6,20 @@ import {
   type StoreFileStat,
   type StoreFileContext,
   type CollectionContext,
-  DocumentContext,
+  type DocumentContext,
+  type StoreFileId,
 } from '@alwatr/store-types';
+import {Dictionary} from '@alwatr/type-helper';
+import {waitForTimeout} from '@alwatr/wait';
 
-import {StoreFileStatModel} from './lib/store-file-stat.js'
-import {WriteFileMode, existsSync, readJsonFile, resolve, unlink, writeJsonFile} from './lib/util.js';
+import {WriteFileMode, existsSync, readJsonFile, resolve, unlink, writeJsonFile} from './lib/node-fs.js';
 import {logger} from './logger.js';
 
 logger.logModule?.('alwatr-store');
 
+/**
+ * AlwatrStore configuration.
+ */
 export interface AlwatrStoreConfig {
   /**
    * The root path of the storage.
@@ -25,9 +30,9 @@ export interface AlwatrStoreConfig {
   /**
    * The save debounce timeout in milliseconds for minimal disk I/O usage.
    * This is used to limit the frequency of disk writes for performance reasons.
-   * The recommended value is `50`.
+   * The recommended value is `40`.
    */
-  saveDebounce: number;
+  defaultChangeDebounce?: number;
 }
 
 /**
@@ -44,170 +49,120 @@ export class AlwatrStore {
    */
   static readonly version = __package_version;
 
+  static getStoreId = getStoreId;
+
   /**
    * The root store file stat.
    */
-  protected static readonly rootDbStat_: StoreFileStat = {
+  private static readonly rootDbStat__: StoreFileStat = {
     name: '.store',
     region: Region.Secret,
     type: StoreFileType.Collection,
     extension: StoreFileExtension.Json,
+    changeDebounce: 40,
   };
-
-  /**
-   * Validates a store file with the provided context and try to migrate if needed.
-   *
-   * @param context The store file context.
-   */
-  protected static validateStoreFile_(context: StoreFileContext<Record<string, unknown>>): void {
-    logger.logMethodArgs?.('validateStoreFile_', {id: context.meta});
-
-    if (context.ok !== true) {
-      logger.accident?.('validateStoreFile_', 'store_not_ok', context);
-      throw new Error('store_not_ok', {cause: context});
-    }
-
-    if (context.meta?.ver !== AlwatrStore.version) {
-      logger.accident?.('validateStoreFile_', 'store_version_incompatible', {
-        fileVersion: context.meta.ver,
-        currentVersion: AlwatrStore.version,
-      });
-
-      switch (context.meta?.type) {
-        case StoreFileType.Document: {
-          DocumentReference.migrateContext_(context);
-          break;
-        }
-
-        case StoreFileType.Collection: {
-          CollectionReference.migrateContext_(context);
-          break;
-        }
-
-        default:
-          logger.accident?.('validateStoreFile_', 'store_file_type_not_supported', context.meta);
-          throw new Error('store_file_type_not_supported', {cause: context.meta});
-      }
-    }
-
-    if (
-      context.meta.region === Region.PerUser ||
-      context.meta.region === Region.PerToken ||
-      context.meta.region === Region.PerDevice
-    ) {
-      if (context.meta.ownerId === undefined) {
-        logger.accident('validateStoreFile_', 'store_owner_id_not_defined', context.meta);
-        throw new Error('store_owner_id_not_defined', {cause: context.meta});
-      }
-    }
-  }
 
   /**
    * `collectionReference` of all `storeFileStat`s.
    * This is the root store collection.
    */
-  protected rootDb_;
+  private rootDb__;
+
+  /**
+   * Keep all loaded store file context loaded in memory.
+   */
+  private cacheReferences__: Dictionary<DocumentReference | CollectionReference> = {};
 
   /**
    * Constructs an AlwatrStore instance with the provided configuration.
    *
-   * @param config_ The configuration of the AlwatrStore engine.
+   * @param config__ The configuration of the AlwatrStore engine.
    * @example
    * ```typescript
    * const alwatrStore = new AlwatrStore({
    *   rootPath: './db',
-   *   saveDebounce: 100,
+   *   saveDebounce: 40,
    * });
    * ```
    */
-  constructor(readonly config_: AlwatrStoreConfig) {
-    logger.logMethodArgs?.('new', config_);
-    this.rootDb_ = this.loadRootDb_();
+  constructor(private readonly config__: AlwatrStoreConfig) {
+    logger.logMethodArgs?.('new', config__);
+    this.config__.defaultChangeDebounce ??= 40;
+    this.rootDb__ = this.loadRootDb__();
   }
 
   /**
-   * Checks if a store file with the given id exists.
+   * Checks if a store file with the given ID exists.
    *
-   * @param id store file id
-   * @returns true if a store file with the given id exists, false otherwise
+   * @param id - The ID of the store file to check.
+   * @returns `true` if the store file exists, `false` otherwise.
    * @example
    * ```typescript
    * if (!alwatrStore.exists('user1/profile')) {
-   *   alwatrStore.defineDocument(...)
+   *  alwatrStore.defineDocument(...)
    * }
    * ```
    */
-  exists(stat: StoreFileStatModel): boolean {
-    const exists = this.rootDb_.exists(stat.id);
-    logger.logMethodFull?.('exists', stat.id, exists);
+  exists(id: string | StoreFileId): boolean {
+    if (typeof id !== 'string') id = getStoreId(id);
+    const exists = this.rootDb__.exists(id);
+    logger.logMethodFull?.('exists', id, exists);
     return exists;
   }
 
   /**
-   * Returns the stats of a store file with the given id from the root store document without loading the store file.
-   * If the store file does not exist, an error is thrown.
+   * Defines a AlwatrStoreFile with the given configuration and initial data.
    *
-   * @param id store file id
-   * @returns file store stat
-   * @example
-   * ```typescript
-   * const stat = alwatrStore.stat('user1/order-list');
-   * console.log(stat.type); // collection
-   * ```
-   */
-  stat(id: string, ownerId?: string): Readonly<StoreFileStat> {
-    if (ownerId) id += `/${ownerId}`;
-    logger.logMethodArgs?.('stat', id);
-    // if (!this.rootDb_.exists(id)) throw new Error('store_file_not_defined', {cause: {id}});
-    return this.rootDb_.get(id);
-  }
-
-  /**
-   * Defines a document in the store with the given configuration and initial data.
-   * Document defined immediately and you don't need to await, unless you want to catch writeContext errors.
-   *
-   * @template TDoc document data type
-   * @param config store file config
+   * @param stat store file stat
    * @param initialData initial data for the document
+   * @template TDoc document data type
    * @example
    * ```typescript
    * await alwatrStore.defineDocument<Order>({
-   *  id: 'user1/profile',
+   *  name: 'profile',
    *  region: Region.PerUser,
-   *  ttl: StoreFileTTL.medium,
+   *  ownerId: 'user1',
+   *  type: StoreFileType.Document,
+   *  extension: StoreFileExtension.Json,
    * }, {
    *   name: 'Ali',
    *   email: 'ali@alwatr.io',
    * });
    * ```
    */
-  defineDocument<TDoc extends Record<string, unknown>>(stat: StoreFileStatModel, initialData: TDoc): Promise<void> {
-    logger.logMethodArgs?.('defineDocument', stat.value);
-    this.addStoreFile_(stat);
-    const docRef = DocumentReference.newRefFromData(stat.value, initialData, this.writeContext_.bind(this))
-    return this.writeContext_(stat.id, docRef.getFullContext_());
+  defineStoreFile<T extends Dictionary<unknown> = Dictionary<unknown>>(
+    stat: StoreFileStat,
+    initialData: DocumentContext<T>['data'] | CollectionContext<T>['data'] | null = null,
+  ): void {
+    logger.logMethodArgs?.('defineStoreFile', stat);
+
+    (stat.changeDebounce as number | undefined) ??= this.config__.defaultChangeDebounce;
+
+    let fileStoreRef: DocumentReference | CollectionReference;
+    if (stat.type === StoreFileType.Document) {
+      fileStoreRef = DocumentReference.newRefFromData(stat, initialData as DocumentContext['data'], this.storeChanged__.bind(this));
+    }
+    else if (stat.type === StoreFileType.Collection) {
+      fileStoreRef = CollectionReference.newRefFromData(stat, initialData as CollectionContext['data'], this.storeChanged__.bind(this));
+    }
+    else {
+      logger.accident('defineDocument', 'store_file_type_not_supported', stat);
+      throw new Error('store_file_type_not_supported', {cause: stat});
+    }
+
+    if (this.rootDb__.exists(fileStoreRef.id)) {
+      logger.accident('defineDocument', 'store_file_already_defined', stat);
+      throw new Error('store_file_already_defined', {cause: stat});
+    }
+
+    this.rootDb__.create(fileStoreRef.id, stat);
+    this.cacheReferences__[fileStoreRef.id] = fileStoreRef;
+
+    // fileStoreRef.save();
+    this.storeChanged__(fileStoreRef);
   }
 
-  /**
-   * Defines a collection in the store with the given configuration.
-   * collection defined immediately and you don't need to await, unless you want to catch writeContext errors.
-   *
-   * @param config store file config
-   * @example
-   * ```typescript
-   * alwatrStore.defineCollection({
-   *   id: 'user1/orders',
-      *   region: Region.PerUser,
-   *   ttl: StoreFileTTL.medium,
-   * });
-   * ```
-   */
-  defineCollection(stat: StoreFileStatModel): Promise<void> {
-    logger.logMethodArgs?.('defineCollection', stat.value);
-    this.addStoreFile_(stat);
-    const colRef = CollectionReference.newRefFromData(stat.value, this.writeContext_.bind(this))
-    return this.writeContext_(colRef);
-  }
+  // TODO: defineDocument and defineCollection
 
   /**
    * Create and return a DocumentReference for a document with the given id.
@@ -222,19 +177,33 @@ export class AlwatrStore {
    * doc.update({name: 'ali'});
    * ```
    */
-  async doc<TDoc extends Record<string, unknown>>(stat: StoreFileStatModel): Promise<DocumentReference<TDoc>> {
-    logger.logMethodArgs?.('doc', stat.id);
-    if (!this.exists(stat)) {
-      logger.accident('doc', 'document_not_found', stat.id);
-      throw new Error('document_not_found', {cause: stat.id});
-    }
-    if (stat.value.type != StoreFileType.Document) {
-      logger.accident('doc', 'document_wrong_type', stat);
-      throw new Error('document_not_found', {cause: stat});
+  async doc<TDoc extends Dictionary<unknown>>(id: string | StoreFileId): Promise<DocumentReference<TDoc>> {
+    if (typeof id !== 'string') id = getStoreId(id);
+    logger.logMethodArgs?.('doc', id);
+
+    if (Object.hasOwn(this.cacheReferences__, id)) {
+      const ref = this.cacheReferences__[id];
+      if (!(ref instanceof DocumentReference)) {
+        logger.accident('doc', 'document_wrong_type', id);
+        throw new Error('document_wrong_type', {cause: id});
+      }
+      return this.cacheReferences__[id] as unknown as DocumentReference<TDoc>;
     }
 
-    const context = await this.getContext_(stat) as DocumentContext<TDoc>;
-    return DocumentReference.newRefFromContext<TDoc>(context, this.writeContext_.bind(this));
+    if (!this.rootDb__.exists(id)) {
+      logger.accident('doc', 'document_not_found', id);
+      throw new Error('document_not_found', {cause: id});
+    }
+
+    const storeStat = this.rootDb__.get(id);
+
+    if (storeStat.type != StoreFileType.Document) {
+      logger.accident('doc', 'document_wrong_type', id);
+      throw new Error('document_not_found', {cause: id});
+    }
+
+    const context = await this.readContext__<DocumentContext<TDoc>>(storeStat);
+    return DocumentReference.newRefFromContext(context, this.storeChanged__.bind(this));
   }
 
   /**
@@ -250,19 +219,33 @@ export class AlwatrStore {
    * collection.add({name: 'order 1'});
    * ```
    */
-  async collection<TItem extends Record<string, unknown>>(stat: StoreFileStatModel): Promise<CollectionReference<TItem>> {
-    logger.logMethodArgs?.('collection', stat.id);
-    if (this.exists(stat) === false) {
-      logger.accident('collection', 'collection_not_found', stat.id);
-      throw new Error('collection_not_found', {cause: stat.id});
-    }
-    if (stat.value.type != StoreFileType.Collection) {
-      logger.accident('collection', 'collection_wrong_type', stat);
-      throw new Error('collection_not_found', {cause: stat});
+  async collection<TItem extends Dictionary<unknown>>(id: string | StoreFileId): Promise<CollectionReference<TItem>> {
+    if (typeof id !== 'string') id = getStoreId(id);
+    logger.logMethodArgs?.('collection', id);
+
+    if (Object.hasOwn(this.cacheReferences__, id)) {
+      const ref = this.cacheReferences__[id];
+      if (!(ref instanceof CollectionReference)) {
+        logger.accident('collection', 'collection_wrong_type', id);
+        throw new Error('collection_wrong_type', {cause: id});
+      }
+      return this.cacheReferences__[id] as unknown as CollectionReference<TItem>;
     }
 
-    const context = await this.getContext_(stat) as CollectionContext<TItem>;
-    return CollectionReference.newRefFromContext<TItem>(context, this.writeContext_.bind(this));
+    if (!this.rootDb__.exists(id)) {
+      logger.accident('collection', 'collection_not_found', id);
+      throw new Error('collection_not_found', {cause: id});
+    }
+
+    const storeStat = this.rootDb__.get(id);
+
+    if (storeStat.type != StoreFileType.Collection) {
+      logger.accident('doc', 'collection_wrong_type', id);
+      throw new Error('collection_not_found', {cause: id});
+    }
+
+    const context = await this.readContext__<CollectionContext<TItem>>(storeStat);
+    return CollectionReference.newRefFromContext(context, this.storeChanged__.bind(this));
   }
 
   /**
@@ -271,68 +254,79 @@ export class AlwatrStore {
    * @param id The unique identifier of the store file.
    * @example
    * ```typescript
-   * alwatrStore.unload('user1/profile');
-   * alwatrStore.exists('user1/orders'); // true
+   * alwatrStore.unload({name: 'user-list', region: Region.Secret});
+   * alwatrStore.exists({name: 'user-list', region: Region.Secret}); // true
    * ```
    */
-  unload(stat: StoreFileStatModel): void {
-    logger.logMethodArgs?.('unload', stat.id);
+  unload(id: string | StoreFileId): void {
+    if (typeof id !== 'string') id = getStoreId(id);
+    logger.logMethodArgs?.('unload', id);
     // TODO: this.save_(id);
-    delete this.memoryContextRecord_[stat.id];
+    delete this.cacheReferences__[id];
   }
 
   /**
-   * Deletes the store file with the given id from the store and unload it from memory.
+   * Deletes a file from the store.
    *
-   * @param id The unique identifier of the store file.
+   * You don't need to await this method to complete unless you want to make sure the file is deleted on disk.
+   *
+   * @param id The ID of the file to delete.
+   * @returns A Promise that resolves when the file is deleted.
    * @example
    * ```typescript
-   * alwatrStore.deleteFile('user1/profile');
-   * alwatrStore.exists('user1/orders'); // false
+   * alwatrStore.deleteFile({name: 'user-list', region: Region.Secret});
+   * alwatrStore.exists({name: 'user-list', region: Region.Secret}); // true
    * ```
    */
-  deleteFile(stat: StoreFileStatModel): void {
-    logger.logMethodArgs?.('deleteFile', stat.id);
-    delete this.memoryContextRecord_[stat.id]; // direct unload to prevent save
-    const path = this.storeFilePath_(this.stat(stat.id));
-    unlink(path).catch((err) => {
-      logger.accident?.('deleteFile', 'delete_file_failed', err);
-    });
-    this.rootDb_.delete(stat.id);
+  async deleteFile(id: string | StoreFileId): Promise<void> {
+    if (typeof id !== 'string') id = getStoreId(id);
+    logger.logMethodArgs?.('deleteFile', id);
+    if (!this.rootDb__.exists(id)) {
+      logger.accident('doc', 'document_not_found', id);
+      throw new Error('document_not_found', {cause: id});
+    }
+    delete this.cacheReferences__[id]; // direct unload to prevent save
+    const path = getStorePath(this.rootDb__.get(id));
+    this.rootDb__.delete(id);
+    await waitForTimeout(0);
+    try {
+      await unlink(resolve(this.config__.rootPath, path));
+    }
+    catch (error) {
+      logger.error('deleteFile', 'delete_file_failed', {id, path, error});
+    }
   }
 
   /**
-   * Keep all loaded store file context loaded in memory.
-   */
-  private memoryContextRecord_: Record<string, StoreFileContext> = {};
-
-  /**
-   * Get store file context.
-   * If the store file not exists, an error is thrown.
-   * If the store file is loaded, it will be returned from memory.
-   * If the store file is not loaded, it will be loaded from disk.
+   * Reads the context from a given path or StoreFileStat object.
    *
-   * @param id The unique identifier of the store file.
-   * @returns store file context
-   * @example
-   * ```typescript
-   * const context = await this.getContext_('user1/profile');
-   * console.log(context.data.name); // ali
-   * ```
+   * @param path The path or StoreFileStat object from which to read the context.
+   * @returns A promise that resolves to the context object.
    */
-  protected async getContext_(stat: StoreFileStatModel): Promise<StoreFileContext> {
-    logger.logMethodArgs?.('getContext_', stat.id);
-    return this.memoryContextRecord_[stat.id] ?? this.readContext_(stat);
-  }
-
-  protected async readContext_(stat: StoreFileStatModel): Promise<StoreFileContext> {
-    logger.logMethodArgs?.('readContext_', stat.id);
-    logger.time?.(`readContextTime(${stat.id})`);
-    const context = (await readJsonFile(stat.path)) as StoreFileContext;
-    // AlwatrStore.validateStoreFile_(context);
-    this.memoryContextRecord_[stat.id] = context;
-    logger.timeEnd?.(`readContextTime(${stat.id})`);
+  private async readContext__<T extends StoreFileContext>(path: string | StoreFileStat): Promise<T> {
+    if (typeof path !== 'string') path = getStorePath(path);
+    logger.logMethodArgs?.('readContext__', path);
+    logger.time?.(`readContext__time(${path})`);
+    const context = (await readJsonFile(resolve(this.config__.rootPath, path))) as T;
+    logger.timeEnd?.(`readContext__time(${path})`);
     return context;
+  }
+
+  /**
+   * Writes the context to the specified path.
+   *
+   * @template T The type of the context.
+   * @param path The path where the context will be written.
+   * @param context The context to be written.
+   * @param sync Indicates whether the write operation should be synchronous.
+   * @returns A promise that resolves when the write operation is complete.
+   */
+  private async writeContext__<T extends StoreFileContext>(path: string | StoreFileStat, context: T): Promise<void> {
+    if (typeof path !== 'string') path = getStorePath(path);
+    logger.logMethodArgs?.('writeContext__', path);
+    logger.time?.(`writeContext__time(${path})`);
+    await writeJsonFile(resolve(this.config__.rootPath, path), context, WriteFileMode.Rename);
+    logger.timeEnd?.(`writeContext__time(${path})`);
   }
 
   /**
@@ -341,75 +335,26 @@ export class AlwatrStore {
    * @param id The unique identifier of the store file.
    * @param context The store file context. If not provided, it will be loaded from memory.
    * @param sync If true, the file will be written synchronously.
-   * @example
-   * ```typescript
-   * await this.writeContext_('user1/profile', {data: {name: 'ali'}});
-   * ```
    */
-  protected async writeContext_(from: DocumentReference | CollectionReference, sync = false): Promise<void> {
-    logger.logMethodArgs?.('writeContext', from.id);
-    logger.time?.(`writeContextTime(${from.id})`);
-    this.memoryContextRecord_[from.id] = from.getFullContext_();
-    await writeJsonFile(from.path, from.getFullContext_(), WriteFileMode.Rename, sync);
-    logger.timeEnd?.(`writeContextTime(${from.id})`);
-    logger.logOther?.('writeContextDone', from.id);
-  }
-
-  /**
-   * Calculate store file path.
-   *
-   * @param stat The store file stat.
-   * @returns store file path
-   * @example
-   * ```typescript
-   * const path = this.storeFilePath_({
-   *   id: 'user1/profile',
-   *   region: Region.Secret,
-   *   type: StoreFileType.document,
-   *   encoding: StoreFileEncoding.json,
-   * });
-   * console.log(path); // /rootPath/s/user1/profile.doc.ajs
-   * ```
-   */
-  protected storeFilePath_(stat: StoreFileStat): string {
-    let regionPath: string = stat.region;
-    if (stat.ownerId !== undefined) {
-      regionPath += `/${stat.ownerId.slice(0, 3)}/${stat.ownerId}`;
-    }
-    return resolve(this.config_.rootPath, regionPath, `${stat.id}.${stat.type}.${stat.extension}`);
+  protected storeChanged__<T extends Dictionary<unknown>>(from: DocumentReference<T> | CollectionReference<T>): void {
+    logger.logMethodArgs?.('storeChanged__', from.id);
+    this.writeContext__(from.path, from.getFullContext_()).catch((error) => {
+      logger.error('storeChanged__', 'write_context_failed', {id: from.id, error});
+    });
   }
 
   /**
    * Load storeFilesCollection or create new one.
    */
-  protected loadRootDb_(): CollectionReference<StoreFileStat> {
-    logger.logMethod?.('loadRootDb_');
-    const path = this.storeFilePath_(AlwatrStore.rootDbStat_);
-    let colRef;
-    if (existsSync(path)) {
-      const context = readJsonFile(path, true) as CollectionContext<StoreFileStat>;
-      colRef = CollectionReference.newRefFromContext(context, this.writeContext_.bind(this));
-    }
-    else {
+  private loadRootDb__(): CollectionReference<StoreFileStat> {
+    logger.logMethod?.('loadRootDb__');
+    const fullPath = resolve(this.config__.rootPath, getStorePath(AlwatrStore.rootDbStat__));
+    if (!existsSync(fullPath)) {
       logger.banner('Initialize new alwatr-store');
-      colRef = CollectionReference.newRefFromData({
-        name: AlwatrStore.rootDbStat_.name,
-        region: AlwatrStore.rootDbStat_.region,
-        extension: StoreFileExtension.Json,
-        type: StoreFileType.Collection,
-      }, this.writeContext_.bind(this));
+      return CollectionReference.newRefFromData(AlwatrStore.rootDbStat__, null, this.storeChanged__.bind(this));
     }
-
-    return colRef
-  }
-
-  /**
-   * @param stat store file stat
-   *
-   * Adds a new store file to the root storeFilesCollection.
-   */
-  protected addStoreFile_(stat: StoreFileStatModel) {
-    logger.logMethodArgs?.('_addStoreFile', stat.value);
-    this.rootDb_.create(stat.id, stat.value);
+    // else
+    const context = readJsonFile(fullPath, true) as CollectionContext<StoreFileStat>;
+    return CollectionReference.newRefFromContext(context, this.storeChanged__.bind(this), 'root-db');
   }
 }

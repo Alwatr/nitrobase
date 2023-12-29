@@ -50,7 +50,7 @@
     "w": "yarn run watch",
     "c": "yarn run clean",
     "cb": "yarn run clean && yarn run build",
-    "d": "yarn run build:es && ALWATR_DEBUG=1 yarn node",
+    "d": "ALWATR_DEBUG=1 yarn node --enable-source-maps",
     "build": "yarn run build:ts & yarn run build:es",
     "build:es": "nano-build --preset=module",
     "build:ts": "tsc --build",
@@ -63,6 +63,7 @@
     "@alwatr/flat-string": "^1.0.10",
     "@alwatr/logger": "^2.4.1",
     "@alwatr/store-reference": "workspace:^",
+    "@alwatr/wait": "^1.1.1",
     "exit-hook": "^4.0.0"
   },
   "devDependencies": {
