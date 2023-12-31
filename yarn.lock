@@ -85,6 +85,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@alwatr/store-nginx@workspace:packages/nginx":
+  version: 0.0.0-use.local
+  resolution: "@alwatr/store-nginx@workspace:packages/nginx"
+  languageName: unknown
+  linkType: soft
+
 "@alwatr/store-reference@workspace:^, @alwatr/store-reference@workspace:packages/reference":
   version: 0.0.0-use.local
   resolution: "@alwatr/store-reference@workspace:packages/reference"
