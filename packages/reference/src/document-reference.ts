@@ -241,16 +241,16 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
    * Requests the Alwatr Store to save the document.
    * Saving may take some time in Alwatr Store due to the use of throttling.
    *
-   * @param immediate If true, the document will be saved immediately.
+   * @param withDebounce Indicates whether to use the Alwatr Store's debounce delay.
    *
    * @example
    * ```typescript
    * documentRef.save();
    * ```
    */
-  save(immediate = false): void {
-    this.logger__.logMethod?.('save');
-    this.updated__(immediate);
+  save(withDebounce = false): void {
+    this.logger__.logMethodArgs?.('save', withDebounce);
+    this.updated__(!withDebounce);
   }
 
   getFullContext_(): Readonly<DocumentContext<TDoc>> {
@@ -264,17 +264,17 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
    * Update the document metadata and invoke the updated callback.
    * This method is throttled to prevent multiple updates in a short time.
    */
-  private async updated__(force = false): Promise<void> {
+  private async updated__(immediate = false): Promise<void> {
     this.logger__.logMethodArgs?.('updated__', {delayed: this.updateDelayed_});
 
     this.hasUnprocessedChanges_ = true;
 
-    if (force !== true && this.updateDelayed_ === true) return;
+    if (immediate !== true && this.updateDelayed_ === true) return;
     // else
 
     this.updateDelayed_ = true;
 
-    if (force === true || this.context__.meta.changeDebounce === undefined) {
+    if (immediate === true || this.context__.meta.changeDebounce === undefined) {
       await waitForImmediate();
     }
     else {
@@ -284,14 +284,14 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
     if (this.updateDelayed_ !== true) return; // another parallel update finished!
     this.updateDelayed_ = false;
 
-    this.updateMeta__();
+    this.updateMeta_();
     this.updatedCallback__.call(null, this);
   }
 
   /**
    * Updates the document's metadata.
    */
-  private updateMeta__(): void {
+  updateMeta_(): void {
     this.logger__.logMethod?.('updateMeta__');
     this.context__.meta.updated = Date.now();
     this.context__.meta.rev++;
