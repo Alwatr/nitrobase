@@ -392,17 +392,16 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * Requests the Alwatr Store to save the collection.
    * Saving may take some time in Alwatr Store due to the use of throttling.
    *
-   * @param id - The ID of the item to update the metadata.
-   * @param immediate - If `true`, the Alwatr Store will save the collection immediately.
+   * @param withDebounce Indicates whether to use the Alwatr Store's debounce delay.
    *
    * @example
    * ```typescript
    * collectionRef.save('item1');
    * ```
    */
-  save(id: string | number | null, immediate = false): void {
-    this.logger__.logMethodArgs?.('save', id);
-    this.updated__(id, immediate);
+  save(withDebounce = false): void {
+    this.logger__.logMethodArgs?.('save', withDebounce);
+    this.updated__(null, !withDebounce);
   }
 
   /**
@@ -487,18 +486,18 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    *
    * @param id - The ID of the item to update.
    */
-  private async updated__(id: string | number | null, force = false): Promise<void> {
+  private async updated__(id: string | number | null, immediate = false): Promise<void> {
     this.logger__.logMethodArgs?.('updated__', {delayed: this.updateDelayed_});
 
     this.hasUnprocessedChanges_ = true;
-    this.updateMeta__(id);
+    if (id !== null) this.updateMeta_(id); // meta must updated per item
 
-    if (force === false && this.updateDelayed_ === true) return;
+    if (immediate === false && this.updateDelayed_ === true) return;
     // else
 
     this.updateDelayed_ = true;
 
-    if (force === true || this.context__.meta.changeDebounce === undefined) {
+    if (immediate === true || this.context__.meta.changeDebounce === undefined) {
       await waitForImmediate();
     }
     else {
@@ -508,6 +507,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
     if (this.updateDelayed_ !== true) return; // another parallel update finished!
     this.updateDelayed_ = false;
 
+    if (id === null) this.updateMeta_(id); // root meta not updated for null
     this.updatedCallback__.call(null, this);
   }
 
@@ -516,7 +516,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    *
    * @param id - The ID of the item to update.
    */
-  private updateMeta__(id: string | number | null): void {
+  updateMeta_(id: string | number | null): void {
     this.logger__.logMethodArgs?.('updateMeta__', {id});
     const now = Date.now();
     this.context__.meta.rev++;
