@@ -62,12 +62,12 @@
   "dependencies": {
     "@alwatr/flat-string": "^1.0.10",
     "@alwatr/logger": "^2.4.1",
+    "@alwatr/store-types": "workspace:^",
     "@alwatr/wait": "^1.1.1"
   },
   "devDependencies": {
     "@alwatr/nano-build": "^1.2.2",
     "@alwatr/prettier-config": "^1.0.4",
-    "@alwatr/store-types": "workspace:^",
     "@alwatr/tsconfig-base": "^1.0.5",
     "@alwatr/type-helper": "^1.0.1",
     "@types/node": "^20.10.5",
