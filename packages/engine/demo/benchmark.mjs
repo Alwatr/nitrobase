@@ -44,8 +44,6 @@ import {waitForIdle, waitForImmediate, waitForTimeout} from '@alwatr/wait';
 
   logger.timeEnd('===_DURATION_===');
 
-  await waitForTimeout(1000);
-
   logger.time('getItemTime');
   const item = col.get(500);
   logger.timeEnd('getItemTime');
