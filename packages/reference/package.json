@@ -70,7 +70,7 @@
     "@alwatr/store-types": "workspace:^",
     "@alwatr/tsconfig-base": "^1.0.5",
     "@alwatr/type-helper": "^1.0.1",
-    "@types/node": "^20.10.5",
+    "@types/node": "^20.10.6",
     "typescript": "^5.3.3"
   }
 }
