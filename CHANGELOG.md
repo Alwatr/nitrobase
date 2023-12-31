@@ -3,6 +3,125 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-beta](https://github.com/Alwatr/storage/compare/v4.1.0...v5.0.0-beta) (2023-12-31)
+
+### Bug Fixes
+
+* **demo:** import path ([13dfd4c](https://github.com/Alwatr/storage/commit/13dfd4c379351bade418cb7bc24fdc652d34280f)) by @njfamirm
+* **deps:** dev deps ([b129567](https://github.com/Alwatr/storage/commit/b12956768b9d60a75c0fdc43774512b86b655f78)) by @AliMD
+* **engin5:** Fix import paths in alwatr-store and collection-reference ([4bb206a](https://github.com/Alwatr/storage/commit/4bb206a1899befeba8d01ec1af777bef9fe7fb10)) by @AliMD
+* **engine/demo:** benchmark ([48b4456](https://github.com/Alwatr/storage/commit/48b4456cd09bf610bfe718c843e55ff0db2a9e5a)) by @njfamirm
+* **engine/demo:** import path ([6effc2c](https://github.com/Alwatr/storage/commit/6effc2c105aaf4057581bc161723d59a7ea0b7e6)) by @njfamirm
+* **engine/store:** pick owner id ([2cb028a](https://github.com/Alwatr/storage/commit/2cb028a959f44fc23983e612be072412767b6b05)) by @njfamirm
+* **engine5:** enhance logs ([7b3c2d0](https://github.com/Alwatr/storage/commit/7b3c2d04d9f493cc0cc6d8f53131b95b2f9a8650)) by @AliMD
+* **engine5:** logger scope name ([639bb9c](https://github.com/Alwatr/storage/commit/639bb9cc514ac9bffa203cf43a9c60f74642615b)) by @AliMD
+* **engine5:** review document reference and fix class names ([0e5a10b](https://github.com/Alwatr/storage/commit/0e5a10b3d277a652d91ea633e3bdb445a3e0ec93)) by @AliMD
+* **engine:** add types to deps ([170043d](https://github.com/Alwatr/storage/commit/170043d9095c73e3c678c051bc3f34d2ccd43730)) by @njfamirm
+* **engine:** data loss issue and improve performance ([07f6877](https://github.com/Alwatr/storage/commit/07f68777faec66fee4efae7afd340bebe7078f17)) by @AliMD
+* **engine:** file path ([bbc4abd](https://github.com/Alwatr/storage/commit/bbc4abdbb601108dc91ee95eeaac5cbbc272cdd4)) by @njfamirm
+* **engine:** get collection issue ([742aa23](https://github.com/Alwatr/storage/commit/742aa236ae98c934ea6e0904a8a91d152471a31a)) by @AliMD
+* **engine:** import type ([9f67871](https://github.com/Alwatr/storage/commit/9f67871dba8528a5393ea372f136865c952a102c)) by @njfamirm
+* **engine:** make last auto id optional ([0e80d55](https://github.com/Alwatr/storage/commit/0e80d55f28067b0ccd06cbcbf12030e82d6744d5)) by @njfamirm
+* **engine:** Remove StoreFileStatModel class ([d47b680](https://github.com/Alwatr/storage/commit/d47b680d54b8bd9a0b8926653a69cb59c8f36398)) by @AliMD
+* **engine:** unsaved data lost issues ([fec0bef](https://github.com/Alwatr/storage/commit/fec0bef78ac67ddd669012d8804588883f39affa)) by @AliMD
+* **engine:** Update defaultChangeDebounce value in AlwatrStore ([63edd08](https://github.com/Alwatr/storage/commit/63edd08c87c675edb91b8f7aa61b901a6d1db111)) by @AliMD
+* **engine:** Update imports and refactor util.ts ([2b1f962](https://github.com/Alwatr/storage/commit/2b1f9628f4578f707996fe5e6d5d92c7d093b615)) by @AliMD
+* **nginx:** device id variable ([7e58911](https://github.com/Alwatr/storage/commit/7e5891137a095b28fd6cd5388073212f73441225)) by @njfamirm
+* **nginx:** header map regex ([3e16b69](https://github.com/Alwatr/storage/commit/3e16b6946c7f07b76af7a3af299339899ac4b6fa)) by @njfamirm
+* **reference:** add types to deps ([23788e6](https://github.com/Alwatr/storage/commit/23788e6cdcd8f26378896bcf469a1308d49300aa)) by @njfamirm
+* **reference:** private constructor params ([926aa9d](https://github.com/Alwatr/storage/commit/926aa9d06d4bb0ae0e00277cbaba2cb24a67456d)) by @njfamirm
+* **reference:** protected method ([ff8ae62](https://github.com/Alwatr/storage/commit/ff8ae6235cb71a61f18b69f6f595fde6a065eed1)) by @njfamirm
+* **reference:** Refactor update delay logic in updated__ to prevent data lost ([c7282fe](https://github.com/Alwatr/storage/commit/c7282fe66685843aad4396461ab8c7060742683a)) by @AliMD
+* **reference:** remove extra tsconfig ([5a6f4ef](https://github.com/Alwatr/storage/commit/5a6f4efaa625f0d1adb1eb9894fdce7cc6b1a1b2)) by @njfamirm
+* **store-reference:** review and refactor collection reference to improve performance and readability ([7b1b34d](https://github.com/Alwatr/storage/commit/7b1b34d6830afde4dd0c477a651b2fe9765d3aaf)) by @AliMD
+* **store-reference:** type casting in set method ([81f0ef2](https://github.com/Alwatr/storage/commit/81f0ef2a4ac8881643c6c4965d265a803b67f6d7)) by @AliMD
+* **types:** StoreFileId interface ([d7b0f61](https://github.com/Alwatr/storage/commit/d7b0f61d673e6c70c139454aae03f1472f6f7c31)) by @AliMD
+* **workflow:** service name ([888fa85](https://github.com/Alwatr/storage/commit/888fa85db6d03dc5cf915ca4da0960e0ff55b81f)) by @AliMD
+
+### Features
+
+* **demo:** Add multi-write functionality to node-fs demo ([8839ef8](https://github.com/Alwatr/storage/commit/8839ef8bd928c45dd2875d0959c131c43e95963e)) by @AliMD
+* **doc-ref:** refactor and isolate apis ([e0085d9](https://github.com/Alwatr/storage/commit/e0085d918afe2e611fabd41294bfd070a241e970)) by @AliMD
+* **engin5:**  Add CollectionReference and defineCollection method ([25dd254](https://github.com/Alwatr/storage/commit/25dd254c9c346b9622db678188bf7bf46624ce7f)) by @AliMD
+* **engin5/util:** add new parseJson, jsonStringify, readFile, readJsonFile, writeFile, handleExistsFile, writeJsonFile ([bbb4626](https://github.com/Alwatr/storage/commit/bbb46269c981327d022b8e283107449c3cb0f83f)) by @AliMD
+* **engin5:** add get and writeContext with review all apis and documention ([7594612](https://github.com/Alwatr/storage/commit/7594612ac9bffc6a173b3000a6c50824c200dcfa)) by @AliMD
+* **engin5:** Add MaybePromise type definition ([55b49ca](https://github.com/Alwatr/storage/commit/55b49ca09e1a80c7d84afe3245bb5caf17db76fe)) by @AliMD
+* **engin5:** Add owner ID validation for PerUser, PerToken, and PerDevice regions ([79b2ec7](https://github.com/Alwatr/storage/commit/79b2ec7cd0927bc0c5b985894e4f9e877954f6fe)) by @AliMD
+* **engin5:** Add support for auto-incrementing IDs in CollectionReference ([e883af6](https://github.com/Alwatr/storage/commit/e883af67318708df032af06df02db7dd45fde248)) by @AliMD
+* **engin5:** add utility functions for reading and writing JSON files ([71f8037](https://github.com/Alwatr/storage/commit/71f8037f13c3479c74f5ff533d7a2b81229213a2)) by @AliMD
+* **engin5:** Enhance AlwatrStore read and write methods ([2bca22a](https://github.com/Alwatr/storage/commit/2bca22a2050458c89581b8aeca32499f92e098b0)) by @AliMD
+* **engin5:** fix issues to improve performance and readability ([64b47fc](https://github.com/Alwatr/storage/commit/64b47fcdf9794e32f55aa2322140301a01bf3dd4)) by @AliMD
+* **engin5:** refactor AlwatrStore with root db as collection, and handle save and syncLoad context ([efe9a1d](https://github.com/Alwatr/storage/commit/efe9a1d72dfc381f02b033ce78f1c0b944692c83)) by @AliMD
+* **engin5:** Refactor collection and document demo ([0bb2fd4](https://github.com/Alwatr/storage/commit/0bb2fd46b4b8d6ed0f4bbdf7b9c75e9126462039)) by @AliMD
+* **engin5:** Refactor error handling in collection and document references ([1044c29](https://github.com/Alwatr/storage/commit/1044c29e3ca3254f840d3c53ff5821e0e5f8838e)) by @AliMD
+* **engin5:** Refactor logging statements in collection and document references ([636175f](https://github.com/Alwatr/storage/commit/636175f93958d3c66dd64069720dd02418ce2f22)) by @AliMD
+* **engin5:** Update collection reference methods for retrieving items and IDs ([aaa84a7](https://github.com/Alwatr/storage/commit/aaa84a7ba36c30a5f38504076eb12a8af67290f0)) by @AliMD
+* **engin5:** Update file imports and variable names in demos ([82705b6](https://github.com/Alwatr/storage/commit/82705b62b8e1abc7b8b3694cac98aca33edaaef3)) by @AliMD
+* **engin5:** Update store file location and owner identifiers ([614d56f](https://github.com/Alwatr/storage/commit/614d56f80171dd1d1feb2bb62fc0db5cffb8ab7f)) by @AliMD
+* **engin5:** Update StoreFileTTL and CollectionItemMeta types ([5484c96](https://github.com/Alwatr/storage/commit/5484c964bd20e40925bcc7f14895a8be79fbda76)) by @AliMD
+* **engin5:** Update WriteFileMode enum values ([acaa608](https://github.com/Alwatr/storage/commit/acaa6089c2b6d69e1697c4218bcf7cfcdf5233ee)) by @AliMD
+* **engine/demo:** collection with new api ([f603e86](https://github.com/Alwatr/storage/commit/f603e86d2827c66219321f9df400049e76b78c21)) by @AliMD
+* **engine5:** add exists and refactor stat ([9e6e4d2](https://github.com/Alwatr/storage/commit/9e6e4d21d702272f83bfcf8b9b587299a250c754)) by @AliMD
+* **engine5:** Add global variable for package version in logger.ts ([eca7f69](https://github.com/Alwatr/storage/commit/eca7f698d89560af88990c0765b1592db168c5ed)) by @AliMD
+* **engine5:** AlwatrStore class with complete new api ([c5e4009](https://github.com/Alwatr/storage/commit/c5e40099df81e7584d86e21bb8f3e327fd66ab17)) by @AliMD
+* **engine5:** design final demo api ([8a9477a](https://github.com/Alwatr/storage/commit/8a9477a20c7219e166360999860db4beb679024e)) by @AliMD
+* **engine5:** design new concept ([552e96f](https://github.com/Alwatr/storage/commit/552e96f592abc0f9c245d02c010baa5a1dd51f44)) by @AliMD
+* **engine5:** design new data types ([1c0be8b](https://github.com/Alwatr/storage/commit/1c0be8b9901b6e7ed5703aace29379ee04432cf2)) by @AliMD
+* **engine5:** DocumentReference class to handle document operations ([1edc32f](https://github.com/Alwatr/storage/commit/1edc32fe8cc654dd3801ad3ff066cbc361f444aa)) by @AliMD
+* **engine5:** Import CollectionReference and update version string ([61873ce](https://github.com/Alwatr/storage/commit/61873ce110c7c0ebe5a84eb9843a30e55a7fda79)) by @AliMD
+* **engine5:** import from workspace package ([6e74e9e](https://github.com/Alwatr/storage/commit/6e74e9e5ea9d9937e70acb423fa4aaab6715378f)) by @njfamirm
+* **engine5:** logger and deepClone utility functions ([1946e58](https://github.com/Alwatr/storage/commit/1946e58a412e3cd28e1a09fbfa7f62ccaa4ab0a2)) by @AliMD
+* **engine5:** Refactor defineDoc to defineDocument in demo-doc.ts ([cbe113e](https://github.com/Alwatr/storage/commit/cbe113ed4a8265a29e99a9efd79fb81d63e0f5cc)) by @AliMD
+* **engine5:** Refactor file writing logic in util.ts ([1dac52a](https://github.com/Alwatr/storage/commit/1dac52aba5b3b3a175a8b3e8fad22255f6c5c330)) by @AliMD
+* **engine5:** Update CollectionReference class with new properties and methods ([82d9a5e](https://github.com/Alwatr/storage/commit/82d9a5ea5a96d89d99593997cf4ff3adf6f29b40)) by @AliMD
+* **engine5:** Update DocumentReference class with new properties and methods ([4c14739](https://github.com/Alwatr/storage/commit/4c147390923ee81fd4d552220778a4e11d7a3162)) by @AliMD
+* **engine5:** Update enum values in type.ts ([fe5e1af](https://github.com/Alwatr/storage/commit/fe5e1af4e95cc16e14594f122e3fb3c190898c39)) by @AliMD
+* **engine5:** Update logger method call in rootStoreUpdated_() ([70b0ee6](https://github.com/Alwatr/storage/commit/70b0ee6704fa5f1c685a124ac4e46ae7583ceed0)) by @AliMD
+* **engine5:** Update StoreFileMeta interface in type.ts ([f7be2ac](https://github.com/Alwatr/storage/commit/f7be2ac34c9ed87ea00ceabad2ab8451cfa2939d)) by @AliMD
+* **engine5:** update updatedCallback parameter in CollectionReference and DocumentReference ([043ef26](https://github.com/Alwatr/storage/commit/043ef26db62fda0fb05dac1e7e587479430bc75a)) by @AliMD
+* **engine5:** use store file id model ([86b75e7](https://github.com/Alwatr/storage/commit/86b75e7951520d5b4a3ab45dd3d872d74bd61dd0)) by @njfamirm
+* **engine:** Add data-lost-test.js demo file ([673f324](https://github.com/Alwatr/storage/commit/673f3247c4b6c1bca2f9e9d9169843ca6a5e9804)) by @AliMD
+* **engine:** cjs build support ([74cce67](https://github.com/Alwatr/storage/commit/74cce67ed6686483c2cd57c9a8bd263d71fbd6e3)) by @njfamirm
+* **engine:** col demo ([3a41adb](https://github.com/Alwatr/storage/commit/3a41adb0b1b6dacbc3f2028294c438a5ec866a4e)) by @njfamirm
+* **engine:** debounce for save file ([c92749e](https://github.com/Alwatr/storage/commit/c92749e83352129c02130ac2466dd5acda289795)) by @AliMD
+* **engine:** doc demo ([f49f78b](https://github.com/Alwatr/storage/commit/f49f78bd3b5942406fe74e273e87bcbf12f67c4f)) by @njfamirm
+* **engine:** enhance benchmark demo ([200da18](https://github.com/Alwatr/storage/commit/200da18cd9542fa4182f910c0ad813703326fe38)) by @AliMD
+* **engine:** impediment exit hook ([68695a9](https://github.com/Alwatr/storage/commit/68695a975e0ec6c473bbd2d9a62c81720f090352)) by @AliMD
+* **engine:** Refactor code to improve performance and readability ([b4c0848](https://github.com/Alwatr/storage/commit/b4c0848e7518ae5c96e8ab7643716a2e923f7635)) by @AliMD
+* **engine:** use owner id in all functions ([967c346](https://github.com/Alwatr/storage/commit/967c346df548e6f016c4291638b45e68aa55d248)) by @njfamirm
+* **nginx:** Add debug-info-007 endpoint to return JSON response ([9d6d671](https://github.com/Alwatr/storage/commit/9d6d67187248e3b626675a780e23bf3bdfc64300)) by @AliMD
+* **nginx:** Add input validation for user_id and user_token ([7216ae5](https://github.com/Alwatr/storage/commit/7216ae5171b0c13c77b5d801bf945c23972f6234)) by @AliMD
+* **nginx:** Add location for super admin access ([7e274a6](https://github.com/Alwatr/storage/commit/7e274a63b3d12ac656dd461f9bd03ed63f0db2cb)) by @AliMD
+* **nginx:** Add MIME type for asj files ([756a99e](https://github.com/Alwatr/storage/commit/756a99e70c8977dda1d852327ef9f87942d3f4d9)) by @AliMD
+* **nginx:** Add user/device/token locations headers mappings ([3e71297](https://github.com/Alwatr/storage/commit/3e7129732ada897e4c858d8c7ab0b2309186f353)) by @AliMD
+* **nginx:** compatible with new engine ([196b80f](https://github.com/Alwatr/storage/commit/196b80fcf6ce24d9f061b85c99a0a93d5e1a8933)) by @njfamirm
+* **nginx:** Refactor nginx location configuration for engine5 ([451e266](https://github.com/Alwatr/storage/commit/451e266daade4c7dff88a3d73273424537bc7251)) by @AliMD
+* **nginx:** Update device ID mapping in nginx configuration ([5ff4080](https://github.com/Alwatr/storage/commit/5ff40806e29158e2e7271b6123027e92bbc0c933)) by @AliMD
+* **nginx:** Update home page JSON response ([0da2f5e](https://github.com/Alwatr/storage/commit/0da2f5e1673a96a1bc329a9e7e6968c73312394f)) by @AliMD
+* **nginx:** Update nginx version and add default error JSON file ([5213c65](https://github.com/Alwatr/storage/commit/5213c652977e5a9db4c2f88aeec8da6a07b1f626)) by @AliMD
+* **nginx:** Update nginx-json base image version and add environment variables ([2269f67](https://github.com/Alwatr/storage/commit/2269f67f07bfd0eb0207584a27a3fc8663cece8c)) by @AliMD
+* **nginx:** Update storeRegionSecret env value in nginx Dockerfile ([15b3595](https://github.com/Alwatr/storage/commit/15b35954fc972fdd648584f1b71fdad550699b70)) by @AliMD
+* **node-fs:** Update logger method arguments to include truncated path ([8c6f49a](https://github.com/Alwatr/storage/commit/8c6f49ad56d5667ba1280a5d28b7a39b21c3a11a)) by @AliMD
+* **reference:** add debugDomain ([83dd29a](https://github.com/Alwatr/storage/commit/83dd29ad07e0a80ae1882f0a459402cf671708ef)) by @AliMD
+* **reference:** Add hasUnprocessedChanges_ flag to CollectionReference and DocumentReference ([dff3553](https://github.com/Alwatr/storage/commit/dff35530732cce20d21337cb14df9b4ada9022b6)) by @AliMD
+* **reference:** add immediate option to save methods ([9267cfd](https://github.com/Alwatr/storage/commit/9267cfd13a19ab70cbf2857fe7160314d6a192d8)) by @AliMD
+* **reference:** debounce for save file ([b40f9e9](https://github.com/Alwatr/storage/commit/b40f9e9d4a2d2501471488b07266576a595380c3)) by @AliMD
+* **reference:** demo ([ed82924](https://github.com/Alwatr/storage/commit/ed82924a073dda6e4ff30c1dd73ec27c82eede60)) by @njfamirm
+* **reference:** enhance logging ([4eab5a2](https://github.com/Alwatr/storage/commit/4eab5a277f1bf818fdba2e49ae3ecf0d7e68b4f7)) by @AliMD
+* **reference:** package structure ([070ba0e](https://github.com/Alwatr/storage/commit/070ba0ef5a8b8197e473cba4f4aa5d245fcbec3a)) by @njfamirm
+* **reference:** Refactor save method to include debounce option and public updateMeta_ ([d9abf84](https://github.com/Alwatr/storage/commit/d9abf8415dbe8e189a6dcba3d837fbe2a0e3cdb0)) by @AliMD
+* **reference:** support store file id ([b7a8c33](https://github.com/Alwatr/storage/commit/b7a8c33b1df6031c5827c3f0685d2a32352c4061)) by @njfamirm
+* **store-engine:** add new store-engine package for v5 ([97b00d6](https://github.com/Alwatr/storage/commit/97b00d62caaa931c50062942aa8668b50bdf24f1)) by @AliMD
+* **store-reference:** Add utility functions for converting StoreFileId and StoreFileStat to string IDs and paths ([3343136](https://github.com/Alwatr/storage/commit/3343136a481a0bfa15c6c8f8ec64ce31387a8887)) by @AliMD
+* **store-reference:** debounce the updates ([6ec562c](https://github.com/Alwatr/storage/commit/6ec562cee30e244b764bfe0d94f9125272eca4d4)) by @AliMD
+* **store-reference:** Fix import and add new utility function ([60f25ce](https://github.com/Alwatr/storage/commit/60f25ce8d8e9dedfe1cf663862b5952d64c9d0ec)) by @AliMD
+* **store-reference:** Fix import paths in collection-reference.ts and document-reference.ts ([51b47ea](https://github.com/Alwatr/storage/commit/51b47ea4d19f30036ddad437cbb1fe89c1fe1134)) by @AliMD
+* **store-reference:** Fix import statements and add utility functions ([b323110](https://github.com/Alwatr/storage/commit/b3231107f5867976074092b77ca26957c0976a81)) by @AliMD
+* **store-reference:** new package for doc-ref and col-ref ([13303b5](https://github.com/Alwatr/storage/commit/13303b53bd677b24158f0dc69b55cdcc2520576d)) by @AliMD
+* **store-reference:** Refactor document reference class and import types ([eb2a2e0](https://github.com/Alwatr/storage/commit/eb2a2e09edd325cc6e79dc5a57dc7b2859dc639f)) by @AliMD
+* **type/storeFileId:** change debounce ([0f459b6](https://github.com/Alwatr/storage/commit/0f459b6bf51ef2ab79b35a738f7a58dd67686527)) by @AliMD
+* **types:** new package for store share types ([8487d02](https://github.com/Alwatr/storage/commit/8487d0255b21ab02eecb0b6216e438fe0d0ca852)) by @AliMD
+
 # [4.1.0](https://github.com/Alwatr/storage/compare/v4.0.4...v4.1.0) (2023-12-25)
 
 ### Features
