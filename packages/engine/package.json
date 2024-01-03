@@ -60,12 +60,12 @@
     "clean": "rm -rfv dist *.tsbuildinfo"
   },
   "dependencies": {
+    "@alwatr/exit-hook": "^1.0.1",
     "@alwatr/flat-string": "^1.0.10",
     "@alwatr/logger": "^2.4.1",
     "@alwatr/store-reference": "workspace:^",
     "@alwatr/store-types": "workspace:^",
-    "@alwatr/wait": "^1.1.1",
-    "exit-hook": "^4.0.0"
+    "@alwatr/wait": "^1.1.1"
   },
   "devDependencies": {
     "@alwatr/nano-build": "^1.2.2",

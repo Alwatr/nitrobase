@@ -27,6 +27,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@alwatr/exit-hook@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@alwatr/exit-hook@npm:1.0.1"
+  checksum: 1ebb2d3fb6e764bf08c9dec89dcf622139253b35a8a08cca8bb9488c0d6ac25f198747d25bd55b76a5aeb8464405813b8f95303842cfdb4e2acb92eb39c63283
+  languageName: node
+  linkType: hard
+
 "@alwatr/flat-string@npm:^1.0.10":
   version: 1.0.10
   resolution: "@alwatr/flat-string@npm:1.0.10"
@@ -70,6 +77,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alwatr/store-engine@workspace:packages/engine"
   dependencies:
+    "@alwatr/exit-hook": "npm:^1.0.1"
     "@alwatr/flat-string": "npm:^1.0.10"
     "@alwatr/logger": "npm:^2.4.1"
     "@alwatr/nano-build": "npm:^1.2.2"
@@ -80,7 +88,6 @@ __metadata:
     "@alwatr/type-helper": "npm:^1.0.1"
     "@alwatr/wait": "npm:^1.1.1"
     "@types/node": "npm:^20.10.6"
-    exit-hook: "npm:^4.0.0"
     typescript: "npm:^5.3.3"
   languageName: unknown
   linkType: soft
@@ -2655,13 +2662,6 @@ __metadata:
     signal-exit: "npm:^4.1.0"
     strip-final-newline: "npm:^3.0.0"
   checksum: 2c52d8775f5bf103ce8eec9c7ab3059909ba350a5164744e9947ed14a53f51687c040a250bda833f906d1283aa8803975b84e6c8f7a7c42f99dc8ef80250d1af
-  languageName: node
-  linkType: hard
-
-"exit-hook@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "exit-hook@npm:4.0.0"
-  checksum: 7fb33eaeb9050aee9479da9c93d42b796fb409c40e1d2b6ea2f40786ae7d7db6dc6a0f6ecc7bc24e479f957b7844bcb880044ded73320334743c64e3ecef48d7
   languageName: node
   linkType: hard
 
