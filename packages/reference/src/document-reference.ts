@@ -1,5 +1,5 @@
 import {createLogger} from '@alwatr/logger';
-import {StoreFileType, StoreFileId, StoreFileExtension, type DocumentContext, type StoreFileMeta} from '@alwatr/store-types';
+import {StoreFileType, StoreFileExtension, type StoreFileId, type DocumentContext, type StoreFileMeta} from '@alwatr/store-types';
 import {waitForImmediate, waitForTimeout} from '@alwatr/wait';
 
 import {logger} from './logger';
@@ -17,7 +17,7 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
   /**
    * Alwatr store engine version string.
    */
-  static readonly version = __package_version;
+  static readonly version = __package_version__;
 
   /**
    * Alwatr store engine file format version number.

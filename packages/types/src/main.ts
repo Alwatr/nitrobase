@@ -1,4 +1,9 @@
-import {Dictionary} from '@alwatr/type-helper';
+import {definePackage} from '@alwatr/dedupe';
+
+import type {} from '@alwatr/nano-build';
+import type {Dictionary} from '@alwatr/type-helper';
+
+definePackage('@alwatr/store-types', __package_version__);
 
 // *** Store File ***
 

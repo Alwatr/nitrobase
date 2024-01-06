@@ -10,11 +10,12 @@ import {
   type DocumentContext,
   type StoreFileId,
 } from '@alwatr/store-types';
-import {Dictionary} from '@alwatr/type-helper';
 import {waitForTimeout} from '@alwatr/wait';
 
 import {WriteFileMode, existsSync, readJsonFile, resolve, unlink, writeJsonFile} from './lib/node-fs.js';
 import {logger} from './logger.js';
+
+import type {Dictionary} from '@alwatr/type-helper';
 
 logger.logModule?.('alwatr-store');
 
@@ -48,7 +49,7 @@ export class AlwatrStore {
    *
    * Use for store file format version for check compatibility.
    */
-  static readonly version = __package_version;
+  static readonly version = __package_version__;
 
   static getStoreId = getStoreId;
 

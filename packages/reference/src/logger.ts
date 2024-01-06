@@ -1,10 +1,5 @@
-import {createLogger, definePackage} from '@alwatr/logger';
+import {definePackage} from '@alwatr/logger';
 
-declare global {
-  // eslint-disable-next-line no-var
-  var __package_version: string;
-}
+import type {} from '@alwatr/nano-build';
 
-definePackage('store-reference', __package_version);
-
-export const logger = createLogger('store-reference');
+export const logger = definePackage('@alwatr/store-reference', __package_version__);

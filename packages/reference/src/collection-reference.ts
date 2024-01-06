@@ -8,11 +8,12 @@ import {
   type CollectionItemMeta,
   type StoreFileMeta,
 } from '@alwatr/store-types';
-import {Dictionary} from '@alwatr/type-helper';
 import {waitForImmediate, waitForTimeout} from '@alwatr/wait';
 
 import {logger} from './logger';
 import {getStoreId, getStorePath} from './util';
+
+import type {Dictionary} from '@alwatr/type-helper';
 
 logger.logModule?.('collection-reference');
 
@@ -26,7 +27,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
   /**
    * Alwatr store engine version string.
    */
-  static readonly version = __package_version;
+  static readonly version = __package_version__;
 
   /**
    * Alwatr store engine file format version number.
