@@ -26,7 +26,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
   /**
    * Alwatr store engine version string.
    */
-  static readonly version = __package_version;
+  static readonly version = __package_version__;
 
   /**
    * Alwatr store engine file format version number.

@@ -60,6 +60,7 @@
     "clean": "rm -rfv dist *.tsbuildinfo"
   },
   "dependencies": {
+    "@alwatr/dedupe": "^1.0.0",
     "@alwatr/flat-string": "^1.0.10",
     "@alwatr/logger": "^2.4.1",
     "@alwatr/store-types": "workspace:^",

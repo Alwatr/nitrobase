@@ -1,10 +1,6 @@
-import {createLogger, definePackage} from '@alwatr/logger';
+import {definePackage} from '@alwatr/dedupe';
+import {createLogger} from '@alwatr/logger';
 
-declare global {
-  // eslint-disable-next-line no-var
-  var __package_version: string;
-}
-
-definePackage('store-reference', __package_version);
+definePackage('@alwatr/store-reference', __package_version__);
 
 export const logger = createLogger('store-reference');

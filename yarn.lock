@@ -12,6 +12,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@alwatr/dedupe@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@alwatr/dedupe@npm:1.0.0"
+  checksum: 9ed98707376250e1159ed485e14347d3b322ca3a04e67eb012d4f39197472f4dd7da5af3bc6376ffb3d29086a25101ab412e666f291437d294ad71db1d449346
+  languageName: node
+  linkType: hard
+
 "@alwatr/eslint-config@npm:^1.0.6":
   version: 1.0.6
   resolution: "@alwatr/eslint-config@npm:1.0.6"
@@ -77,6 +84,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alwatr/store-engine@workspace:packages/engine"
   dependencies:
+    "@alwatr/dedupe": "npm:^1.0.0"
     "@alwatr/exit-hook": "npm:^1.0.1"
     "@alwatr/flat-string": "npm:^1.0.10"
     "@alwatr/logger": "npm:^2.4.1"
@@ -102,6 +110,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alwatr/store-reference@workspace:packages/reference"
   dependencies:
+    "@alwatr/dedupe": "npm:^1.0.0"
     "@alwatr/flat-string": "npm:^1.0.10"
     "@alwatr/logger": "npm:^2.4.1"
     "@alwatr/nano-build": "npm:^1.2.2"

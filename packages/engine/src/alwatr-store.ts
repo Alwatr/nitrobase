@@ -48,7 +48,7 @@ export class AlwatrStore {
    *
    * Use for store file format version for check compatibility.
    */
-  static readonly version = __package_version;
+  static readonly version = __package_version__;
 
   static getStoreId = getStoreId;
 
