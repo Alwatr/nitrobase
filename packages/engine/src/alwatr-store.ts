@@ -1,3 +1,4 @@
+import {exitHook} from '@alwatr/exit-hook';
 import {CollectionReference, DocumentReference, getStoreId, getStorePath} from '@alwatr/store-reference';
 import {
   StoreFileType,
@@ -11,7 +12,6 @@ import {
 } from '@alwatr/store-types';
 import {Dictionary} from '@alwatr/type-helper';
 import {waitForTimeout} from '@alwatr/wait';
-import exitHook from 'exit-hook';
 
 import {WriteFileMode, existsSync, readJsonFile, resolve, unlink, writeJsonFile} from './lib/node-fs.js';
 import {logger} from './logger.js';
