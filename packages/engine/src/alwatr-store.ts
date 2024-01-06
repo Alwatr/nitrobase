@@ -35,6 +35,12 @@ export interface AlwatrStoreConfig {
    * The recommended value is `40`.
    */
   defaultChangeDebounce?: number;
+
+  /**
+   * If true, an error will be thrown when trying to read or write to a store file that is not initialized (new storage).
+   * The default value is `false` but highly recommended to set it to `true` in production to prevent data loss.
+   */
+  errorWhenNotInitialized?: boolean;
 }
 
 /**
@@ -383,6 +389,10 @@ export class AlwatrStore {
     logger.logMethod?.('loadRootDb__');
     const fullPath = resolve(this.config__.rootPath, getStorePath(AlwatrStore.rootDbStat__));
     if (!existsSync(fullPath)) {
+      if (this.config__.errorWhenNotInitialized === true) {
+        throw new Error('store_not_found', {cause: 'Store not initialized'});
+      }
+
       logger.banner('Initialize new alwatr-store');
       return CollectionReference.newRefFromData(AlwatrStore.rootDbStat__, null, this.storeChanged__.bind(this));
     }
