@@ -62,7 +62,7 @@
   "dependencies": {
     "@alwatr/exit-hook": "^1.0.2",
     "@alwatr/flat-string": "^1.0.12",
-    "@alwatr/logger": "^2.4.1",
+    "@alwatr/logger": "^3.1.0",
     "@alwatr/store-reference": "workspace:^",
     "@alwatr/store-types": "workspace:^",
     "@alwatr/wait": "^1.1.3"
