@@ -5,7 +5,7 @@ const storeEngine = new AlwatrStore({
   defaultChangeDebounce: 50,
 });
 
-export async function newUser(userId, userToken) {
+export async function newUser(userId, userToken, isSuperAdmin) {
   // 1. create user profile doc
   const collectionStat = {
     name: 'user-info',
@@ -21,8 +21,12 @@ export async function newUser(userId, userToken) {
 
   // 2. create token nothing file in per user region
   const tokenInfoFilePath = doc.path.replace('user-info.doc.asj', 'token/' + userToken + '.asn');
-  console.log(tokenInfoFilePath);
-  writeFile (resolve('data', tokenInfoFilePath), '', WriteFileMode.Replace, true);
+  writeFile(resolve('data', tokenInfoFilePath), '', WriteFileMode.Replace, true);
+
+  if (isSuperAdmin === true) {
+    const permissionFilePath = doc.path.replace('user-info.doc.asj', 'permission/is-super-admin.asn');
+    writeFile(resolve('data', permissionFilePath), '', WriteFileMode.Replace, true);
+  }
 
   // 3. create per token doc
   storeEngine.defineStoreFile({
