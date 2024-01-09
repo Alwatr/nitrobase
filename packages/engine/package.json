@@ -63,6 +63,7 @@
     "@alwatr/exit-hook": "^1.0.3",
     "@alwatr/flat-string": "^1.0.12",
     "@alwatr/logger": "^3.2.1",
+    "@alwatr/node-fs": "^1.0.0-beta.0",
     "@alwatr/store-reference": "workspace:^",
     "@alwatr/store-types": "workspace:^",
     "@alwatr/wait": "^1.1.4"

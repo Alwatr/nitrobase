@@ -1,4 +1,5 @@
 import {exitHook} from '@alwatr/exit-hook';
+import {existsSync, readJson, resolve, unlink, writeJson} from '@alwatr/node-fs';
 import {CollectionReference, DocumentReference, getStoreId, getStorePath} from '@alwatr/store-reference';
 import {
   StoreFileType,
@@ -12,7 +13,6 @@ import {
 } from '@alwatr/store-types';
 import {waitForTimeout} from '@alwatr/wait';
 
-import {WriteFileMode, existsSync, readJsonFile, resolve, unlink, writeJsonFile} from './lib/node-fs.js';
 import {logger} from './logger.js';
 
 import type {Dictionary} from '@alwatr/type-helper';
@@ -338,7 +338,7 @@ export class AlwatrStore {
     if (typeof path !== 'string') path = getStorePath(path);
     logger.logMethodArgs?.('readContext__', path);
     logger.time?.(`readContext__time(${path})`);
-    const context = (await readJsonFile(resolve(this.config__.rootPath, path))) as T;
+    const context = (await readJson(resolve(this.config__.rootPath, path))) as T;
     logger.timeEnd?.(`readContext__time(${path})`);
     return context;
   }
@@ -356,7 +356,7 @@ export class AlwatrStore {
     if (typeof path !== 'string') path = getStorePath(path);
     logger.logMethodArgs?.('writeContext__', path);
     logger.time?.(`writeContext__time(${path})`);
-    await writeJsonFile(resolve(this.config__.rootPath, path), context, WriteFileMode.Rename);
+    await writeJson(resolve(this.config__.rootPath, path), context);
     logger.timeEnd?.(`writeContext__time(${path})`);
   }
 
@@ -397,7 +397,7 @@ export class AlwatrStore {
       return CollectionReference.newRefFromData(AlwatrStore.rootDbStat__, null, this.storeChanged__.bind(this));
     }
     // else
-    const context = readJsonFile(fullPath, true) as CollectionContext<StoreFileStat>;
+    const context = readJson<CollectionContext<StoreFileStat>>(fullPath, true);
     return CollectionReference.newRefFromContext(context, this.storeChanged__.bind(this), 'root-db');
   }
 
@@ -410,7 +410,7 @@ export class AlwatrStore {
       logger.logProperty?.(`StoreFile.${ref.id}.hasUnprocessedChanges`, ref.hasUnprocessedChanges_);
       if (ref.hasUnprocessedChanges_ === true) {
         logger.incident?.('exitHook__', 'rescue_unsaved_context', {id: ref.id});
-        writeJsonFile(resolve(this.config__.rootPath, ref.path), ref.getFullContext_(), WriteFileMode.Rename, true);
+        writeJson(resolve(this.config__.rootPath, ref.path), ref.getFullContext_(), true);
         ref.hasUnprocessedChanges_ = false;
       }
     }
