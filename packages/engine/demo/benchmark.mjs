@@ -29,25 +29,28 @@ import {waitForIdle, waitForImmediate, waitForTimeout} from '@alwatr/wait';
 
   const col = await alwatrStore.collection(colId);
 
-  logger.time('===_DURATION_===');
+  await waitForTimeout(1000);
+
+  logger.time('write_10k_record_time');
 
   const max = 10_000;
   for (let i = 0; i < max; i++) {
     col.append({
       fname: Math.random().toString(36),
       lname: Math.random().toString(36),
-      email: Math.random().toString(36),
-      token: Math.random().toString(36),
     });
-    await waitForImmediate();
+    // await waitForImmediate();
   }
 
-  logger.timeEnd('===_DURATION_===');
+  logger.timeEnd('write_10k_record_time');
 
-  logger.time('getItemTime');
-  const item = col.get(500);
-  logger.timeEnd('getItemTime');
+  await waitForTimeout(1000);
 
+  logger.time('access_10k_item_time');
+  let item;
+  for (let i = 0; i < max; i++) {
+    item = col.access_(i);
+  }
+  logger.timeEnd('access_10k_item_time');
   logger.logProperty('item', item);
-
 })();
