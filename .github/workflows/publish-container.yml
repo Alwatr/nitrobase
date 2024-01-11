@@ -87,7 +87,7 @@ jobs:
       - name: 🏗 Extract metadata
         if: ${{ steps.file_change.outputs.container_folder != 'false' }}
         id: meta
-        uses: docker/metadata-action@v5.4.0
+        uses: docker/metadata-action@v5.5.0
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           images: |
