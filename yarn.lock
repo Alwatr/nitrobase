@@ -12,6 +12,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@alwatr/async-queue@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@alwatr/async-queue@npm:1.1.0"
+  dependencies:
+    "@alwatr/flatomise": "npm:^1.1.0"
+  checksum: c5b7b741e569adb0b5008e5ded3eea4124c72490ec2d4a473345e2f9f9f4a7c61f936c0e38bfce60cedc9b89f625f291ae26310495291155f3083427a294344d
+  languageName: node
+  linkType: hard
+
 "@alwatr/dedupe@npm:^1.0.1":
   version: 1.0.1
   resolution: "@alwatr/dedupe@npm:1.0.1"
@@ -48,6 +57,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@alwatr/flatomise@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@alwatr/flatomise@npm:1.1.0"
+  checksum: 6950da1b224e4d6ef600105ef5f274e212a7d9d01b053c08ceca1e0e343987e4f8ed9cbd457f43d283228a6e7dbd6a11832dcbb3bb4b3196849e34c2d6e1b134
+  languageName: node
+  linkType: hard
+
 "@alwatr/global-scope@npm:^1.1.9":
   version: 1.1.9
   resolution: "@alwatr/global-scope@npm:1.1.9"
@@ -76,6 +92,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@alwatr/node-fs@npm:^1.0.0-beta.0":
+  version: 1.0.0-beta.0
+  resolution: "@alwatr/node-fs@npm:1.0.0-beta.0"
+  dependencies:
+    "@alwatr/async-queue": "npm:^1.1.0"
+    "@alwatr/flat-string": "npm:^1.0.12"
+    "@alwatr/logger": "npm:^3.2.1"
+  checksum: 8989c78bd1430f2feecc32074e17ee9544adcbb862136573a94935c65278b119348dc8920f2dec7a0e25d4baf4d8dc026d2fc2661915bd6c512b28cccb640c65
+  languageName: node
+  linkType: hard
+
 "@alwatr/platform-info@npm:^1.1.1":
   version: 1.1.1
   resolution: "@alwatr/platform-info@npm:1.1.1"
@@ -98,6 +125,7 @@ __metadata:
     "@alwatr/flat-string": "npm:^1.0.12"
     "@alwatr/logger": "npm:^3.2.1"
     "@alwatr/nano-build": "npm:^1.3.0"
+    "@alwatr/node-fs": "npm:^1.0.0-beta.0"
     "@alwatr/prettier-config": "npm:^1.0.4"
     "@alwatr/store-reference": "workspace:^"
     "@alwatr/store-types": "workspace:^"
