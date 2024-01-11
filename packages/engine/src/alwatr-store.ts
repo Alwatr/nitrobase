@@ -112,10 +112,10 @@ export class AlwatrStore {
    * }
    * ```
    */
-  exists(id: string | StoreFileId): boolean {
-    if (typeof id !== 'string') id = getStoreId(id);
-    const exists = this.rootDb__.exists(id);
-    logger.logMethodFull?.('exists', id, exists);
+  exists(id: StoreFileId): boolean {
+    const id_ = getStoreId(id);
+    const exists = this.rootDb__.exists(id_);
+    logger.logMethodFull?.('exists', id_, exists);
     return exists;
   }
 
@@ -178,7 +178,7 @@ export class AlwatrStore {
    * If the document not exists or its not a document, an error is thrown.
    *
    * @template TDoc document data type
-   * @param id document id
+   * @param id_ document id
    * @returns document reference {@link DocumentReference}
    * @example
    * ```typescript
@@ -186,34 +186,34 @@ export class AlwatrStore {
    * doc.update({name: 'ali'});
    * ```
    */
-  async doc<TDoc extends Dictionary<unknown>>(id: string | StoreFileId): Promise<DocumentReference<TDoc>> {
-    if (typeof id !== 'string') id = getStoreId(id);
-    logger.logMethodArgs?.('doc', id);
+  async doc<TDoc extends Dictionary<unknown>>(id: StoreFileId): Promise<DocumentReference<TDoc>> {
+    const id_ = getStoreId(id);
+    logger.logMethodArgs?.('doc', id_);
 
-    if (Object.hasOwn(this.cacheReferences__, id)) {
-      const ref = this.cacheReferences__[id];
+    if (Object.hasOwn(this.cacheReferences__, id_)) {
+      const ref = this.cacheReferences__[id_];
       if (!(ref instanceof DocumentReference)) {
-        logger.accident('doc', 'document_wrong_type', id);
-        throw new Error('document_wrong_type', {cause: id});
+        logger.accident('doc', 'document_wrong_type', id_);
+        throw new Error('document_wrong_type', {cause: id_});
       }
-      return this.cacheReferences__[id] as unknown as DocumentReference<TDoc>;
+      return this.cacheReferences__[id_] as unknown as DocumentReference<TDoc>;
     }
 
-    if (!this.rootDb__.exists(id)) {
-      logger.accident('doc', 'document_not_found', id);
-      throw new Error('document_not_found', {cause: id});
+    if (!this.rootDb__.exists(id_)) {
+      logger.accident('doc', 'document_not_found', id_);
+      throw new Error('document_not_found', {cause: id_});
     }
 
-    const storeStat = this.rootDb__.get(id);
+    const storeStat = this.rootDb__.get(id_);
 
     if (storeStat.type != StoreFileType.Document) {
-      logger.accident('doc', 'document_wrong_type', id);
-      throw new Error('document_wrong_type', {cause: id});
+      logger.accident('doc', 'document_wrong_type', id_);
+      throw new Error('document_wrong_type', {cause: id_});
     }
 
     const context = await this.readContext__<DocumentContext<TDoc>>(storeStat);
     const docRef = DocumentReference.newRefFromContext(context, this.storeChanged__.bind(this));
-    this.cacheReferences__[id] = docRef as unknown as DocumentReference;
+    this.cacheReferences__[id_] = docRef as unknown as DocumentReference;
     return docRef;
   }
 
@@ -222,7 +222,7 @@ export class AlwatrStore {
    * If the collection not exists or its not a collection, an error is thrown.
    *
    * @template TItem collection item data type
-   * @param id collection id
+   * @param id_ collection id
    * @returns collection reference {@link CollectionReference}
    * @example
    * ```typescript
@@ -230,52 +230,57 @@ export class AlwatrStore {
    * collection.add({name: 'order 1'});
    * ```
    */
-  async collection<TItem extends Dictionary<unknown>>(id: string | StoreFileId): Promise<CollectionReference<TItem>> {
-    if (typeof id !== 'string') id = getStoreId(id);
-    logger.logMethodArgs?.('collection', id);
+  async collection<TItem extends Dictionary<unknown>>(id: StoreFileId): Promise<CollectionReference<TItem>> {
+    const id_ = getStoreId(id);
+    logger.logMethodArgs?.('collection', id_);
 
-    if (Object.hasOwn(this.cacheReferences__, id)) {
-      const ref = this.cacheReferences__[id];
+    if (Object.hasOwn(this.cacheReferences__, id_)) {
+      const ref = this.cacheReferences__[id_];
       if (!(ref instanceof CollectionReference)) {
-        logger.accident('collection', 'collection_wrong_type', id);
-        throw new Error('collection_wrong_type', {cause: id});
+        logger.accident('collection', 'collection_wrong_type', id_);
+        throw new Error('collection_wrong_type', {cause: id_});
       }
-      return this.cacheReferences__[id] as unknown as CollectionReference<TItem>;
+      return this.cacheReferences__[id_] as unknown as CollectionReference<TItem>;
     }
 
-    if (!this.rootDb__.exists(id)) {
-      logger.accident('collection', 'collection_not_found', id);
-      throw new Error('collection_not_found', {cause: id});
+    if (!this.rootDb__.exists(id_)) {
+      logger.accident('collection', 'collection_not_found', id_);
+      throw new Error('collection_not_found', {cause: id_});
     }
 
-    const storeStat = this.rootDb__.get(id);
+    const storeStat = this.rootDb__.get(id_);
 
     if (storeStat.type != StoreFileType.Collection) {
-      logger.accident('doc', 'collection_wrong_type', id);
-      throw new Error('collection_not_found', {cause: id});
+      logger.accident('doc', 'collection_wrong_type', id_);
+      throw new Error('collection_not_found', {cause: id_});
     }
 
     const context = await this.readContext__<CollectionContext<TItem>>(storeStat);
     const colRef = CollectionReference.newRefFromContext(context, this.storeChanged__.bind(this));
-    this.cacheReferences__[id] = colRef as unknown as DocumentReference;
+    this.cacheReferences__[id_] = colRef as unknown as DocumentReference;
     return colRef;
   }
 
   /**
    * Unloads the store file with the given id from memory.
    *
-   * @param id The unique identifier of the store file.
+   * @param id_ The unique identifier of the store file.
    * @example
    * ```typescript
    * alwatrStore.unload({name: 'user-list', region: Region.Secret});
    * alwatrStore.exists({name: 'user-list', region: Region.Secret}); // true
    * ```
    */
-  unload(id: string | StoreFileId): void {
-    if (typeof id !== 'string') id = getStoreId(id);
-    logger.logMethodArgs?.('unload', id);
-    // TODO: this.save_(id);
-    delete this.cacheReferences__[id];
+  unload(id: StoreFileId): void {
+    const id_ = getStoreId(id);
+    logger.logMethodArgs?.('unload', id_);
+    const ref = this.cacheReferences__[id_];
+    if (ref === undefined) return;
+    if (ref.hasUnprocessedChanges_ === true) {
+      ref.updateDelayed_ = false;
+      this.storeChanged__(ref);
+    }
+    delete this.cacheReferences__[id_];
   }
 
   /**
@@ -283,7 +288,7 @@ export class AlwatrStore {
    *
    * You don't need to await this method to complete unless you want to make sure the file is deleted on disk.
    *
-   * @param id The ID of the file to delete.
+   * @param id_ The ID of the file to delete.
    * @returns A Promise that resolves when the file is deleted.
    * @example
    * ```typescript
@@ -291,22 +296,28 @@ export class AlwatrStore {
    * alwatrStore.exists({name: 'user-list', region: Region.Secret}); // true
    * ```
    */
-  async deleteFile(id: string | StoreFileId): Promise<void> {
-    if (typeof id !== 'string') id = getStoreId(id);
-    logger.logMethodArgs?.('deleteFile', id);
-    if (!this.rootDb__.exists(id)) {
-      logger.accident('doc', 'document_not_found', id);
-      throw new Error('document_not_found', {cause: id});
+  async deleteFile(id: StoreFileId): Promise<void> {
+    const id_ = getStoreId(id);
+    logger.logMethodArgs?.('deleteFile', id_);
+    if (!this.rootDb__.exists(id_)) {
+      logger.accident('doc', 'document_not_found', id_);
+      throw new Error('document_not_found', {cause: id_});
     }
-    delete this.cacheReferences__[id]; // direct unload to prevent save
-    const path = getStorePath(this.rootDb__.get(id));
-    this.rootDb__.delete(id);
+    const ref = this.cacheReferences__[id_];
+    if (ref !== undefined) {
+      // direct unload to prevent save
+      ref.updateDelayed_ = false;
+      ref.hasUnprocessedChanges_ = false;
+      delete this.cacheReferences__[id_]; // unload
+    }
+    const path = getStorePath(this.rootDb__.get(id_));
+    this.rootDb__.delete(id_);
     await waitForTimeout(0);
     try {
       await unlink(resolve(this.config__.rootPath, path));
     }
     catch (error) {
-      logger.error('deleteFile', 'delete_file_failed', {id, path, error});
+      logger.error('deleteFile', 'delete_file_failed', {id: id_, path, error});
     }
   }
 
