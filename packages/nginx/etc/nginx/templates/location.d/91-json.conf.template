@@ -4,7 +4,7 @@
 # $storeRegionPublic: The location for public data.
 # $storeRegionSecret: The location for secret data.
 # $storeRegionAuthenticated: The location for authenticated data.
-# $storeRegionSuperAdmin: The location for super admin data.
+# $storeRegionManagers: The location for admin and managers data.
 # $storeRegionPerUser: The location for per user data.
 # $storeRegionPerDevice: The location for per device data.
 # $storeRegionPerToken: The location for per token data.
@@ -56,9 +56,9 @@ location ~ ^$storeApiPrefix/$storeRegionAuthenticated/(?<storePath>.*)$ {
   try_files /$storeRegionAuthenticated/$storePath =404;
 }
 
-# Store file location that can be accessed by super admin only.
-location ~ ^$storeApiPrefix/$storeRegionSuperAdmin/(?<storePath>.*)$ {
-  if ($user_id_location = "") {
+# Managers region: Store file location that can be accessed by admin and managers only.
+location ~ ^$storeApiPrefix/$storeRegionManagers/(?<storePath>.*)$ {
+  if ($user_id_location = '') {
     return 401;
   }
 
@@ -78,7 +78,7 @@ location ~ ^$storeApiPrefix/$storeRegionSuperAdmin/(?<storePath>.*)$ {
     return 403;
   }
 
-  try_files /$storeRegionSuperAdmin/$storePath =404;
+  try_files /$storeRegionManagers/$storePath =404;
 }
 
 # Store file location specific to each user id. Can be accessed using the user token.

@@ -12,37 +12,37 @@ definePackage('@alwatr/store-types', __package_version__);
  */
 export enum Region {
   /**
-   * Store file location that can be accessed by anyone.
+   * Store file location that can be accessed by anyone. e.g. Product list.
    */
   Public = 'p',
 
   /**
-   * Store file location that can be accessed by authenticated users.
+   * Store file location that can be accessed by authenticated users. e.g. Special price list for dealers
    */
   Authenticated = 'a',
 
   /**
-   * Store file location that can be accessed by super admin only.
+   * Store file location that can be accessed by admins and managers only. e.g. User list.
    */
-  SuperAdmin = 'sa',
+  Managers = 'm',
 
   /**
-   * Store file location specific to each user id. Can be accessed using the user token.
+   * Store file location specific to each user id. Can be accessed using the user token. e.g. User profile and User orders.
    */
   PerUser = 'u',
 
   /**
-   * Store file location specific to each device id.
+   * Store file location specific to each device id. e.g. Device info.
    */
   PerDevice = 'd',
 
   /**
-   * Store file location specific to each token.
+   * Store file location specific to each token. e.g. User id of specific token.
    */
   PerToken = 't',
 
   /**
-   * Private store file location. Cannot be accessed publicly and must be directly accessed by the admin API only.
+   * Private store file location. Cannot be accessed publicly and must be directly accessed by the admin API only. e.g. User secret data.
    */
   Secret = 'secret',
 }
