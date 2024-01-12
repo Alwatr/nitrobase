@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0](https://github.com/Alwatr/store/compare/v5.0.0-beta...v5.0.0) (2024-01-12)
+
+### Bug Fixes
+
+* **nginx:** token validation in managers region ([f5f54fb](https://github.com/Alwatr/store/commit/f5f54fb52cb9d4721b25d0c3d76d8a8c717ae288)) by @AliMD
+
+### Code Refactoring
+
+* rename region SuperAdmin to Managers ([7c3ece8](https://github.com/Alwatr/store/commit/7c3ece8a24a88ea12a82966e41ea1ad7362159f4)) by @AliMD
+
+### Performance Improvements
+
+* **nginx:** Micro optimization in map ([955f836](https://github.com/Alwatr/store/commit/955f8369e5013af06b987bba7acae5fa2d167dfb)) by @AliMD
+
+### BREAKING CHANGES
+
+* region `SuperAdmin` renamed to `Managers`
+
 # [5.0.0-beta](https://github.com/Alwatr/store/compare/v4.1.0...v5.0.0-beta) (2023-12-31)
 
 ### Bug Fixes

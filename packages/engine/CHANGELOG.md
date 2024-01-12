@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0](https://github.com/Alwatr/store/compare/v5.0.0-beta...v5.0.0) (2024-01-12)
+
+### Code Refactoring
+
+* **engine:** remove all string id from public api ([c44fd1c](https://github.com/Alwatr/store/commit/c44fd1c0a7daffe20ba9e836f23d63a4dd4250b8)) by @AliMD
+
+### Features
+
+* **engine:** use alwatr exit hook ([5be4f01](https://github.com/Alwatr/store/commit/5be4f01bc746b5b4cfb1df10def3abc5632c44ee)) by @njfamirm
+* **store:** Add option to error when store not initialized ([4b27468](https://github.com/Alwatr/store/commit/4b27468a063027b357e27fdff2484932e23d46e0)) by @AliMD
+
+### BREAKING CHANGES
+
+* **engine:** The string ID has been removed from public APIs to prevent confusion caused by a simple sting ID.
+
 # [5.0.0-beta](https://github.com/Alwatr/store/compare/v4.1.0...v5.0.0-beta) (2023-12-31)
 
 ### Bug Fixes
