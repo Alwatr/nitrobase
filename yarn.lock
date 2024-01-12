@@ -132,7 +132,7 @@ __metadata:
     "@alwatr/tsconfig-base": "npm:^1.1.0"
     "@alwatr/type-helper": "npm:^1.0.3"
     "@alwatr/wait": "npm:^1.1.4"
-    "@types/node": "npm:^20.10.8"
+    "@types/node": "npm:^20.11.0"
     typescript: "npm:^5.3.3"
   languageName: unknown
   linkType: soft
@@ -155,7 +155,7 @@ __metadata:
     "@alwatr/tsconfig-base": "npm:^1.1.0"
     "@alwatr/type-helper": "npm:^1.0.3"
     "@alwatr/wait": "npm:^1.1.4"
-    "@types/node": "npm:^20.10.8"
+    "@types/node": "npm:^20.11.0"
     typescript: "npm:^5.3.3"
   languageName: unknown
   linkType: soft
@@ -169,7 +169,7 @@ __metadata:
     "@alwatr/prettier-config": "npm:^1.0.4"
     "@alwatr/tsconfig-base": "npm:^1.1.0"
     "@alwatr/type-helper": "npm:^1.0.3"
-    "@types/node": "npm:^20.10.8"
+    "@types/node": "npm:^20.11.0"
     typescript: "npm:^5.3.3"
   languageName: unknown
   linkType: soft
@@ -1159,12 +1159,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.10.8":
-  version: 20.10.8
-  resolution: "@types/node@npm:20.10.8"
+"@types/node@npm:^20.11.0":
+  version: 20.11.0
+  resolution: "@types/node@npm:20.11.0"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: 93268c33c3bf0194427d696658160c77ab8661aa57107df5b248ff952898a372bf92cf0ba7fc07788fa35e59c69b6619cce63d45e4e67fca806e37da7ea42512
+  checksum: 560aa850dfccb83326f9cba125459f6c3fb0c71ec78f22c61e4d248f1df78bd25fd6792cef573dfbdc49c882f8e38bb1a82ca87e0e28ff2513629c704c2b02af
   languageName: node
   linkType: hard
 
@@ -4333,11 +4333,11 @@ __metadata:
   linkType: hard
 
 "npm-packlist@npm:^8.0.0, npm-packlist@npm:^8.0.1":
-  version: 8.0.1
-  resolution: "npm-packlist@npm:8.0.1"
+  version: 8.0.2
+  resolution: "npm-packlist@npm:8.0.2"
   dependencies:
     ignore-walk: "npm:^6.0.4"
-  checksum: 40a61e7c4ee3d7ae29314b554cba00d8ce7f934c2949043fe137b48a69f8c6dbec222b45bc3176667ea78aae275764e0e2d659017833f47673324ddc2abfd50e
+  checksum: ac3140980b1475c2e9acd3d0ca1acd0f8660c357aed357f1a4ebff2270975e0280a3b1c4938e2f16bd68217853ceb5725cf8779ec3752dfcc546582751ceedff
   languageName: node
   linkType: hard
 
@@ -5111,13 +5111,13 @@ __metadata:
   linkType: hard
 
 "safe-regex-test@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "safe-regex-test@npm:1.0.0"
+  version: 1.0.2
+  resolution: "safe-regex-test@npm:1.0.2"
   dependencies:
-    call-bind: "npm:^1.0.2"
-    get-intrinsic: "npm:^1.1.3"
+    call-bind: "npm:^1.0.5"
+    get-intrinsic: "npm:^1.2.2"
     is-regex: "npm:^1.1.4"
-  checksum: 14a81a7e683f97b2d6e9c8be61fddcf8ed7a02f4e64a825515f96bb1738eb007145359313741d2704d28b55b703a0f6300c749dde7c1dbc13952a2b85048ede2
+  checksum: c24df9c3cbd9e6a6800f02411a12ce2bd642be22ce6ad03f796e7b3f3851d9eb1fb8d1fab48278b04fabe75dd279c10bc07a45e39543aa72407fbd8a31174958
   languageName: node
   linkType: hard
 
@@ -5592,13 +5592,13 @@ __metadata:
   linkType: hard
 
 "tuf-js@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "tuf-js@npm:2.1.0"
+  version: 2.2.0
+  resolution: "tuf-js@npm:2.2.0"
   dependencies:
     "@tufjs/models": "npm:2.0.0"
     debug: "npm:^4.3.4"
     make-fetch-happen: "npm:^13.0.0"
-  checksum: aba49761e5f06776632c1d7855488dc9f6fb030c483ce011cd5ffb168e2145c634bf3161e762cd7f90e5b5d009e6ac57b5e62dd11bdb9f20a072a98aae96709d
+  checksum: 9a11793feed2aa798c1a50107a0f031034b4a670016684e0d0b7d97be3fff7f98f53783c30120bce795c16d58f1b951410bb673aae92cc2437d641cc7457e215
   languageName: node
   linkType: hard
 
