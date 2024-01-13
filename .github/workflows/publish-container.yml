@@ -52,7 +52,7 @@ jobs:
         with:
           filters: |
             container_folder:
-              ${{ matrix.context }}/**
+              ./${{ matrix.context }}/**
 
       - name: 🏗 Install cosign
         if: ${{ github.event_name != 'pull_request' && steps.file_change.outputs.container_folder != 'false' }}
@@ -64,7 +64,7 @@ jobs:
 
       - name: 🏗 Cache Docker Layers
         if: ${{ steps.file_change.outputs.container_folder != 'false' }}
-        uses: actions/cache@v3.3.2
+        uses: actions/cache@v3.3.3
         with:
           path: /tmp/.buildx-cache
           key: container/${{ matrix.name }}
@@ -101,24 +101,37 @@ jobs:
           labels: |
             org.opencontainers.image.title="alwatr/${{matrix.name}}"
             org.opencontainers.image.vendor="Alwatr"
-            org.opencontainers.image.documentation="https://github.com/Alwatr/storage"
+            org.opencontainers.image.documentation="https://github.com/Alwatr/store"
             org.opencontainers.image.authors="S. Ali Mihandoost <ali.mihandoost@gmail.com> (https://ali.mihandoost.com)"
 
-      - name: 🚀 Build and push container image
+      - name: 🚀 Build and export to docekr
         if: ${{ steps.file_change.outputs.container_folder != 'false' }}
-        id: build_and_push
         uses: docker/build-push-action@v5.1.0
         with:
-          context: ${{matrix.context}}
+          context: ./${{matrix.context}}
+          file: ${{matrix.path}}/Dockerfile
+          push: false
+          load: true
+          tags: ${{env.USER}}/${{matrix.name}}:test
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+
+      - name: 🧪 Nginx config test
+        if: ${{ steps.file_change.outputs.container_folder != 'false' && matrix.name == 'nginx' }}
+        run: |
+          echo "Running tests for ${{matrix.name}}"
+          docker run --rm ${{env.USER}}/${{matrix.name}}:test /etc/nginx/entrypoint.sh nginx -t
+
+      # TODO: 🧪 Api test
+
+      - name: 🚀 Build and publish container image
+        if: ${{ steps.file_change.outputs.container_folder != 'false' }}
+        uses: docker/build-push-action@v5.1.0
+        with:
+          context: ./${{matrix.context}}
           file: ${{matrix.path}}/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
-
-      # - name: 🏗 Sign the image with GitHub OIDC Token
-      #   if: ${{ github.event_name != 'pull_request' && steps.file_change.outputs.container_folder != 'false' }}
-      #   env:
-      #     COSIGN_EXPERIMENTAL: 'true'
-      #   run: echo "${{steps.meta.outputs.tags}}" | xargs -I {} cosign sign --yes {}@${{steps.build_and_push.outputs.digest}}
