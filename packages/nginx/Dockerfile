@@ -1,6 +1,6 @@
 FROM ghcr.io/alwatr/nginx-json:2.3.1
 
-LABEL org.opencontainers.image.base.name="ghcr.io/alwatr/nginx-json:2.2.1"
+LABEL org.opencontainers.image.base.name="ghcr.io/alwatr/nginx-json:2.3.1"
 
 COPY etc/nginx/ /etc/nginx/
 COPY default-data/ /default-data/
