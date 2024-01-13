@@ -44,7 +44,7 @@ export enum Region {
   /**
    * Private store file location. Cannot be accessed publicly and must be directly accessed by the admin API only. e.g. User secret data.
    */
-  Secret = 'secret',
+  Secret = '.s',
 }
 
 /**
