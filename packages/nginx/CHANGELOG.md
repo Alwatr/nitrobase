@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.0](https://github.com/Alwatr/store/compare/v5.0.0...v5.1.0) (2024-01-13)
+
+### Features
+
+* update nginx base image to v2.3.2 ([db8c896](https://github.com/Alwatr/store/commit/db8c896464b6d4c824eb93fb5ac5c40d3caad9c9)) by @AliMD
+
+### Miscellaneous Chores
+
+* **deps:** bump alwatr/nginx-json in /packages/nginx ([fedc46a](https://github.com/Alwatr/store/commit/fedc46a497927b0fa4668ec81c85fa4b2b1c369e)) by @dependabot[bot]
+* **nginx:** update docker label ([9f38e70](https://github.com/Alwatr/store/commit/9f38e70607d349cb482e445fe68fe129776b551f)) by @AliMD
+
+### Code Refactoring
+
+* Update storeRegionSecret value in Dockerfile and types file ([a0b13c6](https://github.com/Alwatr/store/commit/a0b13c6ff07599a425fa666437c0ebf167ccf6c8)) by @AliMD
+
 # [5.0.0](https://github.com/Alwatr/store/compare/v5.0.0-beta...v5.0.0) (2024-01-12)
 
 ### Bug Fixes

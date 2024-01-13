@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.0](https://github.com/Alwatr/store/compare/v5.0.0...v5.1.0) (2024-01-13)
+
+### Features
+
+* update nginx base image to v2.3.2 ([db8c896](https://github.com/Alwatr/store/commit/db8c896464b6d4c824eb93fb5ac5c40d3caad9c9)) by @AliMD
+
+### Miscellaneous Chores
+
+* **dependabot:** Remove old api docker update ([e297bd7](https://github.com/Alwatr/store/commit/e297bd7cb9f5ac93f7714a26c68ea73f0c847f5a)) by @AliMD
+* **deps:** bump alwatr/nginx-json in /packages/nginx ([fedc46a](https://github.com/Alwatr/store/commit/fedc46a497927b0fa4668ec81c85fa4b2b1c369e)) by @dependabot[bot]
+* **deps:** bump the github-actions group with 1 update ([91c3905](https://github.com/Alwatr/store/commit/91c3905e8daae95ad5e410c482ca6fa0509bea1d)) by @dependabot[bot]
+* fix repo name ([7c7fef7](https://github.com/Alwatr/store/commit/7c7fef71d49aa5633fa0950f6b2c6ce1201ec5aa)) by @AliMD
+* **lerna:** update changelogPreset ([6f81c20](https://github.com/Alwatr/store/commit/6f81c20c8b4c65eaaa7788dbbd62bd908db97402)) by @AliMD
+* **nginx:** update docker label ([9f38e70](https://github.com/Alwatr/store/commit/9f38e70607d349cb482e445fe68fe129776b551f)) by @AliMD
+* Update package.json script 'rl' to include linting ([b615b9d](https://github.com/Alwatr/store/commit/b615b9d4cb375ddc7de4650f43a83ab4f0d78bd2)) by @
+* **workflow:** fix nginx test ([5da8713](https://github.com/Alwatr/store/commit/5da87132e359ef67b21f0fa55cbd3e34c0144481)) by @AliMD
+* **workflow:** Update publish-container.yml file ro test nginx before publish ([ec9fb80](https://github.com/Alwatr/store/commit/ec9fb80a8a1f21be85cf5ad79b1680d94dbd9396)) by @AliMD
+
+### Code Refactoring
+
+* Update storeRegionSecret value in Dockerfile and types file ([a0b13c6](https://github.com/Alwatr/store/commit/a0b13c6ff07599a425fa666437c0ebf167ccf6c8)) by @AliMD
+
 # [5.0.0](https://github.com/Alwatr/store/compare/v5.0.0-beta...v5.0.0) (2024-01-12)
 
 ### Bug Fixes
