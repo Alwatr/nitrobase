@@ -117,7 +117,7 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache
 
       - name: 🧪 Nginx config test
-        if: ${{ steps.file_change.outputs.container_folder != 'false' && matrix.name == 'nginx' }}
+        if: ${{ steps.file_change.outputs.container_folder != 'false' && contains(matrix.name, 'nginx') }}
         run: |
           echo "Running tests for ${{matrix.name}}"
           docker run --rm ${{env.USER}}/${{matrix.name}}:test /etc/nginx/entrypoint.sh nginx -t
