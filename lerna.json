@@ -34,12 +34,12 @@
             "section": "Reverts"
           },
           {
-            "type": "chore",
-            "section": "Miscellaneous Chores"
-          },
-          {
             "type": "refactor",
             "section": "Code Refactoring"
+          },
+          {
+            "type": "chore",
+            "section": "Miscellaneous Chores"
           },
           {
             "type": "docs",
