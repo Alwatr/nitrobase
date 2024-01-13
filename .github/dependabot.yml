@@ -64,15 +64,15 @@ updates:
       - priority-low
       - maintenance
 
-  - package-ecosystem: docker
-    directory: /packages/api
-    reviewers:
-      - AliMD
-    schedule:
-      interval: weekly
-      time: '00:30'
-      day: 'thursday'
-    labels:
-      - ci
-      - priority-low
-      - maintenance
+  # - package-ecosystem: docker
+  #   directory: /packages/api
+  #   reviewers:
+  #     - AliMD
+  #   schedule:
+  #     interval: weekly
+  #     time: '00:30'
+  #     day: 'thursday'
+  #   labels:
+  #     - ci
+  #     - priority-low
+  #     - maintenance
