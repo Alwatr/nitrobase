@@ -7,13 +7,13 @@ location ~ ^/($storeRegionPerUser/[A-z0-9_=-]+/[A-z0-9_=-]+)/ {
     break;
   }
 
+  try_files $uri =404;
+
   if (-f $document_root/$userLocation/.auth/manager.asn) {
-    try_files $uri =404;
     break;
   }
 
   if ($userLocation = $1) {
-    try_files $uri =404;
     break;
   }
 
