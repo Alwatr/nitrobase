@@ -9,6 +9,10 @@
     "jgclark.vscode-todo-highlight",
     "streetsidesoftware.code-spell-checker-persian",
     "streetsidesoftware.code-spell-checker",
-    "arcanis.vscode-zipfs"
+    "arcanis.vscode-zipfs",
+    "ahmadalli.vscode-nginx-conf",
+    "ms-azuretools.vscode-docker",
+    "irongeek.vscode-env",
+    "redhat.vscode-yaml"
   ]
 }
