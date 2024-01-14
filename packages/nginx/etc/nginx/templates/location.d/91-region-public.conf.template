@@ -1,6 +1,6 @@
 # Public region
 # Store file location that can be accessed by anyone.
 
-location ^~ /$storeRegionPublic/ {
+location /$storeRegionPublic/ {
   try_files $uri =404;
 }
