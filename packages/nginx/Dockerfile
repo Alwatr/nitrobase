@@ -19,10 +19,10 @@ ENV NGINX_DOCUMENT_ROOT=/data \
     NGINX_DISABLE_SYMLINKS=if_not_owner
 
 ENV storeApiPrefix="/api/v1" \
+    storeDebugPath="/debug-info-110" \
     storeRegionPublic="p" \
     storeRegionSecret=".s" \
     storeRegionAuthenticated="a" \
     storeRegionManagers="m" \
     storeRegionPerUser="u" \
-    storeRegionPerDevice="d" \
-    storeRegionPerToken="t"
+    storeRegionPerOwner="o"
