@@ -1,0 +1,4 @@
+if ($userLocation = 0) {
+  return 401;
+  break;
+}
