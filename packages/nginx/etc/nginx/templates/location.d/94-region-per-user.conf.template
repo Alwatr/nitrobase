@@ -1,0 +1,21 @@
+# PerUser region
+# Store file location specific to each user id. Can be accessed using the user token.
+
+location ~ ^/($storeRegionPerUser/[A-z0-9_=-]+/[A-z0-9_=-]+)/ {
+  if (!-f $document_root/$userLocation/.token/$authUserToken.asn) {
+    return 403;
+    break;
+  }
+
+  if (-f $document_root/$userLocation/.auth/manager.asn) {
+    try_files $uri =404;
+    break;
+  }
+
+  if ($userLocation = $1) {
+    try_files $uri =404;
+    break;
+  }
+
+  return 403;
+}
