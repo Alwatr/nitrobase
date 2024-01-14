@@ -57,5 +57,8 @@
     "pmpa",
     "tsbuildinfo",
     "typeof"
-  ]
+  ],
+  "[nginx]": {
+    "editor.defaultFormatter": "ahmadalli.vscode-nginx-conf"
+  }
 }
