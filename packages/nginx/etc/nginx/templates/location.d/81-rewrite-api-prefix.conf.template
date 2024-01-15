@@ -1,0 +1,2 @@
+# remove storeApiPrefix from url
+rewrite ^$storeApiPrefix/(.*)$ /$1;

@@ -2,6 +2,7 @@ FROM ghcr.io/alwatr/nginx-json:2.3.2
 
 LABEL org.opencontainers.image.base.name="ghcr.io/alwatr/nginx-json:2.3.2"
 
+RUN rm -fv /etc/nginx/templates/location.d/90-home-json.conf.template
 COPY etc/nginx/ /etc/nginx/
 COPY default-data/ /default-data/
 RUN ls -RlahF /etc/nginx /default-data /data
@@ -18,11 +19,11 @@ ENV NGINX_DOCUMENT_ROOT=/data \
     NGINX_LIMIT_REQ_BURST=1000 \
     NGINX_DISABLE_SYMLINKS=if_not_owner
 
-ENV storeApiPrefix="/api/v1" \
+ENV storeApiPrefix="/api/s6" \
+    storeDebugPath="/debug-info-110" \
     storeRegionPublic="p" \
     storeRegionSecret=".s" \
     storeRegionAuthenticated="a" \
     storeRegionManagers="m" \
     storeRegionPerUser="u" \
-    storeRegionPerDevice="d" \
-    storeRegionPerToken="t"
+    storeRegionPerOwner="o"

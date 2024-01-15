@@ -32,14 +32,9 @@ export enum Region {
   PerUser = 'u',
 
   /**
-   * Store file location specific to each device id. e.g. Device info.
+   * Store file location specific to each owner id. e.g. user token or device id.
    */
-  PerDevice = 'd',
-
-  /**
-   * Store file location specific to each token. e.g. User id of specific token.
-   */
-  PerToken = 't',
+  PerOwner = 'o',
 
   /**
    * Private store file location. Cannot be accessed publicly and must be directly accessed by the admin API only. e.g. User secret data.
