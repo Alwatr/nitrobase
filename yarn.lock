@@ -132,7 +132,7 @@ __metadata:
     "@alwatr/tsconfig-base": "npm:^1.1.0"
     "@alwatr/type-helper": "npm:^1.0.3"
     "@alwatr/wait": "npm:^1.1.4"
-    "@types/node": "npm:^20.11.0"
+    "@types/node": "npm:^20.11.2"
     typescript: "npm:^5.3.3"
   languageName: unknown
   linkType: soft
@@ -155,7 +155,7 @@ __metadata:
     "@alwatr/tsconfig-base": "npm:^1.1.0"
     "@alwatr/type-helper": "npm:^1.0.3"
     "@alwatr/wait": "npm:^1.1.4"
-    "@types/node": "npm:^20.11.0"
+    "@types/node": "npm:^20.11.2"
     typescript: "npm:^5.3.3"
   languageName: unknown
   linkType: soft
@@ -169,7 +169,7 @@ __metadata:
     "@alwatr/prettier-config": "npm:^1.0.4"
     "@alwatr/tsconfig-base": "npm:^1.1.0"
     "@alwatr/type-helper": "npm:^1.0.3"
-    "@types/node": "npm:^20.11.0"
+    "@types/node": "npm:^20.11.2"
     typescript: "npm:^5.3.3"
   languageName: unknown
   linkType: soft
@@ -1084,12 +1084,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sigstore/bundle@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "@sigstore/bundle@npm:2.1.0"
+"@sigstore/bundle@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "@sigstore/bundle@npm:2.1.1"
   dependencies:
     "@sigstore/protobuf-specs": "npm:^0.2.1"
-  checksum: 785b48d9def9cde91880bfd656b32e5808861a3f81e1513041635bbab5763c35cfd5c854d0d7dd7283a5c6aeadac036ead4396281aa0cbb356e1311bd239eff5
+  checksum: d3e358569e9b0f1a2c5bfa3ab8608046fc11f42424ea717b4871044cf9ecbff374fc08673b9858ec93f993fa1a6166d416b1245a0d13d0f856ea5de99e27a594
+  languageName: node
+  linkType: hard
+
+"@sigstore/core@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "@sigstore/core@npm:0.2.0"
+  checksum: b3da01c5369ba7e02b3f56921d0e3da8d6527d005d1bf6e90fbebf4211541c068a2a18e65f205ff7bcaa9ca3f41c7261396e7d4b4ad05b0aedca2e3bae0405eb
   languageName: node
   linkType: hard
 
@@ -1100,24 +1107,36 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sigstore/sign@npm:^2.1.0":
-  version: 2.2.0
-  resolution: "@sigstore/sign@npm:2.2.0"
+"@sigstore/sign@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "@sigstore/sign@npm:2.2.1"
   dependencies:
-    "@sigstore/bundle": "npm:^2.1.0"
+    "@sigstore/bundle": "npm:^2.1.1"
+    "@sigstore/core": "npm:^0.2.0"
     "@sigstore/protobuf-specs": "npm:^0.2.1"
     make-fetch-happen: "npm:^13.0.0"
-  checksum: f3a24809940688b2e7dac1ec7097caf73cc25a440efc67d138227f73154ecd7c95d1962b4cb11fe7de1495659c4784c068002d7f8a14fdc6099d830e50a7bc08
+  checksum: 482206264bdf517fe54d08171942219b4541704f5dec9ecb169687d545b1437c5a1493ab5ea84e87180f777d7476f0154828f0ce978f55071b0117d5687f3f9c
   languageName: node
   linkType: hard
 
-"@sigstore/tuf@npm:^2.1.0":
-  version: 2.2.0
-  resolution: "@sigstore/tuf@npm:2.2.0"
+"@sigstore/tuf@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "@sigstore/tuf@npm:2.3.0"
   dependencies:
     "@sigstore/protobuf-specs": "npm:^0.2.1"
-    tuf-js: "npm:^2.1.0"
-  checksum: d20c0fd1c13e7054b9569eb70b427439546cfd864e891f8dce48e6c59b782b1dede109e02e3ac33ce381a3fd8b8fbffd6719a17cdcaca18972c2c5a000ba816e
+    tuf-js: "npm:^2.2.0"
+  checksum: a214561e143f553132428597eaa68cfdcb36c6bf757f3dea30b2e55038433b0ffc53c446036e6d104487fb55f8d6bc6e01764090d29f42497fb44d55017f360c
+  languageName: node
+  linkType: hard
+
+"@sigstore/verify@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "@sigstore/verify@npm:0.1.0"
+  dependencies:
+    "@sigstore/bundle": "npm:^2.1.1"
+    "@sigstore/core": "npm:^0.2.0"
+    "@sigstore/protobuf-specs": "npm:^0.2.1"
+  checksum: 3eeb4817ac38dc7b337a48e75c4e88226a5553c32594fa8c22221087a69656a7ccfe68e6f59eb12f1ecc506ea6c6db90e4b312c7dcc4a66c04e01434dc607fc7
   languageName: node
   linkType: hard
 
@@ -1159,12 +1178,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.11.0":
-  version: 20.11.0
-  resolution: "@types/node@npm:20.11.0"
+"@types/node@npm:^20.11.2":
+  version: 20.11.2
+  resolution: "@types/node@npm:20.11.2"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: 560aa850dfccb83326f9cba125459f6c3fb0c71ec78f22c61e4d248f1df78bd25fd6792cef573dfbdc49c882f8e38bb1a82ca87e0e28ff2513629c704c2b02af
+  checksum: 11a935f6676f78e1ced4805f9653891d1fc78ecafd78c7352d289be8c1829c88ebfe45ffd6b4687bbfc73edd0e177746d8cefff651a9f13199ac2dd3ca1076b7
   languageName: node
   linkType: hard
 
@@ -1387,9 +1406,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"alwatr-storage@workspace:.":
+"alwatr-store@workspace:.":
   version: 0.0.0-use.local
-  resolution: "alwatr-storage@workspace:."
+  resolution: "alwatr-store@workspace:."
   dependencies:
     "@alwatr/eslint-config": "npm:^1.0.8"
     "@alwatr/prettier-config": "npm:^1.0.4"
@@ -1406,7 +1425,7 @@ __metadata:
     eslint: "npm:^8.56.0"
     eslint-import-resolver-typescript: "npm:^3.6.1"
     eslint-plugin-import: "npm:^2.29.1"
-    prettier: "npm:^3.2.1"
+    prettier: "npm:^3.2.2"
     typescript: "npm:^5.3.3"
   languageName: unknown
   linkType: soft
@@ -3175,7 +3194,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"has-property-descriptors@npm:^1.0.0":
+"has-property-descriptors@npm:^1.0.0, has-property-descriptors@npm:^1.0.1":
   version: 1.0.1
   resolution: "has-property-descriptors@npm:1.0.1"
   dependencies:
@@ -4829,12 +4848,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.2.1":
-  version: 3.2.1
-  resolution: "prettier@npm:3.2.1"
+"prettier@npm:^3.2.2":
+  version: 3.2.2
+  resolution: "prettier@npm:3.2.2"
   bin:
     prettier: bin/prettier.cjs
-  checksum: e01284f25c1e9a96dfaf4f7d0bfdf0726b26afc732b0e645a2653174d4ad5a1e85ae21ec4d327c71536f1acf8fee1dff5ea35c5b4b8e5b83ff00fe1dd6fef146
+  checksum: e84d0d2a4ce2b88ee1636904effbdf68b59da63d9f887128f2ed5382206454185432e7c0a9578bc4308bc25d099cfef47fd0b9c211066777854e23e65e34044d
   languageName: node
   linkType: hard
 
@@ -5166,14 +5185,15 @@ __metadata:
   linkType: hard
 
 "set-function-length@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "set-function-length@npm:1.1.1"
+  version: 1.2.0
+  resolution: "set-function-length@npm:1.2.0"
   dependencies:
     define-data-property: "npm:^1.1.1"
-    get-intrinsic: "npm:^1.2.1"
+    function-bind: "npm:^1.1.2"
+    get-intrinsic: "npm:^1.2.2"
     gopd: "npm:^1.0.1"
-    has-property-descriptors: "npm:^1.0.0"
-  checksum: a29e255c116c29e3323b851c4f46c58c91be9bb8b065f191e2ea1807cb2c839df56e3175732a498e0c6d54626ba6b6fef896bf699feb7ab70c42dc47eb247c95
+    has-property-descriptors: "npm:^1.0.1"
+  checksum: b4fdf68bbfa9944284a9469c04e0d9cdb7924942fab75cd11fb61e8a7518f0d40bbbbc1b46871f648a93b97d170d8047fe3492cdadff066a8a8ae4ce68d0564a
   languageName: node
   linkType: hard
 
@@ -5239,14 +5259,16 @@ __metadata:
   linkType: hard
 
 "sigstore@npm:^2.0.0, sigstore@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "sigstore@npm:2.1.0"
+  version: 2.2.0
+  resolution: "sigstore@npm:2.2.0"
   dependencies:
-    "@sigstore/bundle": "npm:^2.1.0"
+    "@sigstore/bundle": "npm:^2.1.1"
+    "@sigstore/core": "npm:^0.2.0"
     "@sigstore/protobuf-specs": "npm:^0.2.1"
-    "@sigstore/sign": "npm:^2.1.0"
-    "@sigstore/tuf": "npm:^2.1.0"
-  checksum: 44e9ed0ea337f5bb37cf54b065789be4fba4c2f45aa5c1cd19c33eee7bc5683a24df67e45b46698c6192bdf13e85052251ea994c4873c6d86d21392e0cd45618
+    "@sigstore/sign": "npm:^2.2.1"
+    "@sigstore/tuf": "npm:^2.3.0"
+    "@sigstore/verify": "npm:^0.1.0"
+  checksum: 0e4d0f4301ecab3d176b6fc528368a360bb6d9a3916bfd6ed26c3a3e815ac3aa160044eb2024c38270275cdeb1025df3cd3e90af977dd305204510daa0fb0de0
   languageName: node
   linkType: hard
 
@@ -5601,7 +5623,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tuf-js@npm:^2.1.0":
+"tuf-js@npm:^2.2.0":
   version: 2.2.0
   resolution: "tuf-js@npm:2.2.0"
   dependencies:
