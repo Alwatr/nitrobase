@@ -178,7 +178,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [4.0.4](https://github.com/Alwatr/store/compare/v4.0.3...v4.0.4) (2023-12-19)
 
-**Note:** Version bump only for package alwatr-storage
+**Note:** Version bump only for package alwatr-store
 
 ## [4.0.3](https://github.com/Alwatr/store/compare/v4.0.2...v4.0.3) (2023-12-19)
 
@@ -190,7 +190,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [4.0.2](https://github.com/Alwatr/store/compare/v4.0.1...v4.0.2) (2023-11-28)
 
-**Note:** Version bump only for package alwatr-storage
+**Note:** Version bump only for package alwatr-store
 
 ## [4.0.1](https://github.com/Alwatr/store/compare/v4.0.0...v4.0.1) (2023-11-27)
 
