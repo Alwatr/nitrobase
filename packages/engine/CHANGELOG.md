@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.0-alpha.0](https://github.com/Alwatr/store/compare/v5.1.0...v6.0.0-alpha.0) (2024-01-15)
+
+### Miscellaneous Chores
+
+* **deps:** update ([8f3edcf](https://github.com/Alwatr/store/commit/8f3edcf8a489927a6c43dfcaa5db88a579ecac80)) by @
+
 ## [5.1.0](https://github.com/Alwatr/store/compare/v5.0.0...v5.1.0) (2024-01-13)
 
 **Note:** Version bump only for package @alwatr/store-engine
