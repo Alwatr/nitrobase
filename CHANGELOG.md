@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.2.0](https://github.com/Alwatr/storage/compare/v4.1.0...v4.2.0) (2024-01-23)
+
+### Bug Fixes
+
+* **api:** import type ([f47df97](https://github.com/Alwatr/storage/commit/f47df9721b746d1ad4f82b92dcf3bc2418e45092)) by @
+* **nginx:** compatible with old versions ([86ad6de](https://github.com/Alwatr/storage/commit/86ad6de3fe409a8141892bdd3ef0f1c25b732417)) by @AliMD
+
+### Features
+
+* **nginx:** Update nginx base image and cache settings ([62e4176](https://github.com/Alwatr/storage/commit/62e4176f0245ff3ee2c15ce7812a5bcb96399fa2)) by @AliMD
+
 # [4.1.0](https://github.com/Alwatr/storage/compare/v4.0.4...v4.1.0) (2023-12-25)
 
 ### Features

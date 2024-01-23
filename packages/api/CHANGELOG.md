@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.2.0](https://github.com/Alwatr/store/compare/v4.1.0...v4.2.0) (2024-01-23)
+
+### Bug Fixes
+
+* **api:** import type ([f47df97](https://github.com/Alwatr/store/commit/f47df9721b746d1ad4f82b92dcf3bc2418e45092)) by @
+
 # [4.1.0](https://github.com/Alwatr/store/compare/v4.0.4...v4.1.0) (2023-12-25)
 
 **Note:** Version bump only for package @alwatr/storage-api
