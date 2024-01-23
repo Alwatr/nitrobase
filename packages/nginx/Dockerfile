@@ -8,7 +8,7 @@ RUN ls -RlahF /etc/nginx /default-data /data
 
 ENV NGINX_DOCUMENT_ROOT=/storage \
     NGINX_OPEN_FILE_CACHE="max=5000 inactive=8h" \
-    NGINX_OPEN_FILE_CACHE_VALID=500ms \
+    NGINX_OPEN_FILE_CACHE_VALID=1s \
     NGINX_OPEN_FILE_CACHE_MIN_USES=1 \
     NGINX_OUTPUT_BUFFERS="8 8k" \
     NGINX_EXPIRES_DYNAMIC=epoch \
