@@ -1,14 +1,16 @@
-FROM ghcr.io/alwatr/nginx-json:2.2.1
+FROM ghcr.io/alwatr/nginx-json:2.4.1
 
-LABEL org.opencontainers.image.base.name="ghcr.io/alwatr/nginx-json:2.2.1"
+LABEL org.opencontainers.image.base.name="ghcr.io/alwatr/nginx-json:2.4.1"
 
+RUN rm -fv /etc/nginx/templates/location.d/90-home-json.conf.template
 COPY etc/nginx/ /etc/nginx/
-# COPY data/ .
-RUN set -eux; ls -RlahF /etc/nginx /data
+COPY default-data/ /default-data/
+RUN ls -RlahF /etc/nginx /default-data /data
 
-ENV NGINX_OPEN_FILE_CACHE="max=5000 inactive=1h" \
-    NGINX_OPEN_FILE_CACHE_VALID=1s \
-    NGINX_OPEN_FILE_CACHE_MIN_USES=2 \
+ENV NGINX_DOCUMENT_ROOT=/storage \
+    NGINX_OPEN_FILE_CACHE="max=5000 inactive=8h" \
+    NGINX_OPEN_FILE_CACHE_VALID=500ms \
+    NGINX_OPEN_FILE_CACHE_MIN_USES=1 \
     NGINX_OUTPUT_BUFFERS="8 8k" \
     NGINX_EXPIRES_DYNAMIC=epoch \
     NGINX_EXPIRES_STATIC=max \
