@@ -1,8 +1,8 @@
-import {AlwatrDocumentObject, AlwatrStorageMeta} from '@alwatr/type';
-
 import {config, logger} from '../config.js';
 import {nanoServer} from '../lib/nano-server.js';
 import {storageProvider} from '../lib/storage-provider.js';
+
+import type {AlwatrDocumentObject, AlwatrStorageMeta} from '@alwatr/type';
 
 nanoServer.route<Record<string, AlwatrDocumentObject>, AlwatrStorageMeta>('GET', '/storage', (connection) => {
   logger.logMethod?.('getStorage');
