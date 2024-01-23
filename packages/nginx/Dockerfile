@@ -4,7 +4,6 @@ LABEL org.opencontainers.image.base.name="ghcr.io/alwatr/nginx-json:2.4.1"
 
 RUN rm -fv /etc/nginx/templates/location.d/90-home-json.conf.template
 COPY etc/nginx/ /etc/nginx/
-COPY default-data/ /default-data/
 RUN ls -RlahF /etc/nginx /default-data /data
 
 ENV NGINX_DOCUMENT_ROOT=/storage \
