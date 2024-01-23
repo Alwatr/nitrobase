@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.1](https://github.com/Alwatr/storage/compare/v4.2.0...v4.2.1) (2024-01-23)
+
+### Bug Fixes
+
+* **nginx:** NGINX_OPEN_FILE_CACHE_VALID ([eeadcf7](https://github.com/Alwatr/storage/commit/eeadcf7d68481918cadaa83120c9c81d6b0d1341)) by @
+
 # [4.2.0](https://github.com/Alwatr/storage/compare/v4.1.0...v4.2.0) (2024-01-23)
 
 ### Bug Fixes

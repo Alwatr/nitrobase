@@ -1,6 +1,6 @@
 {
   "name": "@alwatr/storage-api",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "description": "Extremely fast and compact JSON-based database that operates in memory, includes a JSON file backup, and serve over the highly accelerated Nginx.",
   "author": "S. Ali Mihandoost <ali.mihandoost@gmail.com>",
   "private": true,
