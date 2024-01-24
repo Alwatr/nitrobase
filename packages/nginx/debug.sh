@@ -80,42 +80,49 @@ function command_request() {
 }
 
 function command_test() {
+  local prefixUri=/api/s6
+
   echoStep "Test..."
-  command_request /api/s5/debug-info-110 --verbose
+  command_request $prefixUri/debug-info-110 --verbose
 
   echoStep "Test Home..."
   command_request /
-  command_request /api/s5/
+  command_request $prefixUri/
 
   echoStep "Test Public..."
-  command_request /api/s5/p/post-list.col.asj
+  command_request $prefixUri/p/post-list.col.asj
 
   echoStep "Test Secret..."
-  command_request /api/s5/.s/.store.col.asj
+  command_request $prefixUri/.s/.store.col.asj
 
   echoStep "Test Authentificated..."
-  command_request /api/s5/a/posts/intro-to-alwatr-store.doc.asj
+  command_request $prefixUri/a/posts/intro-to-alwatr-store.doc.asj
 
   echoStep "Test Managers..."
-  command_request /api/s5/m/user-list.col.asj
+  command_request $prefixUri/m/user-list.col.asj
 
   echoStep "Test PerUser..."
-  command_request /api/s5/u/Ual/Ual1md1/info.doc.asj
-  command_request /api/s5/u/Ual/Ual1md1/404.doc.asj
-  command_request /api/s5/u/Ual/Ual1md2/info.doc.asj
+  command_request $prefixUri/u/Ual/Ual1md1/info.doc.asj
+  command_request $prefixUri/u/Ual/Ual1md1/404.doc.asj
+  command_request $prefixUri/u/Ual/Ual1md2/info.doc.asj
 
   echoStep "Test PerOwner..."
-  command_request /api/s5/o/D3v/D3v1ce1/info.doc.asj
-  command_request /api/s5/o/T0k/T0k3n1/info.doc.asj
+  command_request $prefixUri/o/D3v/D3v1ce1/info.doc.asj
+  command_request $prefixUri/o/T0k/T0k3n1/info.doc.asj
 
   echoStep "Test Other..."
-  command_request /api/s5/test.json
-  command_request /api/s5/p/post-list.col.asj.bak
+  command_request $prefixUri/test.json
+  command_request $prefixUri/p/post-list.col.asj.bak
 }
 
 function command_exec() {
   echoStep "Execute... $@"
   remoteShellInPath "docker exec --interactive --tty $containerName $@"
+}
+
+function command_ps() {
+  echoStep "PS... $@"
+  remoteShellInPath "docker ps --filter 'name=$containerName'"
 }
 
 function command_help() {
@@ -133,6 +140,7 @@ function command_help() {
     rm     Down and remove containers and delete all files.
     exec   Execute a command in a running container.
     test   Execute tests requests.
+    ps     Show docker status.
     docker Direct access to docker.
   "
 }
