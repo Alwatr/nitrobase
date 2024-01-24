@@ -2,6 +2,8 @@ FROM ghcr.io/alwatr/nginx-json:2.4.1
 
 LABEL org.opencontainers.image.base.name="ghcr.io/alwatr/nginx-json:2.4.1"
 
+HEALTHCHECK --interval=30s --timeout=3s --start-period=1s --retries=3 CMD curl -fso /dev/null --header 'authorization: Alwatr healthcheck:healthcheck' http://localhost/server-info || exit 1
+
 RUN rm -fv /etc/nginx/templates/location.d/90-home-json.conf.template
 COPY etc/nginx/ /etc/nginx/
 COPY default-data/ /default-data/
