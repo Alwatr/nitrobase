@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.0](https://github.com/Alwatr/store/compare/v6.0.0-alpha.0...v6.0.0) (2024-01-24)
+
+### Features
+
+* Enhance types, add Jsonifiable type and update method signatures ([57502d2](https://github.com/Alwatr/store/commit/57502d230f0c9cb88aa9a9e71a3460f1219955b0)) by @AliMD
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump the development-dependencies group with 4 updates ([7d71044](https://github.com/Alwatr/store/commit/7d71044165583f9d56fb61a05bdf51ccb104f422)) by @dependabot[bot]
+* **deps:** bump alwatr/nginx-json in /packages/nginx ([485b9a4](https://github.com/Alwatr/store/commit/485b9a4b934bb6857a15b6acb47b45f522478c84)) by @dependabot[bot]
+* **deps:** bump the alwatr-dependencies group with 10 updates ([cc42e89](https://github.com/Alwatr/store/commit/cc42e895179c53ee2dd60802d994ba84f5a37fde)) by @dependabot[bot]
+* **deps:** bump the github-actions group with 2 updates ([68a76f8](https://github.com/Alwatr/store/commit/68a76f898bd78430133efba6113ffd267cf5fdff)) by @dependabot[bot]
+* **deps:** update ([0e85743](https://github.com/Alwatr/store/commit/0e85743f76f0efdd0f6cd4001eebc4550b43f43f)) by @AliMD
+* **deps:** update ([a894bfc](https://github.com/Alwatr/store/commit/a894bfc62124a3eb027cad4e8d1c974761e22dad)) by @AliMD
+* enhance lint script ([9a11060](https://github.com/Alwatr/store/commit/9a11060ddb870d1529e4e2be64fc60d19a9348e5)) by @AliMD
+* **nginx:** update dockerfile labels ([80555c8](https://github.com/Alwatr/store/commit/80555c846ff6158cee0658aba016c8eda30b72f7)) by @AliMD
+
 ## [6.0.0-alpha.0](https://github.com/Alwatr/store/compare/v5.1.0...v6.0.0-alpha.0) (2024-01-15)
 
 ### ⚠ BREAKING CHANGES

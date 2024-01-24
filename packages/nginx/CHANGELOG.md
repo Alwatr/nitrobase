@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.0](https://github.com/Alwatr/store/compare/v6.0.0-alpha.0...v6.0.0) (2024-01-24)
+
+### Miscellaneous Chores
+
+* **deps:** bump alwatr/nginx-json in /packages/nginx ([485b9a4](https://github.com/Alwatr/store/commit/485b9a4b934bb6857a15b6acb47b45f522478c84)) by @dependabot[bot]
+* **nginx:** update dockerfile labels ([80555c8](https://github.com/Alwatr/store/commit/80555c846ff6158cee0658aba016c8eda30b72f7)) by @AliMD
+
 ## [6.0.0-alpha.0](https://github.com/Alwatr/store/compare/v5.1.0...v6.0.0-alpha.0) (2024-01-15)
 
 ### ⚠ BREAKING CHANGES
