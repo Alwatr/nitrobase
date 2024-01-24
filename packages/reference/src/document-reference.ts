@@ -5,7 +5,7 @@ import {waitForImmediate, waitForTimeout} from '@alwatr/wait';
 import {logger} from './logger';
 import {getStoreId, getStorePath} from './util';
 
-import type {Dictionary} from '@alwatr/type-helper';
+import type {JsonifiableObject} from '@alwatr/type-helper';
 
 logger.logModule?.('document-reference');
 
@@ -13,7 +13,7 @@ logger.logModule?.('document-reference');
  * Represents a reference to a document of the AlwatrStore.
  * Provides methods to interact with the document, such as get, set, update and save.
  */
-export class DocumentReference<TDoc extends Dictionary = Dictionary> {
+export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObject> {
   /**
    * Alwatr store engine version string.
    */
@@ -33,7 +33,7 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
    * @template TDoc The document data type.
    * @returns A new document reference class.
    */
-  static newRefFromData<TDoc extends Dictionary>(
+  static newRefFromData<TDoc extends JsonifiableObject>(
     statId: StoreFileId,
     initialData: TDoc,
     updatedCallback: (from: DocumentReference<TDoc>) => unknown,
@@ -68,7 +68,7 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
    * @template TDoc The document data type.
    * @returns A new document reference class.
    */
-  static newRefFromContext<TDoc extends Dictionary>(
+  static newRefFromContext<TDoc extends JsonifiableObject>(
     context: DocumentContext<TDoc>,
     updatedCallback: (from: DocumentReference<TDoc>) => unknown,
     debugDomain?: string,
@@ -82,7 +82,7 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
    *
    * @param context document context
    */
-  private static validateContext__(context: DocumentContext<Dictionary>): void {
+  private static validateContext__(context: DocumentContext<JsonifiableObject>): void {
     logger.logMethodArgs?.('doc.validateContext__', {name: context.meta?.name});
 
     if (context.ok !== true) {
@@ -115,7 +115,7 @@ export class DocumentReference<TDoc extends Dictionary = Dictionary> {
    *
    * @param context document context
    */
-  private static migrateContext__(context: DocumentContext<Dictionary>): void {
+  private static migrateContext__(context: DocumentContext<JsonifiableObject>): void {
     if (context.meta.ver === DocumentReference.version) return;
 
     logger.logMethodArgs?.('doc.migrateContext__', {

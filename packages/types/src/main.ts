@@ -1,7 +1,7 @@
 import {definePackage} from '@alwatr/dedupe';
 
 import type {} from '@alwatr/nano-build';
-import type {Dictionary} from '@alwatr/type-helper';
+import type {Dictionary, JsonifiableObject} from '@alwatr/type-helper';
 
 definePackage('@alwatr/store-types', __package_version__);
 
@@ -77,9 +77,7 @@ export enum StoreFileExtension {
  *
  * Get from user for select store file.
  */
-export interface StoreFileId {
-  [P: string]: unknown;
-
+export type StoreFileId = {
   /**
    * The store filename.
    */
@@ -98,12 +96,12 @@ export interface StoreFileId {
    *
    */
   readonly ownerId?: string;
-}
+};
 
 /**
  * Store the complete metadata of the file in the root database.
  */
-export interface StoreFileStat extends StoreFileId {
+export type StoreFileStat = StoreFileId & {
   /**
    * The type of the store file.
    *
@@ -130,12 +128,12 @@ export interface StoreFileStat extends StoreFileId {
    * The time-to-live (TTL) of the store file in memory.
    */
   // readonly ttl?: number;
-}
+};
 
 /**
  * Represents the metadata of a store file.
  */
-export interface StoreFileMeta extends StoreFileStat {
+export type StoreFileMeta = StoreFileStat & {
   /**
    * The AlwatrStore engine version.
    */
@@ -154,26 +152,28 @@ export interface StoreFileMeta extends StoreFileStat {
   rev: number;
 
   /**
+   * The Unix timestamp (in milliseconds since the epoch) for when the store file was created.
+   */
+  readonly created: number;
+
+  /**
    * The Unix timestamp (in milliseconds since the epoch) for when the store file was updated.
    */
   updated: number;
 
   /**
-   * The Unix timestamp (in milliseconds since the epoch) for when the store file was created.
-   */
-  created: number;
-
-  /**
    * Last auto increment id.
    */
   lastAutoId?: number;
-}
+};
+
+export type StoreFileData<T extends JsonifiableObject = JsonifiableObject> = T;
 
 /**
  * Represents the context of a store file.
  * @template TData The type of the data content in the store file.
  */
-export interface StoreFileContext<TData extends Dictionary<unknown> = Dictionary<unknown>> {
+export type StoreFileContext<TData extends JsonifiableObject = JsonifiableObject> = {
   /**
    * The status of the store file.
    *
@@ -191,7 +191,7 @@ export interface StoreFileContext<TData extends Dictionary<unknown> = Dictionary
    * The data content of the store file.
    */
   readonly data: TData;
-}
+};
 
 /**
  * Store file meta only content type.
@@ -203,25 +203,23 @@ export type StoreFileMetaOnlyContext = Omit<StoreFileContext<never>, 'data'>;
 /**
  * StoreFileContext for document type.
  */
-export type DocumentContext<TDoc extends Dictionary<unknown> = Dictionary<unknown>> = StoreFileContext<TDoc>;
+export type DocumentContext<T extends JsonifiableObject = JsonifiableObject> = StoreFileContext<T>;
 
 // *** Collections ***
 
 /**
  * The metadata of an item in a collection.
  */
-export interface CollectionItemMeta {
+export type CollectionItemMeta = {
   /**
    * The unique identifier for the collection item.
    */
   readonly id: string | number;
 
   /**
-   * The revision number for the collection item.
-   *
-   * This number is incremented each time the item is updated.
+   * The Unix timestamp (in milliseconds since the epoch) for when the collection item was created.
    */
-  rev: number;
+  readonly created: number;
 
   /**
    * The Unix timestamp (in milliseconds since the epoch) for when the collection item was updated.
@@ -229,15 +227,17 @@ export interface CollectionItemMeta {
   updated: number;
 
   /**
-   * The Unix timestamp (in milliseconds since the epoch) for when the collection item was created.
+   * The revision number for the collection item.
+   *
+   * This number is incremented each time the item is updated.
    */
-  created: number;
-}
+  rev: number;
+};
 
 /**
  * Collection item context type.
  */
-export interface CollectionItem<TItem> {
+export type CollectionItem<TData extends JsonifiableObject = JsonifiableObject> = {
   /**
    * Collection item's metadata.
    */
@@ -246,12 +246,10 @@ export interface CollectionItem<TItem> {
   /**
    * Collection item data.
    */
-  readonly data: TItem;
-}
+  readonly data: TData;
+};
 
 /**
  * Collection item context type.
  */
-export type CollectionContext<TItem extends Dictionary<unknown> = Dictionary<unknown>> = StoreFileContext<
-  Dictionary<CollectionItem<TItem>>
->;
+export type CollectionContext<T extends JsonifiableObject = JsonifiableObject> = StoreFileContext<Dictionary<CollectionItem<T>>>;

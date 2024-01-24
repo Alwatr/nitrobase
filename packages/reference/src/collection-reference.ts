@@ -13,7 +13,7 @@ import {waitForImmediate, waitForTimeout} from '@alwatr/wait';
 import {logger} from './logger';
 import {getStoreId, getStorePath} from './util';
 
-import type {Dictionary} from '@alwatr/type-helper';
+import type {JsonifiableObject} from '@alwatr/type-helper';
 
 logger.logModule?.('collection-reference');
 
@@ -23,7 +23,7 @@ logger.logModule?.('collection-reference');
  *
  * @template TItem - The data type of the collection items.
  */
-export class CollectionReference<TItem extends Dictionary = Dictionary> {
+export class CollectionReference<TItem extends JsonifiableObject = JsonifiableObject> {
   /**
    * Alwatr store engine version string.
    */
@@ -43,7 +43,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * @template TItem The collection item data type.
    * @returns A new collection reference class.
    */
-  static newRefFromData<TItem extends Dictionary>(
+  static newRefFromData<TItem extends JsonifiableObject>(
     stat: StoreFileId,
     initialData: CollectionContext<TItem>['data'] | null,
     updatedCallback: (from: CollectionReference<TItem>) => void,
@@ -79,7 +79,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    * @template TItem The collection item data type.
    * @returns A new collection reference class.
    */
-  static newRefFromContext<TItem extends Dictionary>(
+  static newRefFromContext<TItem extends JsonifiableObject>(
     context: CollectionContext<TItem>,
     updatedCallback: (from: CollectionReference<TItem>) => void,
     debugDomain?: string,
@@ -93,7 +93,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    *
    * @param context collection context
    */
-  private static validateContext__(context: CollectionContext<Dictionary>): void {
+  private static validateContext__(context: CollectionContext<JsonifiableObject>): void {
     logger.logMethodArgs?.('col.validateContext__', {name: context.meta?.name});
 
     if (context.ok !== true) {
@@ -126,7 +126,7 @@ export class CollectionReference<TItem extends Dictionary = Dictionary> {
    *
    * @param context collection context
    */
-  private static migrateContext__(context: CollectionContext<Dictionary>): void {
+  private static migrateContext__(context: CollectionContext<JsonifiableObject>): void {
     if (context.meta.ver === CollectionReference.version) return;
 
     logger.logMethodArgs?.('coll.migrateContext__', {

@@ -15,7 +15,7 @@ import {waitForTimeout} from '@alwatr/wait';
 
 import {logger} from './logger.js';
 
-import type {Dictionary} from '@alwatr/type-helper';
+import type {Dictionary, JsonifiableObject} from '@alwatr/type-helper';
 
 logger.logModule?.('alwatr-store');
 
@@ -139,7 +139,7 @@ export class AlwatrStore {
    * });
    * ```
    */
-  defineStoreFile<T extends Dictionary<unknown> = Dictionary<unknown>>(
+  defineStoreFile<T extends JsonifiableObject = JsonifiableObject>(
     stat: StoreFileStat,
     initialData: DocumentContext<T>['data'] | CollectionContext<T>['data'] | null = null,
   ): void {
@@ -186,7 +186,7 @@ export class AlwatrStore {
    * doc.update({name: 'ali'});
    * ```
    */
-  async doc<TDoc extends Dictionary<unknown>>(id: StoreFileId): Promise<DocumentReference<TDoc>> {
+  async doc<TDoc extends JsonifiableObject>(id: StoreFileId): Promise<DocumentReference<TDoc>> {
     const id_ = getStoreId(id);
     logger.logMethodArgs?.('doc', id_);
 
@@ -230,7 +230,7 @@ export class AlwatrStore {
    * collection.add({name: 'order 1'});
    * ```
    */
-  async collection<TItem extends Dictionary<unknown>>(id: StoreFileId): Promise<CollectionReference<TItem>> {
+  async collection<TItem extends JsonifiableObject>(id: StoreFileId): Promise<CollectionReference<TItem>> {
     const id_ = getStoreId(id);
     logger.logMethodArgs?.('collection', id_);
 
@@ -378,7 +378,7 @@ export class AlwatrStore {
    * @param context The store file context. If not provided, it will be loaded from memory.
    * @param sync If true, the file will be written synchronously.
    */
-  protected async storeChanged__<T extends Dictionary<unknown>>(from: DocumentReference<T> | CollectionReference<T>): Promise<void> {
+  protected async storeChanged__<T extends JsonifiableObject>(from: DocumentReference<T> | CollectionReference<T>): Promise<void> {
     logger.logMethodArgs?.('storeChanged__', from.id);
     const rev = from.meta().rev;
     try {

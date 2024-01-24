@@ -51,6 +51,7 @@
     "Alwatr",
     "Deno",
     "flatomise",
+    "Jsonifiable",
     "nanolib",
     "outdir",
     "outfile",
