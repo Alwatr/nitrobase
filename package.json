@@ -44,13 +44,13 @@
     "@lerna-lite/publish": "^3.2.1",
     "@lerna-lite/run": "^3.2.1",
     "@lerna-lite/version": "^3.2.1",
-    "@typescript-eslint/eslint-plugin": "^6.18.1",
-    "@typescript-eslint/parser": "^6.18.1",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
     "conventional-changelog-conventionalcommits": "^7.0.2",
     "eslint": "^8.56.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
-    "prettier": "^3.2.2",
+    "prettier": "^3.2.4",
     "typescript": "^5.3.3"
   },
   "packageManager": "yarn@4.0.2"
