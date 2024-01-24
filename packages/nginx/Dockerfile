@@ -1,6 +1,6 @@
-FROM ghcr.io/alwatr/nginx-json:2.3.2
+FROM ghcr.io/alwatr/nginx-json:2.4.1
 
-LABEL org.opencontainers.image.base.name="ghcr.io/alwatr/nginx-json:2.3.2"
+LABEL org.opencontainers.image.base.name="ghcr.io/alwatr/nginx-json:2.4.1"
 
 RUN rm -fv /etc/nginx/templates/location.d/90-home-json.conf.template
 COPY etc/nginx/ /etc/nginx/
