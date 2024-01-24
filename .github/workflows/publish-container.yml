@@ -64,7 +64,7 @@ jobs:
 
       - name: 🏗 Cache Docker Layers
         if: ${{ steps.file_change.outputs.container_folder != 'false' }}
-        uses: actions/cache@v3.3.3
+        uses: actions/cache@v4.0.0
         with:
           path: /tmp/.buildx-cache
           key: container/${{ matrix.name }}
