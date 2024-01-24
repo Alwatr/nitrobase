@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.1](https://github.com/Alwatr/store/compare/v6.0.0...v6.0.1) (2024-01-24)
+
+### Bug Fixes
+
+* **nginx/debug:** Add prefixUri variable to command_test function and add ps command ([ae165f8](https://github.com/Alwatr/store/commit/ae165f8b7f1a6d60ec4d220e20f2e594618d6447)) by @
+* **nginx:** docker HEALTHCHECK ([34f61c0](https://github.com/Alwatr/store/commit/34f61c0079730be6c8aa972df748e53ee81f8e62)) by @
+
 ## [6.0.0](https://github.com/Alwatr/store/compare/v6.0.0-alpha.0...v6.0.0) (2024-01-24)
 
 ### Features
