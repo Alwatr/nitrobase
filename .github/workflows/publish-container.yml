@@ -48,7 +48,7 @@ jobs:
       - name: ❔ Check Container files changed
         id: file_change
         if: ${{ github.event_name != 'release' && github.event_name != 'workflow_dispatch' }}
-        uses: dorny/paths-filter@v2.11.1
+        uses: dorny/paths-filter@v2.12.0
         with:
           filters: |
             container_folder:
