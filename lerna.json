@@ -77,7 +77,7 @@
       "ignoreChanges": [
         "*.md"
       ],
-      "skipBumpOnlyReleases": true,
+      "skipBumpOnlyReleases": false,
       "message": "release:",
       "private": true,
       "forceGitTag": true,
