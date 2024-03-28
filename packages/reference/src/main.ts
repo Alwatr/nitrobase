@@ -1,3 +1,3 @@
-export * from './collection-reference';
-export * from './document-reference';
-export * from './util';
+export * from './collection-reference.js';
+export * from './document-reference.js';
+export * from './util.js';

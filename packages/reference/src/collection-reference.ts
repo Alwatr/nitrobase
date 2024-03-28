@@ -10,8 +10,8 @@ import {
 } from '@alwatr/store-types';
 import {waitForImmediate, waitForTimeout} from '@alwatr/wait';
 
-import {logger} from './logger';
-import {getStoreId, getStorePath} from './util';
+import {logger} from './logger.js';
+import {getStoreId, getStorePath} from './util.js';
 
 import type {JsonifiableObject} from '@alwatr/type-helper';
 
