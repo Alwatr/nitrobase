@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.3](https://github.com/Alwatr/store/compare/v6.0.2...v6.0.3) (2024-03-28)
+
+### Bug Fixes
+
+* prevent skipBumpOnlyReleases ([61fe232](https://github.com/Alwatr/store/commit/61fe232330517dc5e56b73eda3e8de003f44d6db)) by @AliMD
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump the development-dependencies group with 13 updates ([23fb121](https://github.com/Alwatr/store/commit/23fb1217470593d386b658f2a1d85fe4ef6e55df)) by @dependabot[bot]
+* **deps:** bump ip from 2.0.0 to 2.0.1 ([e4b6d52](https://github.com/Alwatr/store/commit/e4b6d526c572481232657161e59b4dcf06fc5719)) by @dependabot[bot]
+* **deps:** bump the alwatr-dependencies group with 10 updates ([ce6ee74](https://github.com/Alwatr/store/commit/ce6ee7495aaa67a8d3bb0a3f2b2ea8389e161552)) by @dependabot[bot]
+* **deps:** bump the alwatr-dependencies group with 9 updates ([686e155](https://github.com/Alwatr/store/commit/686e155d4c0ccab6daf81d280cf91299152b8583)) by @dependabot[bot]
+* **deps:** bump the github-actions group with 11 updates ([3c94246](https://github.com/Alwatr/store/commit/3c9424678d6b1620d8141d328f3433f4d7a95f4d)) by @dependabot[bot]
+* **deps:** update ([1062274](https://github.com/Alwatr/store/commit/106227448a27524eb1ad07184b3e67eb5e599b31)) by @
+
 ## [6.0.2](https://github.com/Alwatr/store/compare/v6.0.1...v6.0.2) (2024-02-09)
 
 ### Performance Improvements
