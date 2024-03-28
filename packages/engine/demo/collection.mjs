@@ -15,7 +15,7 @@ async function quickstart() {
   const postsCollectionId = {
     name: 'post',
     region: Region.PerUser,
-    ownerId: 'user_123'
+    ownerId: 'user_123',
   };
 
   logger.logProperty?.('collectionId', postsCollectionId);

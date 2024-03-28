@@ -2,9 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/lerna-lite/lerna-lite/main/packages/cli/schemas/lerna-schema.json",
   "version": "6.0.2",
   "npmClient": "yarn",
-  "packages": [
-    "packages/*"
-  ],
+  "packages": ["packages/*"],
   "loglevel": "verbose",
   "command": {
     "version": {
@@ -74,9 +72,7 @@
         ]
       },
       "changelogIncludeCommitsClientLogin": " by @%l",
-      "ignoreChanges": [
-        "*.md"
-      ],
+      "ignoreChanges": ["*.md"],
       "skipBumpOnlyReleases": false,
       "message": "release:",
       "private": true,

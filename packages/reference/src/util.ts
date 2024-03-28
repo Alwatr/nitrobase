@@ -1,8 +1,5 @@
 import {flatString} from '@alwatr/flat-string';
-import {
-  type StoreFileId,
-  type StoreFileStat,
-} from '@alwatr/store-types';
+import {type StoreFileId, type StoreFileStat} from '@alwatr/store-types';
 
 /**
  * Convert StoreFileId to a string ID.

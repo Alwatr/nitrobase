@@ -41,13 +41,12 @@ function insertData() {
     age: Math.floor(Math.random() * 80) + 10,
   });
 
-
   console.log('Collection: %s, itemId:', collection.id, itemId);
 
   itemId = list[0].append({
     name: (Math.random() * 10000).toString(36),
     age: 15,
-  })
+  });
 
   console.log('Collection0, itemId:', itemId);
 

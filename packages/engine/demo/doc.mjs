@@ -25,14 +25,17 @@ async function quickstart() {
 
   if (!exists) {
     // Define a new document store file.
-    alwatrStore.defineStoreFile({
-      ...docId,
-      type: StoreFileType.Document,
-      extension: StoreFileExtension.Json,
-    }, {
-      title: 'new title',
-      body: '',
-    });
+    alwatrStore.defineStoreFile(
+      {
+        ...docId,
+        type: StoreFileType.Document,
+        extension: StoreFileExtension.Json,
+      },
+      {
+        title: 'new title',
+        body: '',
+      },
+    );
   }
 
   // Create new document reference of specific id.
