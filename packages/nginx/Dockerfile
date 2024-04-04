@@ -1,4 +1,4 @@
-FROM ghcr.io/alwatr/nginx-json:2.4.2
+FROM ghcr.io/alwatr/nginx-json:2.5.0
 
 LABEL org.opencontainers.image.base.name="ghcr.io/alwatr/nginx-json:2.4.2"
 
