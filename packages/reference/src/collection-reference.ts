@@ -308,13 +308,16 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
       this.logger__.accident('create', 'collection_item_exist', {id});
       throw new Error('collection_item_exist', {cause: {id}});
     }
+
+    const now = Date.now();
+
     this.context__.data[id] = {
       meta: {
         id,
         // other prop calc in updateMeta__
         rev: 0,
-        created: 0,
-        updated: 0,
+        created: now,
+        updated: now,
       },
       data,
     };
