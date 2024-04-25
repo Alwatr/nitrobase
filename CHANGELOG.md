@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.4](https://github.com/Alwatr/store/compare/v6.0.3...v6.0.4) (2024-04-25)
+
+### Bug Fixes
+
+* **refrence:** set created meta to now ([9cacc0f](https://github.com/Alwatr/store/commit/9cacc0fc84743ccbb5a8a2581963545bb493c2bb)) by @njfamirm
+
+### Miscellaneous Chores
+
+* **deps:** bump alwatr/nginx-json in /packages/nginx ([ae24e49](https://github.com/Alwatr/store/commit/ae24e49b1a1d183f7e331b72e8d077cbd14484b2)) by @dependabot[bot]
+* **deps:** bump the github-actions group across 1 directory with 5 updates ([b051cd5](https://github.com/Alwatr/store/commit/b051cd515060502f1a101a9c0cc22ec030fb8435)) by @dependabot[bot]
+* **nginx:** update labels ([4b15d23](https://github.com/Alwatr/store/commit/4b15d23aea3383cfd97356437411642f93ebd270)) by @AliMD
+
 ## [6.0.3](https://github.com/Alwatr/store/compare/v6.0.2...v6.0.3) (2024-03-28)
 
 ### Bug Fixes
