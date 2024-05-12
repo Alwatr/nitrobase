@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.5](https://github.com/Alwatr/store/compare/v6.0.4...v6.0.5) (2024-05-12)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump the development-dependencies group across 1 directory with 3 updates ([f97552d](https://github.com/Alwatr/store/commit/f97552d0e8e85bc2e2f0863da17502b8e55799e8)) by @dependabot[bot]
+* **deps:** bump the alwatr-dependencies group with 8 updates ([1aa95ca](https://github.com/Alwatr/store/commit/1aa95ca232a7b706eda4b0eb537316d38b27aa28)) by @dependabot[bot]
+* **deps:** bump the github-actions group across 1 directory with 3 updates ([e34096c](https://github.com/Alwatr/store/commit/e34096c56e7fc0af3402575b0c2d7433d3b648ef)) by @dependabot[bot]
+* **lerna:** update ([ab51222](https://github.com/Alwatr/store/commit/ab51222ce7dac522fb4880ef44cd96046e6664ac)) by @
+
+### Dependencies update
+
+* upd ([8529591](https://github.com/Alwatr/store/commit/852959178c4e4c71938dd2a1011d3e9cc3995c21)) by @
+
 ## [6.0.4](https://github.com/Alwatr/store/compare/v6.0.3...v6.0.4) (2024-04-25)
 
 ### Bug Fixes
