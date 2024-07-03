@@ -332,7 +332,7 @@ export class AlwatrStore {
   async saveAll(): Promise<void> {
     logger.logMethod?.('saveAll');
     for (const ref of Object.values(this.cacheReferences__)) {
-      if (ref.hasUnprocessedChanges_ === true) {
+      if (ref.hasUnprocessedChanges_ === true && ref.freeze !== true) {
         ref.updateDelayed_ = false;
         await this.storeChanged__(ref);
       }
@@ -419,7 +419,7 @@ export class AlwatrStore {
     logger.logMethod?.('exitHook__');
     for (const ref of Object.values(this.cacheReferences__)) {
       logger.logProperty?.(`StoreFile.${ref.id}.hasUnprocessedChanges`, ref.hasUnprocessedChanges_);
-      if (ref.hasUnprocessedChanges_ === true) {
+      if (ref.hasUnprocessedChanges_ === true && ref.freeze !== true) {
         logger.incident?.('exitHook__', 'rescue_unsaved_context', {id: ref.id});
         writeJson(resolve(this.config__.rootPath, ref.path), ref.getFullContext_(), true);
         ref.hasUnprocessedChanges_ = false;
