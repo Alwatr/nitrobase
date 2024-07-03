@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.1.0](https://github.com/Alwatr/store/compare/v6.0.5...v6.1.0) (2024-07-03)
+
+### Features
+
+* schema version ([2590674](https://github.com/Alwatr/store/commit/259067435512b71f1f0aaea07566441cbb85e539)) by @AliMD
+
+### Miscellaneous Chores
+
+* **deps:** bump braces from 3.0.2 to 3.0.3 ([29ed0af](https://github.com/Alwatr/store/commit/29ed0af0c2a1711c75cebc395798d63ad81d940f)) by @dependabot[bot]
+* **deps:** bump the github-actions group across 1 directory with 5 updates ([3bc05c8](https://github.com/Alwatr/store/commit/3bc05c84c4559a4a33932786ef96797d1651f624)) by @dependabot[bot]
+
+### Dependencies update
+
+* bump the development-dependencies ([546ca1b](https://github.com/Alwatr/store/commit/546ca1be049090eb3c8304fcb75e98ac0b984510)) by @AliMD
+
 ## [6.0.5](https://github.com/Alwatr/store/compare/v6.0.4...v6.0.5) (2024-05-12)
 
 ### Miscellaneous Chores

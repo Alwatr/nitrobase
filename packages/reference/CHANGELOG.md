@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.1.0](https://github.com/Alwatr/store/compare/v6.0.5...v6.1.0) (2024-07-03)
+
+### Features
+
+* schema version ([2590674](https://github.com/Alwatr/store/commit/259067435512b71f1f0aaea07566441cbb85e539)) by @AliMD
+
+### Dependencies update
+
+* bump the development-dependencies ([546ca1b](https://github.com/Alwatr/store/commit/546ca1be049090eb3c8304fcb75e98ac0b984510)) by @AliMD
+
 ## [6.0.5](https://github.com/Alwatr/store/compare/v6.0.4...v6.0.5) (2024-05-12)
 
 ### Miscellaneous Chores
