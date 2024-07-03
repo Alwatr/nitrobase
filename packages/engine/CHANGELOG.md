@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.2.0](https://github.com/Alwatr/store/compare/v6.1.0...v6.2.0) (2024-07-03)
+
+### Features
+
+* Add freeze property to CollectionReference and DocumentReference ([af1d7e4](https://github.com/Alwatr/store/commit/af1d7e47b3217d4e361a63d9eb9c410e04ea9385)) by @AliMD
+
 ## [6.1.0](https://github.com/Alwatr/store/compare/v6.0.5...v6.1.0) (2024-07-03)
 
 ### Dependencies update

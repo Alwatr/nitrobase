@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.2.0](https://github.com/Alwatr/store/compare/v6.1.0...v6.2.0) (2024-07-03)
+
+### Features
+
+* Add freeze property to CollectionReference and DocumentReference ([af1d7e4](https://github.com/Alwatr/store/commit/af1d7e47b3217d4e361a63d9eb9c410e04ea9385)) by @AliMD
+* Add freeze property to CollectionReference and DocumentReference ([beeb378](https://github.com/Alwatr/store/commit/beeb37884f5798c3c3b6612dc0626c8cf9c44676)) by @AliMD
+* Add saveImmediate method to CollectionReference and DocumentReference ([aa5ab87](https://github.com/Alwatr/store/commit/aa5ab871a5157dd70d55768843aeeab521258a49)) by @AliMD
+* **schemaVer:** log schema version changes ([6a5bc90](https://github.com/Alwatr/store/commit/6a5bc9089cd509be141e1d9ee10f2cedc5490925)) by @AliMD
+
+### Bug Fixes
+
+* **schemaVer:** save after change schema version ([99cf345](https://github.com/Alwatr/store/commit/99cf345cfe34edef4f8af2c83157b894f9fb0be0)) by @AliMD
+
 ## [6.1.0](https://github.com/Alwatr/store/compare/v6.0.5...v6.1.0) (2024-07-03)
 
 ### Features
