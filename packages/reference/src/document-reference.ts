@@ -22,7 +22,7 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
   /**
    * Alwatr store engine file format version number.
    */
-  static readonly fileFormatVersion = 1;
+  static readonly fileFormatVersion = 2;
 
   /**
    * Creates new DocumentReference instance from stat and initial data.
@@ -53,6 +53,7 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
         extension: StoreFileExtension.Json,
         ver: DocumentReference.version,
         fv: DocumentReference.fileFormatVersion,
+        schemaVer: 1
       },
       data: initialData,
     };
@@ -128,6 +129,14 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
       logger.accident('doc.migrateContext__', 'store_version_incompatible', context.meta);
       throw new Error('store_version_incompatible', {cause: context.meta});
     }
+
+    if (context.meta.fv === 1) {
+      // migrate from v1 to v2
+      context.meta.schemaVer = 0;
+      context.meta.fv = 2;
+    }
+
+    context.meta.ver = DocumentReference.version;
   }
 
   /**
@@ -172,6 +181,22 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
     this.logger__ = createLogger(`doc:${debugDomain}`);
 
     this.logger__.logMethodArgs?.('new', {path: this.path});
+  }
+
+  /**
+   * get store schema version
+   *
+   * @returns store schema version
+   */
+  get schemaVer(): number {
+    return this.context__.meta.schemaVer;
+  }
+
+  /**
+   * set store schema version for migrate
+   */
+  set schemaVer(ver: number) {
+    this.context__.meta.schemaVer = ver;
   }
 
   /**
