@@ -184,7 +184,7 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
   }
 
   /**
-   * get store schema version
+   * Get store schema version
    *
    * @returns store schema version
    */
@@ -193,9 +193,10 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
   }
 
   /**
-   * set store schema version for migrate
+   * Set store schema version for migrate
    */
   set schemaVer(ver: number) {
+    this.logger__.logMethodArgs?.('set schemaVer', {old: this.context__.meta.schemaVer, new: ver});
     this.context__.meta.schemaVer = ver;
     this.save();
   }
