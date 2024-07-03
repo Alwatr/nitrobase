@@ -213,6 +213,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    */
   set schemaVer(ver: number) {
     this.context__.meta.schemaVer = ver;
+    this.save();
   }
 
   /**
