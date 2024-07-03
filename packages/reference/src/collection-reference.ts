@@ -32,7 +32,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   /**
    * Alwatr store engine file format version number.
    */
-  static readonly fileFormatVersion = 1;
+  static readonly fileFormatVersion = 2;
 
   /**
    * Creates new CollectionReference instance from stat.
@@ -64,6 +64,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
         extension: StoreFileExtension.Json,
         ver: CollectionReference.version,
         fv: CollectionReference.fileFormatVersion,
+        schemaVer: 1
       },
       data: initialData ?? {},
     };
@@ -140,7 +141,11 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
       throw new Error('store_version_incompatible', {cause: context.meta});
     }
 
-    // if (context.meta.fv === 1) migrate_to_2
+    if (context.meta.fv === 1) {
+      // migrate from v1 to v2
+      context.meta.schemaVer = 0;
+      context.meta.fv = 2;
+    }
 
     context.meta.ver = CollectionReference.version;
   }
@@ -192,6 +197,22 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     this.logger__ = createLogger(`col:${debugDomain}`);
 
     this.logger__.logMethodArgs?.('new', {id: this.id});
+  }
+
+  /**
+   * get store schema version
+   *
+   * @returns store schema version
+   */
+  get schemaVer(): number {
+    return this.context__.meta.schemaVer;
+  }
+
+  /**
+   * set store schema version for migrate
+   */
+  set schemaVer(ver: number) {
+    this.context__.meta.schemaVer = ver;
   }
 
   /**

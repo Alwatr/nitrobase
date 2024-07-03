@@ -140,6 +140,12 @@ export type StoreFileMeta = StoreFileStat & {
   ver: string;
 
   /**
+   * The schema version for easy migration by user.
+   * default is `0` for old migrate data an `1` for new define storage.
+   */
+  schemaVer: number;
+
+  /**
    * Store file format version.
    */
   fv: number;
