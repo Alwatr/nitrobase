@@ -268,18 +268,39 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
    * Requests the Alwatr Store to save the document.
    * Saving may take some time in Alwatr Store due to the use of throttling.
    *
-   * @param withDebounce Indicates whether to use the Alwatr Store's debounce delay.
-   *
    * @example
    * ```typescript
    * documentRef.save();
    * ```
    */
-  save(withDebounce = false): void {
-    this.logger__.logMethodArgs?.('save', withDebounce);
-    this.updated__(!withDebounce);
+  save(): void {
+    this.logger__.logMethod?.('save');
+    this.updated__(false);
   }
 
+  /**
+   * Requests the Alwatr Store to save the document immediately.
+   *
+   * @example
+   * ```typescript
+   * documentRef.saveImmediate();
+   * ```
+   */
+  saveImmediate(): void {
+    this.logger__.logMethod?.('saveImmediate');
+    this.updated__(true);
+  }
+
+  /**
+   * Retrieves the full context of the document.
+   *
+   * @returns The full context of the document.
+   *
+   * @example
+   * ```typescript
+   * const context = documentRef.getFullContext_();
+   * ```
+   */
   getFullContext_(): Readonly<DocumentContext<TDoc>> {
     this.logger__.logMethod?.('getFullContext_');
     return this.context__;
@@ -292,7 +313,7 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
    * This method is throttled to prevent multiple updates in a short time.
    */
   private async updated__(immediate = false): Promise<void> {
-    this.logger__.logMethodArgs?.('updated__', {delayed: this.updateDelayed_});
+    this.logger__.logMethodArgs?.('updated__', {immediate, delayed: this.updateDelayed_});
 
     this.hasUnprocessedChanges_ = true;
 

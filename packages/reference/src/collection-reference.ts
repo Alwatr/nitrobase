@@ -419,16 +419,27 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    * Requests the Alwatr Store to save the collection.
    * Saving may take some time in Alwatr Store due to the use of throttling.
    *
-   * @param withDebounce Indicates whether to use the Alwatr Store's debounce delay.
+   * @example
+   * ```typescript
+   * collectionRef.save();
+   * ```
+   */
+  save(): void {
+    this.logger__.logMethod?.('save');
+    this.updated__(null, false);
+  }
+
+  /**
+   * Requests the Alwatr Store to save the collection immediately.
    *
    * @example
    * ```typescript
-   * collectionRef.save('item1');
+   * collectionRef.saveImmediate();
    * ```
    */
-  save(withDebounce = false): void {
-    this.logger__.logMethodArgs?.('save', withDebounce);
-    this.updated__(null, !withDebounce);
+  saveImmediate(): void {
+    this.logger__.logMethod?.('saveImmediate');
+    this.updated__(null, true);
   }
 
   /**
@@ -500,6 +511,16 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     }
   }
 
+  /**
+   * Retrieves the full context of the collection.
+   *
+   * @returns The full context of the collection.
+   *
+   * @example
+   * ```typescript
+   * const context = collectionRef.getFullContext_();
+   * ```
+   */
   getFullContext_(): Readonly<CollectionContext<TItem>> {
     this.logger__.logMethod?.('getFullContext_');
     return this.context__;
@@ -514,7 +535,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    * @param id - The ID of the item to update.
    */
   private async updated__(id: string | number | null, immediate = false): Promise<void> {
-    this.logger__.logMethodArgs?.('updated__', {delayed: this.updateDelayed_});
+    this.logger__.logMethodArgs?.('updated__', {id, immediate, delayed: this.updateDelayed_});
 
     this.hasUnprocessedChanges_ = true;
     if (id !== null) this.updateMeta_(id); // meta must updated per item
