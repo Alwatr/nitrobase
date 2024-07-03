@@ -217,6 +217,43 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     this.save();
   }
 
+
+  /**
+   * Indicates whether the collection data is frozen and cannot be saved.
+   */
+  private _freeze = false;
+
+  /**
+   * Gets the freeze status of the collection data.
+   *
+   * @returns `true` if the collection data is frozen, `false` otherwise.
+   *
+   * @example
+   * ```typescript
+   * const isFrozen = collectionRef.freeze;
+   * console.log(isFrozen); // Output: false
+   * ```
+   */
+  get freeze(): boolean {
+    return this._freeze;
+  }
+
+  /**
+   * Sets the freeze status of the collection data.
+   *
+   * @param value - The freeze status to set.
+   *
+   * @example
+   * ```typescript
+   * collectionRef.freeze = true;
+   * console.log(collectionRef.freeze); // Output: true
+   * ```
+   */
+  set freeze(value: boolean) {
+    this.logger__.logMethodArgs?.('freeze changed', { value });
+    this._freeze = value;
+  }
+
   /**
    * Checks if an item exists in the collection.
    *
@@ -556,6 +593,8 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     this.updateDelayed_ = false;
 
     if (id === null) this.updateMeta_(id); // root meta not updated for null
+
+    if (this._freeze === true) return; // prevent save if frozen
     this.updatedCallback__.call(null, this);
   }
 
