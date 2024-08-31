@@ -426,18 +426,18 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   /**
    * Sets an item's data in the collection. Replaces the item's data with the given data.
    *
-   * @param id - The ID of the item to set.
+   * @param itemId - The ID of the item to set.
    * @param data - The data to set for the item.
    *
    * @example
    * ```typescript
-   * collectionRef.set('item1', { key: 'new value' });
+   * collectionRef.update('item1', { a: 1, b: 2, c: 3 });
    * ```
    */
-  set(id: string | number, data: TItem): void {
-    this.logger__.logMethodArgs?.('set', {id, data});
-    (this.item__(id).data as unknown) = data;
-    this.updated__(id);
+  update(itemId: string | number, data: TItem): void {
+    this.logger__.logMethodArgs?.('update', {itemId, data});
+    (this.item__(itemId).data as unknown) = data;
+    this.updated__(itemId);
   }
 
   /**
