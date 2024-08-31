@@ -324,17 +324,17 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   /**
    * Retrieves an item's data from the collection. If the item does not exist, an error is thrown.
    *
-   * @param id - The ID of the item.
+   * @param itemId - The ID of the item.
    * @returns The data of the item with the given ID.
    *
    * @example
    * ```typescript
-   * const itemData = collectionRef.get('item1');
+   * const itemData = collectionRef.getItem('item1');
    * ```
    */
-  get(id: string | number): TItem {
-    this.logger__.logMethodArgs?.('get', id);
-    return this.item__(id).data;
+  getItem(itemId: string | number): TItem {
+    this.logger__.logMethodArgs?.('get', itemId);
+    return this.item__(itemId).data;
   }
 
   /**
