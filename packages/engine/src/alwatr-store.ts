@@ -226,10 +226,8 @@ export class AlwatrStore {
     this.storeChanged__(fileStoreRef);
   }
 
-  // TODO: defineDocument and defineCollection
-
   /**
-   * Create and return a DocumentReference for a document with the given id.
+   * Open a document with the given id and create and return a DocumentReference.
    * If the document not exists or its not a document, an error is thrown.
    *
    * @template TDoc document data type
@@ -237,11 +235,15 @@ export class AlwatrStore {
    * @returns document reference {@link DocumentReference}
    * @example
    * ```typescript
-   * const doc = await alwatrStore.doc<User>('user1/profile');
-   * doc.update({name: 'ali'});
+   * const userProfile = await alwatrStore.openDocument<User>({
+   *   name: 'user1/profile',
+   *   region: Region.PerUser,
+   *   ownerId: 'user1',
+   * });
+   * userProfile.update({name: 'ali'});
    * ```
    */
-  async doc<TDoc extends JsonifiableObject>(id: StoreFileId): Promise<DocumentReference<TDoc>> {
+  async openDocument<TDoc extends JsonifiableObject>(id: StoreFileId): Promise<DocumentReference<TDoc>> {
     const id_ = getStoreId(id);
     logger.logMethodArgs?.('doc', id_);
 
@@ -273,7 +275,7 @@ export class AlwatrStore {
   }
 
   /**
-   * Create and return a CollectionReference for a collection with the given id.
+   * Open a collection with the given id and create and return a CollectionReference.
    * If the collection not exists or its not a collection, an error is thrown.
    *
    * @template TItem collection item data type
@@ -281,14 +283,19 @@ export class AlwatrStore {
    * @returns collection reference {@link CollectionReference}
    * @example
    * ```typescript
-   * const collection = await alwatrStore.collection<Order>('user1/orders');
-   * collection.add({name: 'order 1'});
+   * const orders = await alwatrStore.openCollection<Order>({
+   *   name: 'orders',
+   *   region: Region.PerUser,
+   *   ownerId: 'user1',
+   * });
+   * orders.append({name: 'order 1'});
    * ```
    */
-  async collection<TItem extends JsonifiableObject>(id: StoreFileId): Promise<CollectionReference<TItem>> {
+  async openCollection<TItem extends JsonifiableObject>(id: StoreFileId): Promise<CollectionReference<TItem>> {
     const id_ = getStoreId(id);
     logger.logMethodArgs?.('collection', id_);
 
+    // try to get from cache
     if (Object.hasOwn(this.cacheReferences__, id_)) {
       const ref = this.cacheReferences__[id_];
       if (!(ref instanceof CollectionReference)) {
@@ -298,6 +305,7 @@ export class AlwatrStore {
       return this.cacheReferences__[id_] as unknown as CollectionReference<TItem>;
     }
 
+    // load and create new collection reference
     if (!this.rootDb__.exists(id_)) {
       logger.accident('collection', 'collection_not_found', id_);
       throw new Error('collection_not_found', {cause: id_});
@@ -312,7 +320,7 @@ export class AlwatrStore {
 
     const context = await this.readContext__<CollectionContext<TItem>>(storeStat);
     const colRef = CollectionReference.newRefFromContext(context, this.storeChanged__.bind(this));
-    this.cacheReferences__[id_] = colRef as unknown as DocumentReference;
+    this.cacheReferences__[id_] = colRef as unknown as CollectionReference;
     return colRef;
   }
 
