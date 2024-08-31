@@ -210,12 +210,12 @@ export class AlwatrStore {
       fileStoreRef = CollectionReference.newRefFromData(stat, initialData as CollectionContext['data'], this.storeChanged__.bind(this));
     }
     else {
-      logger.accident('defineDocument', 'store_file_type_not_supported', stat);
+      logger.accident('newStoreFile_', 'store_file_type_not_supported', stat);
       throw new Error('store_file_type_not_supported', {cause: stat});
     }
 
     if (this.rootDb__.exists(fileStoreRef.id)) {
-      logger.accident('defineDocument', 'store_file_already_defined', stat);
+      logger.accident('newStoreFile_', 'store_file_already_defined', stat);
       throw new Error('store_file_already_defined', {cause: stat});
     }
 
@@ -250,21 +250,21 @@ export class AlwatrStore {
     if (Object.hasOwn(this.cacheReferences__, id_)) {
       const ref = this.cacheReferences__[id_];
       if (!(ref instanceof DocumentReference)) {
-        logger.accident('doc', 'document_wrong_type', id_);
+        logger.accident('openDocument', 'document_wrong_type', id_);
         throw new Error('document_wrong_type', {cause: id_});
       }
       return this.cacheReferences__[id_] as unknown as DocumentReference<TDoc>;
     }
 
     if (!this.rootDb__.exists(id_)) {
-      logger.accident('doc', 'document_not_found', id_);
+      logger.accident('openDocument', 'document_not_found', id_);
       throw new Error('document_not_found', {cause: id_});
     }
 
     const storeStat = this.rootDb__.get(id_);
 
     if (storeStat.type != StoreFileType.Document) {
-      logger.accident('doc', 'document_wrong_type', id_);
+      logger.accident('openDocument', 'document_wrong_type', id_);
       throw new Error('document_wrong_type', {cause: id_});
     }
 
@@ -299,7 +299,7 @@ export class AlwatrStore {
     if (Object.hasOwn(this.cacheReferences__, id_)) {
       const ref = this.cacheReferences__[id_];
       if (!(ref instanceof CollectionReference)) {
-        logger.accident('collection', 'collection_wrong_type', id_);
+        logger.accident('openCollection', 'collection_wrong_type', id_);
         throw new Error('collection_wrong_type', {cause: id_});
       }
       return this.cacheReferences__[id_] as unknown as CollectionReference<TItem>;
@@ -307,14 +307,14 @@ export class AlwatrStore {
 
     // load and create new collection reference
     if (!this.rootDb__.exists(id_)) {
-      logger.accident('collection', 'collection_not_found', id_);
+      logger.accident('openCollection', 'collection_not_found', id_);
       throw new Error('collection_not_found', {cause: id_});
     }
 
     const storeStat = this.rootDb__.get(id_);
 
     if (storeStat.type != StoreFileType.Collection) {
-      logger.accident('doc', 'collection_wrong_type', id_);
+      logger.accident('openCollection', 'collection_wrong_type', id_);
       throw new Error('collection_not_found', {cause: id_});
     }
 
