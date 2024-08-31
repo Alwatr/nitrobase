@@ -245,11 +245,11 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
    *
    * @example
    * ```typescript
-   * const documentData = documentRef.get();
+   * const documentData = documentRef.getData();
    * ```
    */
-  get(): TDoc {
-    this.logger__.logMethod?.('get');
+  getData(): TDoc {
+    this.logger__.logMethod?.('getData');
     return this.context__.data;
   }
 
