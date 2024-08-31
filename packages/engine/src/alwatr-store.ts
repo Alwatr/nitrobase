@@ -428,12 +428,10 @@ export class AlwatrStore {
    * @param sync Indicates whether the write operation should be synchronous.
    * @returns A promise that resolves when the write operation is complete.
    */
-  private async writeContext__<T extends StoreFileContext>(path: string | StoreFileStat, context: T): Promise<void> {
+  private writeContext__<T extends StoreFileContext>(path: string | StoreFileStat, context: T): Promise<void> {
     if (typeof path !== 'string') path = getStorePath(path);
     logger.logMethodArgs?.('writeContext__', path);
-    logger.time?.(`writeContext__time(${path})`);
-    await writeJson(resolve(this.config__.rootPath, path), context);
-    logger.timeEnd?.(`writeContext__time(${path})`);
+    return writeJson(resolve(this.config__.rootPath, path), context);
   }
 
   /**
