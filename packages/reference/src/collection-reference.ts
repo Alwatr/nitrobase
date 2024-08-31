@@ -293,14 +293,14 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   /**
    * Retrieves an item from the collection. If the item does not exist, an error is thrown.
    *
-   * @param id - The ID of the item.
+   * @param itemId - The ID of the item.
    * @returns The item with the given ID.
    */
-  private item__(id: string | number): CollectionItem<TItem> {
-    const item = this.context__.data[id];
+  private item__(itemId: string | number): CollectionItem<TItem> {
+    const item = this.context__.data[itemId];
     if (item === undefined) {
-      this.logger__.accident('item_', 'collection_item_not_found', {id});
-      throw new Error('collection_item_not_found', {cause: {id}});
+      this.logger__.accident('item_', 'collection_item_not_found', {itemId});
+      throw new Error('collection_item_not_found', {cause: {itemId}});
     }
     return item;
   }
@@ -403,7 +403,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   append(data: TItem): string | number {
     this.logger__.logMethodArgs?.('append', data);
     const id = this.nextAutoIncrementId__();
-    this.create(id, data);
+    this.add(id, data);
     return id;
   }
 
@@ -580,7 +580,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     this.logger__.logMethodArgs?.('updated__', {id, immediate, delayed: this.updateDelayed_});
 
     this.hasUnprocessedChanges_ = true;
-    if (id !== null) this.updateMeta_(id); // meta must updated per item
+    if (id !== null) this.updateMetadata_(id); // meta must updated per item
 
     if (immediate === false && this.updateDelayed_ === true) return;
     // else
@@ -597,7 +597,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     if (this.updateDelayed_ !== true) return; // another parallel update finished!
     this.updateDelayed_ = false;
 
-    if (id === null) this.updateMeta_(id); // root meta not updated for null
+    if (id === null) this.updateMetadata_(id); // root meta not updated for null
 
     if (this._freeze === true) return; // prevent save if frozen
     this.updatedCallback__.call(null, this);
