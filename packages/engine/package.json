@@ -22,9 +22,9 @@
   "types": "./dist/main.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/main.d.ts",
       "import": "./dist/main.mjs",
-      "require": "./dist/main.cjs",
-      "types": "./dist/main.d.ts"
+      "require": "./dist/main.cjs"
     }
   },
   "license": "MIT",
@@ -60,13 +60,13 @@
     "clean": "rm -rfv dist *.tsbuildinfo"
   },
   "dependencies": {
-    "@alwatr/exit-hook": "^1.0.13",
-    "@alwatr/flat-string": "^1.0.20",
-    "@alwatr/logger": "^3.2.11",
-    "@alwatr/node-fs": "^1.0.10",
+    "@alwatr/exit-hook": "^1.0.14",
+    "@alwatr/flat-string": "^1.0.21",
+    "@alwatr/logger": "^3.2.12",
+    "@alwatr/node-fs": "^1.0.11",
     "@alwatr/store-reference": "workspace:^",
     "@alwatr/store-types": "workspace:^",
-    "@alwatr/wait": "^1.1.13"
+    "@alwatr/wait": "^1.1.14"
   },
   "devDependencies": {
     "@alwatr/nano-build": "^1.3.8",
