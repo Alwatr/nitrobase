@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.0-beta.0](https://github.com/Alwatr/store/compare/v6.2.1...v7.0.0-beta.0) (2024-08-31)
+
+### ⚠ BREAKING CHANGES
+
+* The `deleteFile` method has been renamed to `remove`. Update your code accordingly.
+* The `doc` and `collection` methods have been deprecated and should no longer be used. Instead, use the `openDocument` and `openCollection` methods.
+
+### Features
+
+* Add newDocument and newCollection methods to AlwatrStore ([363f820](https://github.com/Alwatr/store/commit/363f820a104e49a49746c95e7f303982d3ecb481)) by @AliMD
+* Open document and collection with given id in AlwatrStore ([5041a20](https://github.com/Alwatr/store/commit/5041a20bbf6dc3a26499aac4649e8c0d17c23537)) by @AliMD
+
+### Bug Fixes
+
+* **alwatr-store:** logger methods name issue ([4798d15](https://github.com/Alwatr/store/commit/4798d1527d05f1c7c79ddf03520e3478c0dae529)) by @AliMD
+
+### Code Refactoring
+
+* **AlwatrStore:** compatible with new api ([42c30f2](https://github.com/Alwatr/store/commit/42c30f2c7a066305eaba5e6fae50bfa5dc4502c8)) by @AliMD
+* **demo:** compatible with new api ([a76cc74](https://github.com/Alwatr/store/commit/a76cc7403610661c42099aae254ca5989bda1bff)) by @AliMD
+* Remove unnecessary debug flag from yarn script ([7f21798](https://github.com/Alwatr/store/commit/7f217981fb9c53c01f469a1a0b2761d856dc7337)) by @AliMD
+* rename `deleteFile` method to `remove` ([7356079](https://github.com/Alwatr/store/commit/735607933f78424ff7bdb6728f0e7b6eb18ca8a1)) by @AliMD
+* update StoreFileStat type to make extension property optional ([e75a186](https://github.com/Alwatr/store/commit/e75a186fbafd30a3d745467a973bec06e1d8109e)) by @AliMD
+* updates the `storeChanged__` method name to `storeChanged_`. ([8fd35fa](https://github.com/Alwatr/store/commit/8fd35fa69c0ff5c5fdc1f3be11a70ca4bac7dd81)) by @AliMD
+
+### Miscellaneous Chores
+
+* fix logs messages ([73d4496](https://github.com/Alwatr/store/commit/73d4496928c6e8fa5800f31619b9be717cba3592)) by @AliMD
+
+### Dependencies update
+
+* update ([2657638](https://github.com/Alwatr/store/commit/26576384c4a8ffcf35776f19008432e194fb39de)) by @AliMD
+
 ## [6.2.1](https://github.com/Alwatr/store/compare/v6.2.0...v6.2.1) (2024-08-31)
 
 ### Miscellaneous Chores

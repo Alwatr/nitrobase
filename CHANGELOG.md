@@ -3,6 +3,92 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.0-beta.0](https://github.com/Alwatr/store/compare/v6.2.1...v7.0.0-beta.0) (2024-08-31)
+
+### ⚠ BREAKING CHANGES
+
+* The `update` method in the `DocumentReference` not available anymore. use `updatePartial` instead.
+
+Co-authored-by: Mohammad Honarvar <honarvar.info@gmail.com>
+* **DocumentReference:** The `set` method in the `DocumentReference` not available anymore. use `update` instead.
+
+Co-authored-by: Mohammad Honarvar <honarvar.info@gmail.com>
+* **DocumentReference:** The `meta` method in the `DocumentReference` not available anymore. use `getStoreMetadata` instead.
+
+Co-authored-by: Mohammad Honarvar <honarvar.info@gmail.com>
+* **DocumentReference:** The `get` method in the `DocumentReference` not available anymore. use `getData` instead.
+
+Co-authored-by: Mohammad Honarvar <honarvar.info@gmail.com>
+* **CollectionReference:** The `updateMeta_` method in the `CollectionReference` not available anymore. use `updateMetadata_` instead.
+
+Co-authored-by: Mohammad Honarvar <honarvar.info@gmail.com>
+* **CollectionReference:** The `update` method in the `CollectionReference` not available anymore. use `updatePartial` instead.
+
+Co-authored-by: Mohammad Honarvar <honarvar.info@gmail.com>
+* **CollectionReference:** The `set` method in the `CollectionReference` not available anymore. use `update` instead.
+
+Co-authored-by: Mohammad Honarvar <honarvar.info@gmail.com>
+* The `delete` method in the `CollectionReference` not available anymore. use `remove` instead.
+
+Co-authored-by: Mohammad Honarvar <honarvar.info@gmail.com>
+* The `create` method in the `CollectionReference` not available anymore. use `add` instead.
+
+Co-authored-by: Mohammad Honarvar <honarvar.info@gmail.com>
+* The `access_` method in the `CollectionReference` not available anymore. use `getItemContext_` instead.
+
+Co-authored-by: Mohammad Honarvar <honarvar.info@gmail.com>
+* **CollectionReference:** The `metaItem` method in the `CollectionReference` not available anymore. use `getItemMetadata` instead.
+
+Co-authored-by: Mohammad Honarvar <honarvar.info@gmail.com>
+* The `meta` method in the `CollectionReference` not available anymore. use `getStoreMetadata` instead.
+
+Co-authored-by: Mohammad Honarvar <honarvar.info@gmail.com>
+* The `deleteFile` method has been renamed to `remove`. Update your code accordingly.
+* The `doc` and `collection` methods have been deprecated and should no longer be used. Instead, use the `openDocument` and `openCollection` methods.
+
+### Features
+
+* Add newDocument and newCollection methods to AlwatrStore ([363f820](https://github.com/Alwatr/store/commit/363f820a104e49a49746c95e7f303982d3ecb481)) by @AliMD
+* Open document and collection with given id in AlwatrStore ([5041a20](https://github.com/Alwatr/store/commit/5041a20bbf6dc3a26499aac4649e8c0d17c23537)) by @AliMD
+* Rename `meta` method to `getStoreMetadata` in CollectionReference ([44ee78e](https://github.com/Alwatr/store/commit/44ee78eaf50d8529aa6362f6dfa13804081a0f7d)) by @AliMD
+
+### Bug Fixes
+
+* **alwatr-store:** logger methods name issue ([4798d15](https://github.com/Alwatr/store/commit/4798d1527d05f1c7c79ddf03520e3478c0dae529)) by @AliMD
+* logger method name in CollectionReference and DocumentReference ([f84f288](https://github.com/Alwatr/store/commit/f84f288f906fdc707fdc7f49fd6159c1c270e1ec)) by @AliMD
+
+### Code Refactoring
+
+* **AlwatrStore:** compatible with new api ([42c30f2](https://github.com/Alwatr/store/commit/42c30f2c7a066305eaba5e6fae50bfa5dc4502c8)) by @AliMD
+* **CollectionReference:** Rename `item__` method parameter from `id` to `itemId` ([c0cde18](https://github.com/Alwatr/store/commit/c0cde18b1ac456e29118132ee88c9f115cc44442)) by @AliMD
+* **CollectionReference:** Rename `metaItem` method to `getItemMetadata` in CollectionReference ([3c9cfdb](https://github.com/Alwatr/store/commit/3c9cfdb741312aa626538a795f7980a140b12f6e)) by @AliMD
+* **CollectionReference:** Rename `set` method to `update` in CollectionReference ([258d739](https://github.com/Alwatr/store/commit/258d739e2f00b4f2f548de6158dcdcbfdf6ddf63)) by @AliMD
+* **CollectionReference:** Rename `update` method to `updatePartial` in CollectionReference ([d8a438a](https://github.com/Alwatr/store/commit/d8a438a5b9f5b3d9145ccb74ad980c4f22e40914)) by @AliMD
+* **CollectionReference:** Rename `updateMeta_` method to `updateMetadata_` in CollectionReference ([815fd1d](https://github.com/Alwatr/store/commit/815fd1d3a301d60304c58117a64fc20a2ac9ef64)) by @AliMD
+* **demo:** compatible with new api ([a76cc74](https://github.com/Alwatr/store/commit/a76cc7403610661c42099aae254ca5989bda1bff)) by @AliMD
+* **DocumentReference:** Rename `get` method to `getData` in DocumentReference ([0c3c37e](https://github.com/Alwatr/store/commit/0c3c37eb733a94bce78c532bac6167be312c6a9f)) by @AliMD
+* **DocumentReference:** Rename `meta` method to `getStoreMetadata` in DocumentReference ([3bed92f](https://github.com/Alwatr/store/commit/3bed92f482444d048edfb369355a61f115a78b09)) by @AliMD
+* **DocumentReference:** Rename `set` method to `update` in DocumentReference ([5467a66](https://github.com/Alwatr/store/commit/5467a66daddbd8976953aaac1a900abe67e9c4a3)) by @AliMD
+* Remove unnecessary debug flag from yarn script ([7f21798](https://github.com/Alwatr/store/commit/7f217981fb9c53c01f469a1a0b2761d856dc7337)) by @AliMD
+* Rename `access_` method to `getItemContext_` ([76dd262](https://github.com/Alwatr/store/commit/76dd26210e4252ef536f304a43f83007d362af32)) by @AliMD
+* Rename `create` method to `add` in CollectionReference ([0a0ee28](https://github.com/Alwatr/store/commit/0a0ee28b200173c615bb8835929e8baa7a0a5463)) by @AliMD
+* Rename `delete` method to `remove` in CollectionReference ([017b315](https://github.com/Alwatr/store/commit/017b31591aa69078492f262ccb41b857b937994e)) by @AliMD
+* rename `deleteFile` method to `remove` ([7356079](https://github.com/Alwatr/store/commit/735607933f78424ff7bdb6728f0e7b6eb18ca8a1)) by @AliMD
+* Rename `get` method to `getItem` in CollectionReference ([846ccff](https://github.com/Alwatr/store/commit/846ccff9012e52d930771946b98a7dd93c82977c)) by @AliMD
+* Rename `update` method to `updatePartial` in DocumentReference ([c16d164](https://github.com/Alwatr/store/commit/c16d164900954b7d51c516b5f7637e54b1fb8ab7)) by @AliMD
+* update parameter name in CollectionReference.exists method ([bb06487](https://github.com/Alwatr/store/commit/bb06487a1fe94d84bf3ff7ba7c44ae5600b1d689)) by @AliMD
+* update StoreFileStat type to make extension property optional ([e75a186](https://github.com/Alwatr/store/commit/e75a186fbafd30a3d745467a973bec06e1d8109e)) by @AliMD
+* updates the `storeChanged__` method name to `storeChanged_`. ([8fd35fa](https://github.com/Alwatr/store/commit/8fd35fa69c0ff5c5fdc1f3be11a70ca4bac7dd81)) by @AliMD
+
+### Miscellaneous Chores
+
+* fix logs messages ([73d4496](https://github.com/Alwatr/store/commit/73d4496928c6e8fa5800f31619b9be717cba3592)) by @AliMD
+* **lerna:** switch to prerelease beta ([3267b74](https://github.com/Alwatr/store/commit/3267b748c298e0531ed58c08b673ac3a8c0a44ad)) by @
+
+### Dependencies update
+
+* update ([2657638](https://github.com/Alwatr/store/commit/26576384c4a8ffcf35776f19008432e194fb39de)) by @AliMD
+
 ## [6.2.1](https://github.com/Alwatr/store/compare/v6.2.0...v6.2.1) (2024-08-31)
 
 ### Miscellaneous Chores

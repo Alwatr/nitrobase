@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.0-beta.0](https://github.com/Alwatr/store/compare/v6.2.1...v7.0.0-beta.0) (2024-08-31)
+
+### Code Refactoring
+
+* update StoreFileStat type to make extension property optional ([e75a186](https://github.com/Alwatr/store/commit/e75a186fbafd30a3d745467a973bec06e1d8109e)) by @AliMD
+
+### Dependencies update
+
+* update ([2657638](https://github.com/Alwatr/store/commit/26576384c4a8ffcf35776f19008432e194fb39de)) by @AliMD
+
 ## [6.2.1](https://github.com/Alwatr/store/compare/v6.2.0...v6.2.1) (2024-08-31)
 
 ### Miscellaneous Chores
