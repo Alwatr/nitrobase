@@ -12,10 +12,14 @@ const alwatrStore = new AlwatrStore({
 });
 
 async function quickstart() {
+  /**
+   * @type {import('@alwatr/store-engine').StoreFileId}
+   */
   const postsCollectionId = {
     name: 'post',
     region: Region.PerUser,
     ownerId: 'user_123',
+    schemaVer: 2,
   };
 
   logger.logProperty?.('collectionId', postsCollectionId);
@@ -35,6 +39,8 @@ async function quickstart() {
 
   // Get a collection reference.
   const postsCollection = await alwatrStore.openCollection(postsCollectionId);
+
+  logger.logProperty?.('collection.schemaVer', postsCollection.schemaVer);
 
   const post1Id = 'intro-to-alwatr-store';
   const post2Id = 'intro-to-alwatr-collections';
