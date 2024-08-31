@@ -308,12 +308,16 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   /**
    * Retrieves an item's metadata from the collection. If the item does not exist, an error is thrown.
    *
-   * @param id - The ID of the item.
+   * @param itemId - The ID of the item.
    * @returns The metadata of the item with the given ID.
+   * @example
+   * ```typescript
+   * const itemMeta = collectionRef.getItemMetadata('item1');
+   * ```
    */
-  metaItem(id: string | number): Readonly<CollectionItemMeta> {
-    const meta = this.item__(id).meta;
-    this.logger__.logMethodFull?.('meta', id, meta);
+  getItemMetadata(itemId: string | number): Readonly<CollectionItemMeta> {
+    const meta = this.item__(itemId).meta;
+    this.logger__.logMethodFull?.('getItemMetadata', itemId, meta);
     return meta;
   }
 
