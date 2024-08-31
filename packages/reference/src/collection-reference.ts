@@ -64,7 +64,6 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
         extension: StoreFileExtension.Json,
         ver: CollectionReference.version,
         fv: CollectionReference.fileFormatVersion,
-        schemaVer: 1
       },
       data: initialData ?? {},
     };
@@ -143,7 +142,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
 
     if (context.meta.fv === 1) {
       // migrate from v1 to v2
-      context.meta.schemaVer = 0;
+      // context.meta.schemaVer = 0;
       context.meta.fv = 2;
     }
 
@@ -205,7 +204,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    * @returns store schema version
    */
   get schemaVer(): number {
-    return this.context__.meta.schemaVer;
+    return this.context__.meta.schemaVer ?? 1;
   }
 
   /**

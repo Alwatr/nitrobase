@@ -96,6 +96,12 @@ export type StoreFileId = {
    *
    */
   readonly ownerId?: string;
+
+  /**
+   * The schema version for easy migration by user.
+   * If not specified, the default value is `1`.
+   */
+  schemaVer?: number;
 };
 
 /**
@@ -138,12 +144,6 @@ export type StoreFileMeta = StoreFileStat & {
    * The AlwatrStore engine version.
    */
   ver: string;
-
-  /**
-   * The schema version for easy migration by user.
-   * default is `0` for old migrate data an `1` for new define storage.
-   */
-  schemaVer: number;
 
   /**
    * Store file format version.
