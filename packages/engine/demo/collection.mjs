@@ -1,6 +1,6 @@
 import {createLogger} from '@alwatr/logger';
 
-import {AlwatrStore, Region, StoreFileExtension, StoreFileType} from '@alwatr/store-engine';
+import {AlwatrStore, Region} from '@alwatr/store-engine';
 
 const logger = createLogger('AlwatrStore/Demo', true);
 logger.banner('AlwatrStore/Demo');
@@ -26,51 +26,47 @@ async function quickstart() {
 
   if (exists) {
     // Delete the collection store file.
-    alwatrStore.deleteFile(postsCollectionId);
+    alwatrStore.remove(postsCollectionId);
     logger.logOther?.('The collection store file deleted');
   }
 
   // Create a new collection.
-  alwatrStore.defineStoreFile({
-    ...postsCollectionId,
-    type: StoreFileType.Collection,
-    extension: StoreFileExtension.Json,
-  });
+  alwatrStore.newCollection(postsCollectionId);
 
   // Get a collection reference.
-  const postsCollection = await alwatrStore.collection(postsCollectionId);
+  const postsCollection = await alwatrStore.openCollection(postsCollectionId);
 
   const post1Id = 'intro-to-alwatr-store';
   const post2Id = 'intro-to-alwatr-collections';
 
   // Create new new post (new item in the collection).
-  postsCollection.create(post1Id, {
+  postsCollection.add(post1Id, {
     title: 'Welcome to Alwatr Store',
     body: 'This is a amazing content',
   });
 
   // Read the collection item meta information.
-  logger.logProperty?.('collection.meta', postsCollection.metaItem(post1Id));
+  logger.logProperty?.('collection.meta', postsCollection.getItemMetadata(post1Id));
 
   // Read the collection item.
-  logger.logProperty?.('context1', postsCollection.get(post1Id));
+  logger.logProperty?.('context1', postsCollection.getItem(post1Id));
 
   // Update an existing collection item.
   postsCollection.update(post1Id, {
     body: 'My first AlwatrStore Collection',
   });
-  logger.logProperty?.('context', postsCollection.get(post1Id));
+  logger.logProperty?.('context', postsCollection.getItem(post1Id));
 
   // post 2
 
-  postsCollection.create(post2Id, {
+  postsCollection.add(post2Id, {
     title: 'Welcome to Alwatr Collections',
     body: 'This is a amazing content',
   });
-  logger.logProperty?.('context2', postsCollection.get(post1Id));
+  logger.logProperty?.('context2', postsCollection.getItem(post1Id));
 
-  logger.logProperty?.('collection.meta1', postsCollection.metaItem(post1Id));
-  logger.logProperty?.('collection.meta2', postsCollection.metaItem(post2Id));
+  logger.logProperty?.('collection.meta1', postsCollection.getItemMetadata(post1Id));
+  logger.logProperty?.('collection.meta2', postsCollection.getItemMetadata(post2Id));
 
   // Unload the collection from memory.
   alwatrStore.unload(postsCollectionId);

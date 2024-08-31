@@ -1,6 +1,6 @@
 import {createLogger} from '@alwatr/logger';
-import {AlwatrStore, StoreFileExtension, StoreFileType, Region} from '@alwatr/store-engine';
-import {waitForIdle, waitForImmediate, waitForTimeout} from '@alwatr/wait';
+import {AlwatrStore, Region} from '@alwatr/store-engine';
+import {waitForTimeout} from '@alwatr/wait';
 
 (async function () {
   const logger = createLogger('AlwatrStore/Demo', true);
@@ -18,20 +18,16 @@ import {waitForIdle, waitForImmediate, waitForTimeout} from '@alwatr/wait';
   };
 
   if (alwatrStore.exists(colId)) {
-    await alwatrStore.deleteFile(colId);
+    await alwatrStore.remove(colId);
   }
 
-  alwatrStore.defineStoreFile({
-    ...colId,
-    type: StoreFileType.Collection,
-    extension: StoreFileExtension.Json,
-  });
+  alwatrStore.newCollection(colId);
 
-  const col = await alwatrStore.collection(colId);
+  const col = await alwatrStore.openCollection(colId);
 
   await waitForTimeout(1000);
 
-  logger.time('write_10k_record_time');
+  logger.time?.('write_10k_record_time');
 
   const max = 10_000;
   for (let i = 0; i < max; i++) {
@@ -42,15 +38,15 @@ import {waitForIdle, waitForImmediate, waitForTimeout} from '@alwatr/wait';
     // await waitForImmediate();
   }
 
-  logger.timeEnd('write_10k_record_time');
+  logger.timeEnd?.('write_10k_record_time');
 
   await waitForTimeout(1000);
 
-  logger.time('access_10k_item_time');
+  logger.time?.('access_10k_item_time');
   let item;
   for (let i = 0; i < max; i++) {
-    item = col.access_(i);
+    item = col.getItemContext_(i);
   }
-  logger.timeEnd('access_10k_item_time');
-  logger.logProperty('item', item);
+  logger.timeEnd?.('access_10k_item_time');
+  logger.logProperty?.('item', item);
 })();

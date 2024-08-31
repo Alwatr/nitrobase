@@ -114,7 +114,7 @@ export type StoreFileStat = StoreFileId & {
    *
    * @see {@link StoreFileExtension}
    */
-  readonly extension: StoreFileExtension;
+  readonly extension?: StoreFileExtension;
 
   /**
    * The save debounce timeout in milliseconds for minimal disk I/O usage.

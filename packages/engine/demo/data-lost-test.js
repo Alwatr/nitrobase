@@ -1,6 +1,6 @@
 import {createLogger} from '@alwatr/logger';
 
-import {AlwatrStore, Region, StoreFileExtension, StoreFileType} from '@alwatr/store-engine';
+import {AlwatrStore, Region} from '@alwatr/store-engine';
 
 const logger = createLogger('AlwatrStore/Demo', true);
 logger.banner('AlwatrStore/Demo');
@@ -23,14 +23,10 @@ for (let i = 0; i < 10; i++) {
   };
 
   if (!alwatrStore.exists(docId)) {
-    alwatrStore.defineStoreFile({
-      ...docId,
-      type: StoreFileType.Collection,
-      extension: StoreFileExtension.Json,
-    });
+    alwatrStore.newCollection(docId);
   }
 
-  list.push(await alwatrStore.collection(docId));
+  list.push(await alwatrStore.openCollection(docId));
 }
 
 function insertData() {

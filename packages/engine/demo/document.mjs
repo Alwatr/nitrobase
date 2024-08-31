@@ -1,6 +1,6 @@
 import {createLogger} from '@alwatr/logger';
 
-import {AlwatrStore, Region, StoreFileExtension, StoreFileType} from '@alwatr/store-engine';
+import {AlwatrStore, Region} from '@alwatr/store-engine';
 
 const logger = createLogger('AlwatrStore/Demo', true);
 logger.banner('AlwatrStore/Demo');
@@ -25,41 +25,34 @@ async function quickstart() {
 
   if (!exists) {
     // Define a new document store file.
-    alwatrStore.defineStoreFile(
-      {
-        ...docId,
-        type: StoreFileType.Document,
-        extension: StoreFileExtension.Json,
-      },
-      {
-        title: 'new title',
-        body: '',
-      },
-    );
+    alwatrStore.newDocument(docId, {
+      title: 'new title',
+      body: '',
+    });
   }
 
   // Create new document reference of specific id.
-  const myPost = await alwatrStore.doc(docId);
+  const myPost = await alwatrStore.openDocument(docId);
 
   // Read the document meta information.
-  logger.logProperty?.('doc.meta', myPost.meta());
+  logger.logProperty?.('doc.meta', myPost.getStoreMetadata());
 
   // Enter new data into the document.
-  myPost.set({
+  myPost.update({
     title: 'Welcome to Alwatr Store',
     body: 'This is a amazing content',
   });
 
   // Read the document.
-  logger.logProperty?.('context', myPost.get());
+  logger.logProperty?.('context', myPost.getData());
 
   // Update an existing document.
   myPost.update({
     body: 'My first AlwatrStore Document',
   });
-  logger.logProperty?.('context', myPost.get());
+  logger.logProperty?.('context', myPost.getData());
 
-  logger.logProperty?.('doc.meta', myPost.meta());
+  logger.logProperty?.('doc.meta', myPost.getStoreMetadata());
 
   await new Promise((resolve) => setTimeout(resolve, 1_000));
 

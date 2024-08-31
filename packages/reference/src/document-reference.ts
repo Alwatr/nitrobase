@@ -245,11 +245,11 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
    *
    * @example
    * ```typescript
-   * const documentData = documentRef.get();
+   * const documentData = documentRef.getData();
    * ```
    */
-  get(): TDoc {
-    this.logger__.logMethod?.('get');
+  getData(): TDoc {
+    this.logger__.logMethod?.('getData');
     return this.context__.data;
   }
 
@@ -260,43 +260,42 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
    *
    * @example
    * ```typescript
-   * const documentMeta = documentRef.meta();
+   * const documentMeta = documentRef.gerStoreMetadata();
    * ```
    */
-  meta(): Readonly<StoreFileMeta> {
-    this.logger__.logMethod?.('meta');
+  getStoreMetadata(): Readonly<StoreFileMeta> {
+    this.logger__.logMethod?.('getStoreMetadata');
     return this.context__.meta;
   }
 
   /**
-   * Sets the document's data.
+   * Sets the document's data. replacing the existing data.
    *
    * @param data The new document data.
    *
    * @example
    * ```typescript
-   * documentRef.set({ key: 'value' });
+   * documentRef.update({ a: 1, b: 2, c: 3 });
    * ```
    */
-  set(data: TDoc): void {
-    this.logger__.logMethodArgs?.('set', data);
+  update(data: TDoc): void {
+    this.logger__.logMethodArgs?.('update', data);
     (this.context__.data as unknown) = data;
     this.updated__();
   }
 
   /**
-   * Update Document's data.
-   * Can be used to update a part of the document.
+   * Updates document's data by merging a partial update into the document's data.
    *
-   * @param data Data to update the document with.
+   * @param data The part of data to merge into the document's data.
    *
    * @example
    * ```typescript
-   * documentRef.update({ key: 'updated value' });
+   * documentRef.updatePartial({ c: 4 });
    * ```
    */
-  update(data: Partial<TDoc>): void {
-    this.logger__.logMethodArgs?.('update', data);
+  updatePartial(data: Partial<TDoc>): void {
+    this.logger__.logMethodArgs?.('updatePartial', data);
     Object.assign(this.context__.data, data);
     this.updated__();
   }

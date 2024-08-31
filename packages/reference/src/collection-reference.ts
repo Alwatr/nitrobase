@@ -257,7 +257,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   /**
    * Checks if an item exists in the collection.
    *
-   * @param id - The ID of the item.
+   * @param itemId - The ID of the item.
    * @returns `true` if the item with the given ID exists in the collection, `false` otherwise.
    *
    * @example
@@ -269,9 +269,9 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    * }
    * ```
    */
-  exists(id: string | number): boolean {
-    const exists = Object.hasOwn(this.context__.data, id);
-    this.logger__.logMethodFull?.('exists', id, exists);
+  exists(itemId: string | number): boolean {
+    const exists = Object.hasOwn(this.context__.data, itemId);
+    this.logger__.logMethodFull?.('exists', itemId, exists);
     return exists;
   }
 
@@ -282,25 +282,25 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    *
    * @example
    * ```typescript
-   * const metadata = collectionRef.meta();
+   * const metadata = collectionRef.getStoreMetadata();
    * ```
    */
-  meta(): Readonly<StoreFileMeta> {
-    this.logger__.logMethod?.('meta');
+  getStoreMetadata(): Readonly<StoreFileMeta> {
+    this.logger__.logMethod?.('getStoreMetadata');
     return this.context__.meta;
   }
 
   /**
    * Retrieves an item from the collection. If the item does not exist, an error is thrown.
    *
-   * @param id - The ID of the item.
+   * @param itemId - The ID of the item.
    * @returns The item with the given ID.
    */
-  private item__(id: string | number): CollectionItem<TItem> {
-    const item = this.context__.data[id];
+  private item__(itemId: string | number): CollectionItem<TItem> {
+    const item = this.context__.data[itemId];
     if (item === undefined) {
-      this.logger__.accident('item_', 'collection_item_not_found', {id});
-      throw new Error('collection_item_not_found', {cause: {id}});
+      this.logger__.accident('item_', 'collection_item_not_found', {itemId});
+      throw new Error('collection_item_not_found', {cause: {itemId}});
     }
     return item;
   }
@@ -308,29 +308,33 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   /**
    * Retrieves an item's metadata from the collection. If the item does not exist, an error is thrown.
    *
-   * @param id - The ID of the item.
+   * @param itemId - The ID of the item.
    * @returns The metadata of the item with the given ID.
+   * @example
+   * ```typescript
+   * const itemMeta = collectionRef.getItemMetadata('item1');
+   * ```
    */
-  metaItem(id: string | number): Readonly<CollectionItemMeta> {
-    const meta = this.item__(id).meta;
-    this.logger__.logMethodFull?.('meta', id, meta);
+  getItemMetadata(itemId: string | number): Readonly<CollectionItemMeta> {
+    const meta = this.item__(itemId).meta;
+    this.logger__.logMethodFull?.('getItemMetadata', itemId, meta);
     return meta;
   }
 
   /**
    * Retrieves an item's data from the collection. If the item does not exist, an error is thrown.
    *
-   * @param id - The ID of the item.
+   * @param itemId - The ID of the item.
    * @returns The data of the item with the given ID.
    *
    * @example
    * ```typescript
-   * const itemData = collectionRef.get('item1');
+   * const itemData = collectionRef.getItem('item1');
    * ```
    */
-  get(id: string | number): TItem {
-    this.logger__.logMethodArgs?.('get', id);
-    return this.item__(id).data;
+  getItem(itemId: string | number): TItem {
+    this.logger__.logMethodArgs?.('getItem', itemId);
+    return this.item__(itemId).data;
   }
 
   /**
@@ -338,42 +342,43 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    * If the item does not exist, `undefined` is returned.
    * **USE WITH CAUTION!**
    *
-   * @param id - The ID of the item.
+   * @param itemId - The ID of the item.
    * @returns The data of the item with the given ID or `undefined` if the item does not exist.
    *
    * @example
    * ```typescript
-   * collectionRef.access_('item1')?.data.name = 'test2';
+   * collectionRef.getItemContext_('item1')?.data.name = 'test2';
    * ```
    */
-  access_(id: string | number): CollectionItem<TItem> | undefined {
-    this.logger__.logMethodArgs?.('access_', id);
-    return this.context__.data[id];
+  getItemContext_(itemId: string | number): CollectionItem<TItem> | undefined {
+    this.logger__.logMethodArgs?.('getItemContext_', itemId);
+    return this.context__.data[itemId];
   }
 
   /**
-   * Creates a new item in the collection. If an item with the given ID already exists, an error is thrown.
+   * Add a new item to the collection.
+   * If an item with the given ID already exists, an error is thrown.
    *
-   * @param id - The ID of the item to create.
+   * @param itemId - The ID of the item to create.
    * @param data - The initial data of the item.
    *
    * @example
    * ```typescript
-   * collectionRef.create('item1', { key: 'value' });
+   * collectionRef.add('item1', { key: 'value' });
    * ```
    */
-  create(id: string | number, data: TItem): void {
-    this.logger__.logMethodArgs?.('create', {id, data});
-    if (this.exists(id)) {
-      this.logger__.accident('create', 'collection_item_exist', {id});
-      throw new Error('collection_item_exist', {cause: {id}});
+  add(itemId: string | number, data: TItem): void {
+    this.logger__.logMethodArgs?.('add', {itemId, data});
+    if (this.exists(itemId)) {
+      this.logger__.accident('add', 'collection_item_exist', {itemId});
+      throw new Error('collection_item_exist', {cause: {itemId}});
     }
 
     const now = Date.now();
 
-    this.context__.data[id] = {
+    this.context__.data[itemId] = {
       meta: {
-        id,
+        id: itemId,
         // other prop calc in updateMeta__
         rev: 0,
         created: now,
@@ -381,7 +386,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
       },
       data,
     };
-    this.updated__(id);
+    this.updated__(itemId);
   }
 
   /**
@@ -398,58 +403,58 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   append(data: TItem): string | number {
     this.logger__.logMethodArgs?.('append', data);
     const id = this.nextAutoIncrementId__();
-    this.create(id, data);
+    this.add(id, data);
     return id;
   }
 
   /**
-   * Deletes an item from the collection.
+   * Removes an item from the collection.
    *
-   * @param id - The ID of the item to delete.
+   * @param itemId - The ID of the item to delete.
    *
    * @example
    * ```typescript
-   * collectionRef.delete('item1');
+   * collectionRef.remove('item1');
    * ```
    */
-  delete(id: string | number): void {
-    this.logger__.logMethodArgs?.('delete', id);
-    delete this.context__.data[id];
+  remove(itemId: string | number): void {
+    this.logger__.logMethodArgs?.('remove', itemId);
+    delete this.context__.data[itemId];
     this.updated__(null);
   }
 
   /**
    * Sets an item's data in the collection. Replaces the item's data with the given data.
    *
-   * @param id - The ID of the item to set.
+   * @param itemId - The ID of the item to set.
    * @param data - The data to set for the item.
    *
    * @example
    * ```typescript
-   * collectionRef.set('item1', { key: 'new value' });
+   * collectionRef.update('item1', { a: 1, b: 2, c: 3 });
    * ```
    */
-  set(id: string | number, data: TItem): void {
-    this.logger__.logMethodArgs?.('set', {id, data});
-    (this.item__(id).data as unknown) = data;
-    this.updated__(id);
+  update(itemId: string | number, data: TItem): void {
+    this.logger__.logMethodArgs?.('update', {itemId, data});
+    (this.item__(itemId).data as unknown) = data;
+    this.updated__(itemId);
   }
 
   /**
-   * Updates an item in the collection. Can be used to update a part of the item.
+   * Updates an item in the collection by merging a partial update into the item's data.
    *
-   * @param id - The ID of the item to update.
-   * @param data - The data to update for the item.
+   * @param itemId - The ID of the item to update.
+   * @param data - The part of data to merge into the item's data.
    *
    * @example
    * ```typescript
-   * collectionRef.update('item1', { key: 'updated value' });
+   * collectionRef.updatePartial(itemId, partialUpdate);
    * ```
    */
-  update(id: string | number, data: Partial<TItem>): void {
-    this.logger__.logMethodArgs?.('update', {id, data});
-    Object.assign(this.item__(id).data, data);
-    this.updated__(id);
+  updatePartial(itemId: string | number, data: Partial<TItem>): void {
+    this.logger__.logMethodArgs?.('updatePartial', {itemId, data});
+    Object.assign(this.item__(itemId).data, data);
+    this.updated__(itemId);
   }
 
   /**
@@ -575,7 +580,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     this.logger__.logMethodArgs?.('updated__', {id, immediate, delayed: this.updateDelayed_});
 
     this.hasUnprocessedChanges_ = true;
-    if (id !== null) this.updateMeta_(id); // meta must updated per item
+    if (id !== null) this.updateMetadata_(id); // meta must updated per item
 
     if (immediate === false && this.updateDelayed_ === true) return;
     // else
@@ -592,7 +597,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     if (this.updateDelayed_ !== true) return; // another parallel update finished!
     this.updateDelayed_ = false;
 
-    if (id === null) this.updateMeta_(id); // root meta not updated for null
+    if (id === null) this.updateMetadata_(id); // root meta not updated for null
 
     if (this._freeze === true) return; // prevent save if frozen
     this.updatedCallback__.call(null, this);
@@ -601,15 +606,15 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   /**
    * Updates the collection's metadata.
    *
-   * @param id - The ID of the item to update.
+   * @param itemId - The ID of the item to update.
    */
-  updateMeta_(id: string | number | null): void {
-    this.logger__.logMethodArgs?.('updateMeta__', {id});
+  updateMetadata_(itemId: string | number | null): void {
+    this.logger__.logMethodArgs?.('updateMetadata_', {id: itemId});
     const now = Date.now();
     this.context__.meta.rev++;
     this.context__.meta.updated = now;
-    if (id !== null) {
-      const itemMeta = this.item__(id).meta;
+    if (itemId !== null) {
+      const itemMeta = this.item__(itemId).meta;
       itemMeta.rev++;
       itemMeta.updated = now;
     }

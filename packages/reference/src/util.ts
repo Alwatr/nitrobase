@@ -1,5 +1,5 @@
 import {flatString} from '@alwatr/flat-string';
-import {type StoreFileId, type StoreFileStat} from '@alwatr/store-types';
+import {StoreFileExtension, type StoreFileId, type StoreFileStat} from '@alwatr/store-types';
 
 /**
  * Convert StoreFileId to a string ID.
@@ -26,6 +26,6 @@ export function getStorePath(storeStat: StoreFileStat): string {
   if (storeStat.ownerId !== undefined) {
     path += '/' + storeStat.ownerId.slice(0, 3) + '/' + storeStat.ownerId;
   }
-  path += `/${storeStat.name}.${storeStat.type}.${storeStat.extension}`;
+  path += `/${storeStat.name}.${storeStat.type}.${storeStat.extension ?? StoreFileExtension.Json}`;
   return flatString(path);
 }
