@@ -347,21 +347,22 @@ export class AlwatrStore {
   }
 
   /**
-   * Deletes a file from the store.
-   *
+   * Remove document or collection from store and delete the file from disk.
+   * If the file is not found, an error is thrown.
+   * If the file is not unloaded, it will be unloaded first.
    * You don't need to await this method to complete unless you want to make sure the file is deleted on disk.
    *
    * @param id_ The ID of the file to delete.
    * @returns A Promise that resolves when the file is deleted.
    * @example
    * ```typescript
-   * alwatrStore.deleteFile({name: 'user-list', region: Region.Secret});
-   * alwatrStore.exists({name: 'user-list', region: Region.Secret}); // true
+   * alwatrStore.remove({name: 'user-list', region: Region.Secret});
+   * alwatrStore.exists({name: 'user-list', region: Region.Secret}); // false
    * ```
    */
-  async deleteFile(id: StoreFileId): Promise<void> {
+  async remove(id: StoreFileId): Promise<void> {
     const id_ = getStoreId(id);
-    logger.logMethodArgs?.('deleteFile', id_);
+    logger.logMethodArgs?.('remove', id_);
     if (!this.rootDb__.exists(id_)) {
       logger.accident('doc', 'document_not_found', id_);
       throw new Error('document_not_found', {cause: id_});
@@ -380,7 +381,7 @@ export class AlwatrStore {
       await unlink(resolve(this.config__.rootPath, path));
     }
     catch (error) {
-      logger.error('deleteFile', 'delete_file_failed', {id: id_, path, error});
+      logger.error('deleteFile', 'remove_file_failed', error, {id, path});
     }
   }
 
