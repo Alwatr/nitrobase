@@ -408,18 +408,18 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   }
 
   /**
-   * Deletes an item from the collection.
+   * Removes an item from the collection.
    *
-   * @param id - The ID of the item to delete.
+   * @param itemId - The ID of the item to delete.
    *
    * @example
    * ```typescript
-   * collectionRef.delete('item1');
+   * collectionRef.remove('item1');
    * ```
    */
-  delete(id: string | number): void {
-    this.logger__.logMethodArgs?.('delete', id);
-    delete this.context__.data[id];
+  remove(itemId: string | number): void {
+    this.logger__.logMethodArgs?.('remove', itemId);
+    delete this.context__.data[itemId];
     this.updated__(null);
   }
 
