@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.2.1](https://github.com/Alwatr/store/compare/v6.2.0...v6.2.1) (2024-08-31)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump the development-dependencies group across 1 directory with 13 updates ([7e6aa11](https://github.com/Alwatr/store/commit/7e6aa11e1b4507111993a6070b481ebc95e534c7)) by @dependabot[bot]
+* **deps:** bump the alwatr-dependencies group with 10 updates ([faf1fc1](https://github.com/Alwatr/store/commit/faf1fc15f8b4c9c4c451dd5fa1d564eb3bf3d9a3)) by @dependabot[bot]
+* **deps:** bump the alwatr-dependencies group with 9 updates ([64ac4f2](https://github.com/Alwatr/store/commit/64ac4f239c0f0a8ccdadbd736c16973bd684f811)) by @dependabot[bot]
+
 ## [6.2.0](https://github.com/Alwatr/store/compare/v6.1.0...v6.2.0) (2024-07-03)
 
 ### Features
