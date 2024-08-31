@@ -356,28 +356,29 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   }
 
   /**
-   * Creates a new item in the collection. If an item with the given ID already exists, an error is thrown.
+   * Add a new item to the collection.
+   * If an item with the given ID already exists, an error is thrown.
    *
-   * @param id - The ID of the item to create.
+   * @param itemId - The ID of the item to create.
    * @param data - The initial data of the item.
    *
    * @example
    * ```typescript
-   * collectionRef.create('item1', { key: 'value' });
+   * collectionRef.add('item1', { key: 'value' });
    * ```
    */
-  create(id: string | number, data: TItem): void {
-    this.logger__.logMethodArgs?.('create', {id, data});
-    if (this.exists(id)) {
-      this.logger__.accident('create', 'collection_item_exist', {id});
-      throw new Error('collection_item_exist', {cause: {id}});
+  add(itemId: string | number, data: TItem): void {
+    this.logger__.logMethodArgs?.('add', {itemId, data});
+    if (this.exists(itemId)) {
+      this.logger__.accident('add', 'collection_item_exist', {itemId});
+      throw new Error('collection_item_exist', {cause: {itemId}});
     }
 
     const now = Date.now();
 
-    this.context__.data[id] = {
+    this.context__.data[itemId] = {
       meta: {
-        id,
+        id: itemId,
         // other prop calc in updateMeta__
         rev: 0,
         created: now,
@@ -385,7 +386,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
       },
       data,
     };
-    this.updated__(id);
+    this.updated__(itemId);
   }
 
   /**
