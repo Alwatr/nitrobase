@@ -120,26 +120,81 @@ export class AlwatrStore {
   }
 
   /**
-   * Defines a AlwatrStoreFile with the given configuration and initial data.
+   * Defines a new document with the given configuration and initial data.
+   * If a document with the same ID already exists, an error is thrown.
    *
    * @param stat store file stat
    * @param initialData initial data for the document
    * @template TDoc document data type
    * @example
    * ```typescript
-   * await alwatrStore.defineDocument<Order>({
-   *  name: 'profile',
-   *  region: Region.PerUser,
-   *  ownerId: 'user1',
-   *  type: StoreFileType.Document,
-   *  extension: StoreFileExtension.Json,
-   * }, {
-   *   name: 'Ali',
-   *   email: 'ali@alwatr.io',
-   * });
+   * await alwatrStore.newDocument<Order>(
+   *   {
+   *     name: 'profile',
+   *     region: Region.PerUser,
+   *     ownerId: 'user1',
+   *   },
+   *   {
+   *     name: 'Ali',
+   *     email: 'ali@alwatr.io',
+   *   }
+   * );
    * ```
    */
-  defineStoreFile<T extends JsonifiableObject = JsonifiableObject>(
+  newDocument<T extends JsonifiableObject = JsonifiableObject>(
+    stat: Omit<StoreFileStat, 'type'>,
+    initialData: DocumentContext<T>['data'] | null = null,
+  ): void {
+    logger.logMethodArgs?.('newDocument', stat);
+    return this.newStoreFile_(
+      {
+        ...stat,
+        type: StoreFileType.Document,
+      },
+      initialData,
+    );
+  }
+
+  /**
+   * Defines a new collection with the given configuration and initial data.
+   * If a collection with the same ID already exists, an error is thrown.
+   *
+   * @param stat store file stat
+   * @param initialData initial data for the collection
+   * @template TItem collection item data type
+   * @example
+   * ```typescript
+   * await alwatrStore.newCollection<Order>(
+   *   {
+   *     name: 'orders',
+   *     region: Region.PerUser,
+   *     ownerId: 'user1',
+   *   }
+   * );
+   * ```
+   */
+  newCollection<TItem extends JsonifiableObject = JsonifiableObject>(
+    stat: Omit<StoreFileStat, 'type'>,
+    initialData: CollectionContext<TItem>['data'] | null = null,
+  ): void {
+    logger.logMethodArgs?.('newCollection', stat);
+    return this.newStoreFile_(
+      {
+        ...stat,
+        type: StoreFileType.Collection,
+      },
+      initialData,
+    );
+  }
+
+  /**
+   * Defines a AlwatrStoreFile with the given configuration and initial data.
+   *
+   * @param stat store file stat
+   * @param initialData initial data for the document
+   * @template TDoc document data type
+   */
+  newStoreFile_<T extends JsonifiableObject = JsonifiableObject>(
     stat: StoreFileStat,
     initialData: DocumentContext<T>['data'] | CollectionContext<T>['data'] | null = null,
   ): void {
