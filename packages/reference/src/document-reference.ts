@@ -260,11 +260,11 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
    *
    * @example
    * ```typescript
-   * const documentMeta = documentRef.meta();
+   * const documentMeta = documentRef.gerStoreMetadata();
    * ```
    */
-  meta(): Readonly<StoreFileMeta> {
-    this.logger__.logMethod?.('meta');
+  getStoreMetadata(): Readonly<StoreFileMeta> {
+    this.logger__.logMethod?.('documentMetadata');
     return this.context__.meta;
   }
 
