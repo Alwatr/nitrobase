@@ -204,10 +204,10 @@ export class AlwatrStore {
 
     let fileStoreRef: DocumentReference | CollectionReference;
     if (stat.type === StoreFileType.Document) {
-      fileStoreRef = DocumentReference.newRefFromData(stat, initialData as DocumentContext['data'], this.storeChanged__.bind(this));
+      fileStoreRef = DocumentReference.newRefFromData(stat, initialData as DocumentContext['data'], this.storeChanged_.bind(this));
     }
     else if (stat.type === StoreFileType.Collection) {
-      fileStoreRef = CollectionReference.newRefFromData(stat, initialData as CollectionContext['data'], this.storeChanged__.bind(this));
+      fileStoreRef = CollectionReference.newRefFromData(stat, initialData as CollectionContext['data'], this.storeChanged_.bind(this));
     }
     else {
       logger.accident('newStoreFile_', 'store_file_type_not_supported', stat);
@@ -223,7 +223,7 @@ export class AlwatrStore {
     this.cacheReferences__[fileStoreRef.id] = fileStoreRef;
 
     // fileStoreRef.save();
-    this.storeChanged__(fileStoreRef);
+    this.storeChanged_(fileStoreRef);
   }
 
   /**
@@ -269,7 +269,7 @@ export class AlwatrStore {
     }
 
     const context = await this.readContext__<DocumentContext<TDoc>>(storeStat);
-    const docRef = DocumentReference.newRefFromContext(context, this.storeChanged__.bind(this));
+    const docRef = DocumentReference.newRefFromContext(context, this.storeChanged_.bind(this));
     this.cacheReferences__[id_] = docRef as unknown as DocumentReference;
     return docRef;
   }
@@ -319,7 +319,7 @@ export class AlwatrStore {
     }
 
     const context = await this.readContext__<CollectionContext<TItem>>(storeStat);
-    const colRef = CollectionReference.newRefFromContext(context, this.storeChanged__.bind(this));
+    const colRef = CollectionReference.newRefFromContext(context, this.storeChanged_.bind(this));
     this.cacheReferences__[id_] = colRef as unknown as CollectionReference;
     return colRef;
   }
@@ -341,7 +341,7 @@ export class AlwatrStore {
     if (ref === undefined) return;
     if (ref.hasUnprocessedChanges_ === true) {
       ref.updateDelayed_ = false;
-      this.storeChanged__(ref);
+      this.storeChanged_(ref);
     }
     delete this.cacheReferences__[id_];
   }
@@ -398,7 +398,7 @@ export class AlwatrStore {
     for (const ref of Object.values(this.cacheReferences__)) {
       if (ref.hasUnprocessedChanges_ === true && ref.freeze !== true) {
         ref.updateDelayed_ = false;
-        await this.storeChanged__(ref);
+        await this.storeChanged_(ref);
       }
     }
   }
@@ -442,7 +442,7 @@ export class AlwatrStore {
    * @param context The store file context. If not provided, it will be loaded from memory.
    * @param sync If true, the file will be written synchronously.
    */
-  protected async storeChanged__<T extends JsonifiableObject>(from: DocumentReference<T> | CollectionReference<T>): Promise<void> {
+  protected async storeChanged_<T extends JsonifiableObject>(from: DocumentReference<T> | CollectionReference<T>): Promise<void> {
     logger.logMethodArgs?.('storeChanged__', from.id);
     const rev = from.meta().rev;
     try {
@@ -469,11 +469,11 @@ export class AlwatrStore {
       }
 
       logger.banner('Initialize new alwatr-store');
-      return CollectionReference.newRefFromData(AlwatrStore.rootDbStat__, null, this.storeChanged__.bind(this));
+      return CollectionReference.newRefFromData(AlwatrStore.rootDbStat__, null, this.storeChanged_.bind(this));
     }
     // else
     const context = readJson<CollectionContext<StoreFileStat>>(fullPath, true);
-    return CollectionReference.newRefFromContext(context, this.storeChanged__.bind(this), 'root-db');
+    return CollectionReference.newRefFromContext(context, this.storeChanged_.bind(this), 'root-db');
   }
 
   /**
