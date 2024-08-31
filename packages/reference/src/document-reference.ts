@@ -269,17 +269,17 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
   }
 
   /**
-   * Sets the document's data.
+   * Sets the document's data. replacing the existing data.
    *
    * @param data The new document data.
    *
    * @example
    * ```typescript
-   * documentRef.set({ key: 'value' });
+   * documentRef.update({ a: 1, b: 2, c: 3 });
    * ```
    */
-  set(data: TDoc): void {
-    this.logger__.logMethodArgs?.('set', data);
+  update(data: TDoc): void {
+    this.logger__.logMethodArgs?.('update', data);
     (this.context__.data as unknown) = data;
     this.updated__();
   }
