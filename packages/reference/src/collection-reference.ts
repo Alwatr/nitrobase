@@ -342,17 +342,17 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    * If the item does not exist, `undefined` is returned.
    * **USE WITH CAUTION!**
    *
-   * @param id - The ID of the item.
+   * @param itemId - The ID of the item.
    * @returns The data of the item with the given ID or `undefined` if the item does not exist.
    *
    * @example
    * ```typescript
-   * collectionRef.access_('item1')?.data.name = 'test2';
+   * collectionRef.getItemContext_('item1')?.data.name = 'test2';
    * ```
    */
-  access_(id: string | number): CollectionItem<TItem> | undefined {
-    this.logger__.logMethodArgs?.('access_', id);
-    return this.context__.data[id];
+  getItemContext_(itemId: string | number): CollectionItem<TItem> | undefined {
+    this.logger__.logMethodArgs?.('access_', itemId);
+    return this.context__.data[itemId];
   }
 
   /**
