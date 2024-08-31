@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.0-beta.1](https://github.com/Alwatr/store/compare/v7.0.0-beta.0...v7.0.0-beta.1) (2024-08-31)
+
+### Code Refactoring
+
+* move schemaVer to storeId ([322b76d](https://github.com/Alwatr/store/commit/322b76d8432752f979e1d4fc3c2250e22945fd36)) by @
+* Remove unnecessary debug flag ([bdebb58](https://github.com/Alwatr/store/commit/bdebb5856310efd3628edb236f790968d94035fa)) by @
+* Update demo for test schemaVer ([4d5038b](https://github.com/Alwatr/store/commit/4d5038b3a5ae390355e2bd6524f7edc66fedc65c)) by @
+
 ## [7.0.0-beta.0](https://github.com/Alwatr/store/compare/v6.2.1...v7.0.0-beta.0) (2024-08-31)
 
 ### ⚠ BREAKING CHANGES
