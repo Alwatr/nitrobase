@@ -257,7 +257,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   /**
    * Checks if an item exists in the collection.
    *
-   * @param id - The ID of the item.
+   * @param itemId - The ID of the item.
    * @returns `true` if the item with the given ID exists in the collection, `false` otherwise.
    *
    * @example
@@ -269,9 +269,9 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    * }
    * ```
    */
-  exists(id: string | number): boolean {
-    const exists = Object.hasOwn(this.context__.data, id);
-    this.logger__.logMethodFull?.('exists', id, exists);
+  exists(itemId: string | number): boolean {
+    const exists = Object.hasOwn(this.context__.data, itemId);
+    this.logger__.logMethodFull?.('exists', itemId, exists);
     return exists;
   }
 
