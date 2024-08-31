@@ -285,18 +285,17 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
   }
 
   /**
-   * Update Document's data.
-   * Can be used to update a part of the document.
+   * Updates document's data by merging a partial update into the document's data.
    *
-   * @param data Data to update the document with.
+   * @param data The part of data to merge into the document's data.
    *
    * @example
    * ```typescript
-   * documentRef.update({ key: 'updated value' });
+   * documentRef.updatePartial({ c: 4 });
    * ```
    */
-  update(data: Partial<TDoc>): void {
-    this.logger__.logMethodArgs?.('update', data);
+  updatePartial(data: Partial<TDoc>): void {
+    this.logger__.logMethodArgs?.('updatePartial', data);
     Object.assign(this.context__.data, data);
     this.updated__();
   }
