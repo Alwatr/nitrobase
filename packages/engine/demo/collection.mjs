@@ -34,7 +34,6 @@ async function quickstart() {
   alwatrStore.defineStoreFile({
     ...postsCollectionId,
     type: StoreFileType.Collection,
-    extension: StoreFileExtension.Json,
   });
 
   // Get a collection reference.
