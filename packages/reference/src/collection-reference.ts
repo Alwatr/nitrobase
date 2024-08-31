@@ -282,11 +282,11 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    *
    * @example
    * ```typescript
-   * const metadata = collectionRef.meta();
+   * const metadata = collectionRef.getStoreMetadata();
    * ```
    */
-  meta(): Readonly<StoreFileMeta> {
-    this.logger__.logMethod?.('meta');
+  getStoreMetadata(): Readonly<StoreFileMeta> {
+    this.logger__.logMethod?.('getCollectionMetadata');
     return this.context__.meta;
   }
 
