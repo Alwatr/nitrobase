@@ -219,7 +219,7 @@ export class AlwatrStore {
       throw new Error('store_file_already_defined', {cause: stat});
     }
 
-    this.rootDb__.create(fileStoreRef.id, stat);
+    this.rootDb__.add(fileStoreRef.id, stat);
     this.cacheReferences__[fileStoreRef.id] = fileStoreRef;
 
     // fileStoreRef.save();
@@ -261,7 +261,7 @@ export class AlwatrStore {
       throw new Error('document_not_found', {cause: id_});
     }
 
-    const storeStat = this.rootDb__.get(id_);
+    const storeStat = this.rootDb__.getItem(id_);
 
     if (storeStat.type != StoreFileType.Document) {
       logger.accident('openDocument', 'document_wrong_type', id_);
@@ -311,7 +311,7 @@ export class AlwatrStore {
       throw new Error('collection_not_found', {cause: id_});
     }
 
-    const storeStat = this.rootDb__.get(id_);
+    const storeStat = this.rootDb__.getItem(id_);
 
     if (storeStat.type != StoreFileType.Collection) {
       logger.accident('openCollection', 'collection_wrong_type', id_);
@@ -370,12 +370,13 @@ export class AlwatrStore {
     const ref = this.cacheReferences__[id_];
     if (ref !== undefined) {
       // direct unload to prevent save
+      ref.freeze = true;
       ref.updateDelayed_ = false;
       ref.hasUnprocessedChanges_ = false;
       delete this.cacheReferences__[id_]; // unload
     }
-    const path = getStorePath(this.rootDb__.get(id_));
-    this.rootDb__.delete(id_);
+    const path = getStorePath(this.rootDb__.getItem(id_));
+    this.rootDb__.remove(id_);
     await waitForTimeout(0);
     try {
       await unlink(resolve(this.config__.rootPath, path));
@@ -444,10 +445,10 @@ export class AlwatrStore {
    */
   protected async storeChanged_<T extends JsonifiableObject>(from: DocumentReference<T> | CollectionReference<T>): Promise<void> {
     logger.logMethodArgs?.('storeChanged__', from.id);
-    const rev = from.meta().rev;
+    const rev = from.getStoreMetadata().rev;
     try {
       await this.writeContext__(from.path, from.getFullContext_());
-      if (rev === from.meta().rev) {
+      if (rev === from.getStoreMetadata().rev) {
         // Context not changed during saving
         from.hasUnprocessedChanges_ = false;
       }
