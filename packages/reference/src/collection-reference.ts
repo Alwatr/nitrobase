@@ -441,20 +441,20 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   }
 
   /**
-   * Updates an item in the collection. Can be used to update a part of the item.
+   * Updates an item in the collection by merging a partial update into the item's data.
    *
-   * @param id - The ID of the item to update.
-   * @param data - The data to update for the item.
+   * @param itemId - The ID of the item to update.
+   * @param data - The part of data to merge into the item's data.
    *
    * @example
    * ```typescript
-   * collectionRef.update('item1', { key: 'updated value' });
+   * collectionRef.updatePartial(itemId, partialUpdate);
    * ```
    */
-  update(id: string | number, data: Partial<TItem>): void {
-    this.logger__.logMethodArgs?.('update', {id, data});
-    Object.assign(this.item__(id).data, data);
-    this.updated__(id);
+  updatePartial(itemId: string | number, data: Partial<TItem>): void {
+    this.logger__.logMethodArgs?.('updatePartial', {itemId, data});
+    Object.assign(this.item__(itemId).data, data);
+    this.updated__(itemId);
   }
 
   /**
