@@ -606,15 +606,15 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   /**
    * Updates the collection's metadata.
    *
-   * @param id - The ID of the item to update.
+   * @param itemId - The ID of the item to update.
    */
-  updateMeta_(id: string | number | null): void {
-    this.logger__.logMethodArgs?.('updateMeta__', {id});
+  updateMetadata_(itemId: string | number | null): void {
+    this.logger__.logMethodArgs?.('updateMetadata_', {id: itemId});
     const now = Date.now();
     this.context__.meta.rev++;
     this.context__.meta.updated = now;
-    if (id !== null) {
-      const itemMeta = this.item__(id).meta;
+    if (itemId !== null) {
+      const itemMeta = this.item__(itemId).meta;
       itemMeta.rev++;
       itemMeta.updated = now;
     }
