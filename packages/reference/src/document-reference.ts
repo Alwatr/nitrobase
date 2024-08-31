@@ -264,7 +264,7 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
    * ```
    */
   getStoreMetadata(): Readonly<StoreFileMeta> {
-    this.logger__.logMethod?.('documentMetadata');
+    this.logger__.logMethod?.('getStoreMetadata');
     return this.context__.meta;
   }
 

@@ -286,7 +286,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    * ```
    */
   getStoreMetadata(): Readonly<StoreFileMeta> {
-    this.logger__.logMethod?.('getCollectionMetadata');
+    this.logger__.logMethod?.('getStoreMetadata');
     return this.context__.meta;
   }
 
@@ -333,7 +333,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    * ```
    */
   getItem(itemId: string | number): TItem {
-    this.logger__.logMethodArgs?.('get', itemId);
+    this.logger__.logMethodArgs?.('getItem', itemId);
     return this.item__(itemId).data;
   }
 
@@ -351,7 +351,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    * ```
    */
   getItemContext_(itemId: string | number): CollectionItem<TItem> | undefined {
-    this.logger__.logMethodArgs?.('access_', itemId);
+    this.logger__.logMethodArgs?.('getItemContext_', itemId);
     return this.context__.data[itemId];
   }
 
