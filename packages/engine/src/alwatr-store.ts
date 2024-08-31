@@ -198,7 +198,7 @@ export class AlwatrStore {
     stat: StoreFileStat,
     initialData: DocumentContext<T>['data'] | CollectionContext<T>['data'] | null = null,
   ): void {
-    logger.logMethodArgs?.('defineStoreFile', stat);
+    logger.logMethodArgs?.('newStoreFile_', stat);
 
     (stat.changeDebounce as number | undefined) ??= this.config__.defaultChangeDebounce;
 
@@ -245,7 +245,7 @@ export class AlwatrStore {
    */
   async openDocument<TDoc extends JsonifiableObject>(id: StoreFileId): Promise<DocumentReference<TDoc>> {
     const id_ = getStoreId(id);
-    logger.logMethodArgs?.('doc', id_);
+    logger.logMethodArgs?.('openDocument', id_);
 
     if (Object.hasOwn(this.cacheReferences__, id_)) {
       const ref = this.cacheReferences__[id_];
@@ -293,7 +293,7 @@ export class AlwatrStore {
    */
   async openCollection<TItem extends JsonifiableObject>(id: StoreFileId): Promise<CollectionReference<TItem>> {
     const id_ = getStoreId(id);
-    logger.logMethodArgs?.('collection', id_);
+    logger.logMethodArgs?.('openCollection', id_);
 
     // try to get from cache
     if (Object.hasOwn(this.cacheReferences__, id_)) {
