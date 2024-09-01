@@ -22,7 +22,7 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
   /**
    * Alwatr store engine file format version number.
    */
-  static readonly fileFormatVersion = 2;
+  static readonly fileFormatVersion = 3;
 
   /**
    * Creates new DocumentReference instance from stat and initial data.
@@ -51,7 +51,6 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
         created: now,
         type: StoreFileType.Document,
         extension: StoreFileExtension.Json,
-        ver: DocumentReference.version,
         fv: DocumentReference.fileFormatVersion,
       },
       data: initialData,
@@ -109,30 +108,30 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
 
   /**
    * Migrate the document context to the latest.
-   *
-   * @param context document context
    */
-  private static migrateContext__(context: DocumentContext<JsonifiableObject>): void {
-    if (context.meta.ver === DocumentReference.version) return;
+  private migrateContext__(): void {
+    if (this.context__.meta.fv === DocumentReference.fileFormatVersion) return;
 
-    logger.logMethodArgs?.('doc.migrateContext__', {
-      name: context.meta.name,
-      ver: context.meta.ver,
-      fv: context.meta.fv,
-    });
+    this.logger__.logMethod?.('migrateContext__');
 
-    if (context.meta.fv > DocumentReference.fileFormatVersion) {
-      logger.accident('doc.migrateContext__', 'store_version_incompatible', context.meta);
-      throw new Error('store_version_incompatible', {cause: context.meta});
+    if (this.context__.meta.fv > DocumentReference.fileFormatVersion) {
+      this.logger__.accident('migrateContext__', 'store_version_incompatible', this.context__.meta);
+      throw new Error('store_version_incompatible', {cause: this.context__.meta});
     }
 
-    if (context.meta.fv === 1) {
+    if (this.context__.meta.fv === 1) {
       // migrate from v1 to v2
-      // context.meta.schemaVer = 0;
-      context.meta.fv = 2;
+      this.context__.meta.fv = 2;
     }
 
-    context.meta.ver = DocumentReference.version;
+    if (this.context__.meta.fv === 2) {
+      // migrate from v1 to v3
+      this.context__.meta.schemaVer ??= 1
+      delete (this.context__.meta as Dictionary)['ver'];
+      this.context__.meta.fv = 3;
+    }
+
+    this.save();
   }
 
   /**
