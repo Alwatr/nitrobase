@@ -90,34 +90,31 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
 
   /**
    * Validates the collection context and try to migrate it to the latest version.
-   *
-   * @param context collection context
    */
-  private static validateContext__(context: CollectionContext<JsonifiableObject>): void {
-    logger.logMethodArgs?.('col.validateContext__', {name: context.meta?.name});
+  private validateContext__(): void {
+    this.logger__.logMethod?.('validateContext__');
 
-    if (context.ok !== true) {
-      logger.accident?.('col.validateContext__', 'store_not_ok', context);
-      throw new Error('store_not_ok', {cause: context});
+    if (this.context__.ok !== true) {
+      logger.accident?.('col.validateContext__', 'store_not_ok');
+      throw new Error('store_not_ok', {cause: {context: this.context__}});
     }
 
-    if (context.meta === undefined) {
-      logger.accident?.('col.validateContext__', 'store_meta_undefined', context);
-      throw new Error('store_meta_undefined', {cause: context});
+    if (this.context__.meta === undefined) {
+      logger.accident?.('col.validateContext__', 'store_meta_undefined');
+      throw new Error('store_meta_undefined', {cause: {context: this.context__}});
     }
 
-    if (context.meta.type !== StoreFileType.Collection) {
-      logger.accident?.('col.validateContext__', 'collection_type_invalid', context.meta);
-      throw new Error('collection_type_invalid', {cause: context.meta});
+    if (this.context__.meta.type !== StoreFileType.Collection) {
+      logger.accident?.('col.validateContext__', 'collection_type_invalid', this.context__.meta);
+      throw new Error('collection_type_invalid', {cause: this.context__.meta});
     }
 
-    if (context.meta.ver !== CollectionReference.version) {
-      logger.incident?.('col.validateContext__', 'store_version_incompatible', {
-        fileVersion: context.meta.ver,
-        currentVersion: CollectionReference.version,
+    if (this.context__.meta.fv !== CollectionReference.fileFormatVersion) {
+      this.logger__.incident?.('validateContext__', 'store_file_version_incompatible', {
+        old: this.context__.meta.fv,
+        new: CollectionReference.fileFormatVersion,
       });
-
-      CollectionReference.migrateContext__(context);
+      this.migrateContext__();
     }
   }
 
