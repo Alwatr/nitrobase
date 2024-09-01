@@ -359,12 +359,12 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    *
    * @example
    * ```typescript
-   * collectionRef.add('item1', { key: 'value' });
+   * collectionRef.addItem('item1', { key: 'value' });
    * ```
    */
-  add(itemId: string | number, data: TItem): void {
-    this.logger__.logMethodArgs?.('add', {itemId, data});
-    if (this.exists(itemId)) {
+  addItem(itemId: string | number, data: TItem): void {
+    this.logger__.logMethodArgs?.('addItem', {itemId, data});
+    if (this.itemExists(itemId)) {
       this.logger__.accident('add', 'collection_item_exist', {itemId});
       throw new Error('collection_item_exist', {cause: {itemId}});
     }
