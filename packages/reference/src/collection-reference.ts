@@ -13,7 +13,7 @@ import {waitForImmediate, waitForTimeout} from '@alwatr/wait';
 import {logger} from './logger.js';
 import {getStoreId, getStorePath} from './util.js';
 
-import type {JsonifiableObject} from '@alwatr/type-helper';
+import type {Dictionary, JsonifiableObject} from '@alwatr/type-helper';
 
 logger.logModule?.('collection-reference');
 
@@ -62,7 +62,6 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
         lastAutoId: 0,
         type: StoreFileType.Collection,
         extension: StoreFileExtension.Json,
-        ver: CollectionReference.version,
         fv: CollectionReference.fileFormatVersion,
       },
       data: initialData ?? {},
@@ -184,8 +183,6 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     private updatedCallback__: (from: CollectionReference<TItem>) => void,
     debugDomain?: string,
   ) {
-    CollectionReference.validateContext__(this.context__);
-
     this.id = getStoreId(this.context__.meta);
     this.path = getStorePath(this.context__.meta);
 
@@ -193,6 +190,8 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     this.logger__ = createLogger(`col:${debugDomain}`);
 
     this.logger__.logMethodArgs?.('new', {id: this.id});
+
+    this.validateContext__();
   }
 
   /**

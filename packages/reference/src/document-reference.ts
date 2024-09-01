@@ -5,7 +5,7 @@ import {waitForImmediate, waitForTimeout} from '@alwatr/wait';
 import {logger} from './logger.js';
 import {getStoreId, getStorePath} from './util.js';
 
-import type {JsonifiableObject} from '@alwatr/type-helper';
+import type {Dictionary, JsonifiableObject} from '@alwatr/type-helper';
 
 logger.logModule?.('document-reference');
 
@@ -167,8 +167,6 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
     private readonly updatedCallback__: (from: DocumentReference<TDoc>) => unknown,
     debugDomain?: string,
   ) {
-    DocumentReference.validateContext__(this.context__);
-
     this.id = getStoreId(this.context__.meta);
     this.path = getStorePath(this.context__.meta);
 
@@ -176,6 +174,8 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
     this.logger__ = createLogger(`doc:${debugDomain}`);
 
     this.logger__.logMethodArgs?.('new', {path: this.path});
+
+    this.validateContext__();
   }
 
   /**
