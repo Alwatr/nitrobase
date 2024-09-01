@@ -324,11 +324,11 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    *
    * @example
    * ```typescript
-   * const itemData = collectionRef.getItem('item1');
+   * const itemData = collectionRef.getItemData('item1');
    * ```
    */
-  getItem(itemId: string | number): TItem {
-    this.logger__.logMethodArgs?.('getItem', itemId);
+  getItemData(itemId: string | number): TItem {
+    this.logger__.logMethodArgs?.('getItemData', itemId);
     return this.item__(itemId).data;
   }
 
