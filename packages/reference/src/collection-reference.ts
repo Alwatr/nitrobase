@@ -427,11 +427,11 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    *
    * @example
    * ```typescript
-   * collectionRef.update('item1', { a: 1, b: 2, c: 3 });
+   * collectionRef.replaceItemData('item1', { a: 1, b: 2, c: 3 });
    * ```
    */
-  update(itemId: string | number, data: TItem): void {
-    this.logger__.logMethodArgs?.('update', {itemId, data});
+  replaceItemData(itemId: string | number, data: TItem): void {
+    this.logger__.logMethodArgs?.('replaceItemData', {itemId, data});
     (this.item__(itemId).data as unknown) = data;
     this.updated__(itemId);
   }
