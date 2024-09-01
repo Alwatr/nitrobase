@@ -257,16 +257,16 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    *
    * @example
    * ```typescript
-   * const doesExist = collectionRef.exists('item1');
+   * const doesExist = collectionRef.itemExists('item1');
    *
    * if (doesExist) {
    *    collectionRef.create('item1', { key: 'value' });
    * }
    * ```
    */
-  exists(itemId: string | number): boolean {
+  itemExists(itemId: string | number): boolean {
     const exists = Object.hasOwn(this.context__.data, itemId);
-    this.logger__.logMethodFull?.('exists', itemId, exists);
+    this.logger__.logMethodFull?.('itemExists', itemId, exists);
     return exists;
   }
 
