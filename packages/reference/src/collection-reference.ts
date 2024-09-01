@@ -392,13 +392,13 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    *
    * @example
    * ```typescript
-   * const newId = collectionRef.append({ key: 'value' });
+   * const newId = collectionRef.appendItem({ key: 'value' });
    * ```
    */
-  append(data: TItem): string | number {
-    this.logger__.logMethodArgs?.('append', data);
+  appendItem(data: TItem): string | number {
+    this.logger__.logMethodArgs?.('appendItem', data);
     const id = this.nextAutoIncrementId__();
-    this.add(id, data);
+    this.addItem(id, data);
     return id;
   }
 
