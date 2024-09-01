@@ -409,11 +409,12 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    *
    * @example
    * ```typescript
-   * collectionRef.remove('item1');
+   * collectionRef.removeItem('item1');
+   * collectionRef.itemExists('item1'); // Output: false
    * ```
    */
-  remove(itemId: string | number): void {
-    this.logger__.logMethodArgs?.('remove', itemId);
+  removeItem(itemId: string | number): void {
+    this.logger__.logMethodArgs?.('removeItem', itemId);
     delete this.context__.data[itemId];
     this.updated__(null);
   }
