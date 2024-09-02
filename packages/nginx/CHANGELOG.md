@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.0](https://github.com/Alwatr/store/compare/v7.0.0-beta.1...v7.0.0) (2024-09-02)
+
+**Note:** Version bump only for package @alwatr/store-nginx
+
 ## [6.0.4](https://github.com/Alwatr/store/compare/v6.0.3...v6.0.4) (2024-04-25)
 
 ### Miscellaneous Chores

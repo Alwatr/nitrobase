@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.0](https://github.com/Alwatr/store/compare/v7.0.0-beta.1...v7.0.0) (2024-09-02)
+
+### ⚠ BREAKING CHANGES
+
+* The `StoreFileMeta` interface has been updated to include the `extra` property. Developers should update their code to handle the new property.
+* The `update` method has been replaced with `replaceData` in the `DocumentReference` class. Developers should update their code to use the new method name.
+* The `updateMetadata_` method has been replaced with `refreshMetadata_` in the `CollectionReference` class. Developers should update their code to use the new method name.
+* The `updatePartial` method has been replaced with `mergeItemData` in the `CollectionReference` class. Developers should update their code to use the new method name.
+* `update` method in CollectionReference has been replaced with `replaceItemData`
+* `remove` renamed to `removeItem` in CollectionReference
+* `append` renamed to `appendItem` in CollectionReference
+* `add` renamed to `addItem` in CollectionReference
+* `getItem` renamed to `getItemData` in CollectionReference
+* exists renamed to itemExists in CollectionReference
+* version in metadata removed
+
+### Features
+
+* Add `extra` meta for `collection-reference.ts` and `document-reference.ts` with migrate old versions ([8182369](https://github.com/Alwatr/store/commit/81823692edacacb95a53d55218c2c818c9fa13cb)) by @AliMD
+* Add methods for managing extra metadata in DocumentReference ([5c0ae83](https://github.com/Alwatr/store/commit/5c0ae83980ba863b99f3d53ee7c7b91c31bf61c0)) by @AliMD
+
+### Bug Fixes
+
+* **CollectionReference:** logger issues ([9660fb2](https://github.com/Alwatr/store/commit/9660fb22dce5670c16028441c60f0715f537467a)) by @AliMD
+* **reference:** set the correct names ([e55300e](https://github.com/Alwatr/store/commit/e55300e908526b38b17274c65b9e3b8fa0387a96)) by @mohammadhonarvar
+
+### Code Refactoring
+
+* Add methods for managing extra metadata in CollectionReference ([eed99f5](https://github.com/Alwatr/store/commit/eed99f5d596885b715a6a51fc3b6fb885dbeadb5)) by @AliMD
+* **reference:** rename  `itemExists` to `hasItem` ([f49e776](https://github.com/Alwatr/store/commit/f49e77655e3507bce2d4359dcebabb4e048bc6ec)) by @mohammadhonarvar
+* Refresh metadata in CollectionReference when updating or refreshing items ([b7108c7](https://github.com/Alwatr/store/commit/b7108c72a04441afddabd2bb30432b22a4d31f51)) by @AliMD
+* Refresh metadata in DocumentReference when updating ([50d3ea8](https://github.com/Alwatr/store/commit/50d3ea82ea6044e194eed7554be42c509b8377f1)) by @AliMD
+* Remove unused "ALWATR_DEBUG" environment variable from build script ([26e7642](https://github.com/Alwatr/store/commit/26e764280e0a2827904762ed3de21a9966ddfc63)) by @AliMD
+* remove ver in metadata and Update file format version to 3 in CollectionReference and DocumentReference ([4bf146e](https://github.com/Alwatr/store/commit/4bf146ed5b1cbd2b340b3c0f3c5f6911aeed6f6d)) by @AliMD
+* Rename add method to addItem in CollectionReference ([60a859b](https://github.com/Alwatr/store/commit/60a859b920ba57e2e98b2cc7b4d25d978e649944)) by @AliMD
+* Rename append method to appendItem in CollectionReference ([949f261](https://github.com/Alwatr/store/commit/949f261fc12c93cd89b3480a2c1aaa8054af477a)) by @AliMD
+* Rename exists method to itemExists in CollectionReference ([7555803](https://github.com/Alwatr/store/commit/7555803cdf5fd737b013f2ecd340f5b6936b9c65)) by @AliMD
+* Rename getItem method to getItemData in CollectionReference ([e592ae5](https://github.com/Alwatr/store/commit/e592ae5511e8e81a702f3d0283b2aa20a93edc74)) by @AliMD
+* Rename remove method to removeItem in CollectionReference ([6238cae](https://github.com/Alwatr/store/commit/6238cae8e46b379d00559b54c27aedc793ca77c2)) by @AliMD
+* Rename update method to replaceData in DocumentReference ([367257c](https://github.com/Alwatr/store/commit/367257c13255a1537d87d948ed0f303368b2ae2d)) by @AliMD
+* Rename updatePartial method to mergeData in DocumentReference ([cbc1194](https://github.com/Alwatr/store/commit/cbc119410b3a58d554c30dfc01eafbdb91b4c49a)) by @AliMD
+* Rename updatePartial method to mergeItemData in CollectionReference ([e091900](https://github.com/Alwatr/store/commit/e09190062e9387d7abad0d395a921b94b4efea18)) by @AliMD
+* Replace update method with replaceItemData in CollectionReference ([45a9309](https://github.com/Alwatr/store/commit/45a9309887ed6db4ac452b6dbc48a8cb4b38c7c7)) by @AliMD
+* Update migrate process in CollectionReference and DocumentReference ([5a25ae2](https://github.com/Alwatr/store/commit/5a25ae2674dfa3eda78b6995b0af3beb4ab885c5)) by @AliMD
+* Update type imports in alwatr-store.ts ([b6a4aba](https://github.com/Alwatr/store/commit/b6a4aba2e5fc51585d69b047a9bd22c49ed2098a)) by @AliMD
+* Update validateContext__ method in CollectionReference and DocumentReference ([4dfee95](https://github.com/Alwatr/store/commit/4dfee95f7eb04cf12afc4df1f275c5495f78ad6a)) by @AliMD
+* Update validateContext__ method in CollectionReference and DocumentReference ([bb0ae6a](https://github.com/Alwatr/store/commit/bb0ae6ab62e6fe34ff916adba74aba6a2a0b304a)) by @AliMD
+
+### Dependencies update
+
+* update ([6411ff7](https://github.com/Alwatr/store/commit/6411ff7d49323b8bbf0dbb03fbc3c640b433a8bb)) by @
+
 ## [7.0.0-beta.1](https://github.com/Alwatr/store/compare/v7.0.0-beta.0...v7.0.0-beta.1) (2024-08-31)
 
 ### Code Refactoring

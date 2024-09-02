@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.0](https://github.com/Alwatr/store/compare/v7.0.0-beta.1...v7.0.0) (2024-09-02)
+
+### ⚠ BREAKING CHANGES
+
+* The ver property has been removed from the StoreFileMeta interface. Developers should update their code to remove any references to the ver property.
+
+### Features
+
+* add `extra` property to StoreFileMeta ([5cdb573](https://github.com/Alwatr/store/commit/5cdb5735c2faf888a3fcea466ec3fd848e60148e)) by @AliMD
+* Add migrateName property to StoreFileStat ([f5b4f39](https://github.com/Alwatr/store/commit/f5b4f3904cec69ad96089daa800ed4243bd0f33e)) by @AliMD
+* Update type imports in alwatr-store.ts ([68064c4](https://github.com/Alwatr/store/commit/68064c4430c5aad8bca49d1f2a9270d6e64b051e)) by @AliMD
+
+### Code Refactoring
+
+* Remove unused "ALWATR_DEBUG" environment variable from build script ([26e7642](https://github.com/Alwatr/store/commit/26e764280e0a2827904762ed3de21a9966ddfc63)) by @AliMD
+* Remove ver property from StoreFileMeta ([3c27903](https://github.com/Alwatr/store/commit/3c2790330c71857ffafd41495610abdd691c5486)) by @AliMD
+
+### Dependencies update
+
+* update ([6411ff7](https://github.com/Alwatr/store/commit/6411ff7d49323b8bbf0dbb03fbc3c640b433a8bb)) by @
+
 ## [7.0.0-beta.1](https://github.com/Alwatr/store/compare/v7.0.0-beta.0...v7.0.0-beta.1) (2024-08-31)
 
 ### Code Refactoring

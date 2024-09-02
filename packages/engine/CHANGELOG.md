@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.0](https://github.com/Alwatr/store/compare/v7.0.0-beta.1...v7.0.0) (2024-09-02)
+
+### Features
+
+* Add getStoreList method to AlwatrStore ([25ace2a](https://github.com/Alwatr/store/commit/25ace2aa4e32d9ad99d6ac2e63ac783462b9f4e5)) by @AliMD
+
+### Bug Fixes
+
+* **engine:** set the correct names ([076fa3e](https://github.com/Alwatr/store/commit/076fa3e0d7cfe673cc58418153b7dc2aacfb340a)) by @mohammadhonarvar
+* **packages/engine:** apply some new name of methods ([e3d5712](https://github.com/Alwatr/store/commit/e3d5712e19406f58fb87b822e036df5847aab6c0)) by @mohammadhonarvar
+
+### Code Refactoring
+
+* **engine:** use  `hasItem` ([e17afa7](https://github.com/Alwatr/store/commit/e17afa7ef050cbf9f349dd6919739a01764aa24f)) by @mohammadhonarvar
+* move all demo from engine to srore package ([e34fc49](https://github.com/Alwatr/store/commit/e34fc49c71703cd287559ca4fb23f9f13842b2d0)) by @AliMD
+* Remove unused "ALWATR_DEBUG" environment variable from build script ([26e7642](https://github.com/Alwatr/store/commit/26e764280e0a2827904762ed3de21a9966ddfc63)) by @AliMD
+* Replace id_ with documentId and collectionId in AlwatrStore ([e58d0fd](https://github.com/Alwatr/store/commit/e58d0fd905722352238e11ed4e308907485f8ff5)) by @AliMD
+* Update type imports in alwatr-store.ts ([d6f02ad](https://github.com/Alwatr/store/commit/d6f02ad5b779d04aa1b484bff96369483393af15)) by @AliMD
+* Update type imports in alwatr-store.ts ([274d234](https://github.com/Alwatr/store/commit/274d234e6653cade2288288a4894feb7314987a2)) by @AliMD
+
+### Dependencies update
+
+* update ([6411ff7](https://github.com/Alwatr/store/commit/6411ff7d49323b8bbf0dbb03fbc3c640b433a8bb)) by @
+
 ## [7.0.0-beta.1](https://github.com/Alwatr/store/compare/v7.0.0-beta.0...v7.0.0-beta.1) (2024-08-31)
 
 ### Code Refactoring
