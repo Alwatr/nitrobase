@@ -637,4 +637,51 @@ export class CollectionReference<TItem extends JsonObject = JsonObject> {
     } while (meta.lastAutoId in this.context__.data);
     return meta.lastAutoId;
   }
+
+  /**
+   * Retrieves the collection's extra metadata.
+   *
+   * @returns The collection's extra metadata.
+   *
+   * @example
+   * ```typescript
+   * const colExtraMeta = collectionRef.getExtraMeta();
+   * ```
+   */
+  getExtraMeta<T extends JsonObject>(): T {
+    this.logger__.logMethod?.('getExtraMeta');
+    return this.context__.meta.extra as T;
+  }
+
+  /**
+   * Sets/replace the collection's extra metadata.
+   *
+   * @param extraMeta The new collection's extra metadata.
+   *
+   * @example
+   * ```typescript
+   * collectionRef.replaceExtraMeta({ a: 1, b: 2, c: 3 });
+   * ```
+   */
+  replaceExtraMeta<T extends JsonObject>(extraMeta: T): void {
+    this.logger__.logMethodArgs?.('replaceExtraMeta', extraMeta);
+    this.context__.meta.extra = extraMeta;
+    this.updated__();
+  }
+
+  /**
+   * Updates collection's extra metadata by merging a partial update.
+   *
+   * @param extraMeta The part of extra metadata to merge into the collection's extra metadata.
+   *
+   * @example
+   * ```typescript
+   * collectionRef.mergeExtraMeta({ c: 4 });
+   * ```
+   */
+  mergeExtraMeta<T extends JsonObject>(extraMeta: Partial<T>): void {
+    this.logger__.logMethodArgs?.('mergeExtraMeta', extraMeta);
+    Object.assign(this.context__.meta.extra, extraMeta);
+    this.updated__();
+  }
 }
