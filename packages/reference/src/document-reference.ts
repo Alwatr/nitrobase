@@ -52,6 +52,7 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
         type: StoreFileType.Document,
         extension: StoreFileExtension.Json,
         fv: DocumentReference.fileFormatVersion,
+        extra: {},
       },
       data: initialData,
     };
@@ -131,6 +132,7 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
         this.context__.meta.schemaVer = 1
       }
       delete (this.context__.meta as Dictionary)['ver'];
+      this.context__.meta.extra ??= {};
       this.context__.meta.fv = 3;
     }
 

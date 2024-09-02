@@ -63,6 +63,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
         type: StoreFileType.Collection,
         extension: StoreFileExtension.Json,
         fv: CollectionReference.fileFormatVersion,
+        extra: {},
       },
       data: initialData ?? {},
     };
@@ -142,6 +143,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
         this.context__.meta.schemaVer = 1
       }
       delete (this.context__.meta as Dictionary)['ver'];
+      this.context__.meta.extra ??= {};
       this.context__.meta.fv = 3;
     }
 
