@@ -94,17 +94,17 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     this.logger__.logMethod?.('validateContext__');
 
     if (this.context__.ok !== true) {
-      logger.accident?.('col.validateContext__', 'store_not_ok');
+      this.logger__.accident?.('validateContext__', 'store_not_ok');
       throw new Error('store_not_ok', {cause: {context: this.context__}});
     }
 
     if (this.context__.meta === undefined) {
-      logger.accident?.('col.validateContext__', 'store_meta_undefined');
+      this.logger__.accident?.('validateContext__', 'store_meta_undefined');
       throw new Error('store_meta_undefined', {cause: {context: this.context__}});
     }
 
     if (this.context__.meta.type !== StoreFileType.Collection) {
-      logger.accident?.('col.validateContext__', 'collection_type_invalid', this.context__.meta);
+      this.logger__.accident?.('validateContext__', 'collection_type_invalid', this.context__.meta);
       throw new Error('collection_type_invalid', {cause: this.context__.meta});
     }
 
@@ -126,7 +126,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     this.logger__.logMethod?.('migrateContext__');
 
     if (this.context__.meta.fv > CollectionReference.fileFormatVersion) {
-      logger.accident('coll.migrateContext__', 'store_version_incompatible', this.context__.meta);
+      this.logger__.accident('migrateContext__', 'store_version_incompatible', this.context__.meta);
       throw new Error('store_version_incompatible', {cause: this.context__.meta});
     }
 
