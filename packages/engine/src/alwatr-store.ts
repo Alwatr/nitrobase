@@ -15,7 +15,7 @@ import {waitForTimeout} from '@alwatr/wait';
 
 import {logger} from './logger.js';
 
-import type {Dictionary, JsonifiableObject} from '@alwatr/type-helper';
+import type {Dictionary, JsonObject} from '@alwatr/type-helper';
 
 logger.logModule?.('alwatr-store');
 
@@ -141,7 +141,7 @@ export class AlwatrStore {
    * );
    * ```
    */
-  newDocument<T extends JsonifiableObject = JsonifiableObject>(
+  newDocument<T extends JsonObject = JsonObject>(
     stat: Omit<StoreFileStat, 'type'>,
     initialData: DocumentContext<T>['data'] | null = null,
   ): void {
@@ -173,7 +173,7 @@ export class AlwatrStore {
    * );
    * ```
    */
-  newCollection<TItem extends JsonifiableObject = JsonifiableObject>(
+  newCollection<TItem extends JsonObject = JsonObject>(
     stat: Omit<StoreFileStat, 'type'>,
     initialData: CollectionContext<TItem>['data'] | null = null,
   ): void {
@@ -194,7 +194,7 @@ export class AlwatrStore {
    * @param initialData initial data for the document
    * @template TDoc document data type
    */
-  newStoreFile_<T extends JsonifiableObject = JsonifiableObject>(
+  newStoreFile_<T extends JsonObject = JsonObject>(
     stat: StoreFileStat,
     initialData: DocumentContext<T>['data'] | CollectionContext<T>['data'] | null = null,
   ): void {
@@ -243,7 +243,7 @@ export class AlwatrStore {
    * userProfile.update({name: 'ali'});
    * ```
    */
-  async openDocument<TDoc extends JsonifiableObject>(id: StoreFileId): Promise<DocumentReference<TDoc>> {
+  async openDocument<TDoc extends JsonObject>(id: StoreFileId): Promise<DocumentReference<TDoc>> {
     const id_ = getStoreId(id);
     logger.logMethodArgs?.('openDocument', id_);
 
@@ -291,7 +291,7 @@ export class AlwatrStore {
    * orders.append({name: 'order 1'});
    * ```
    */
-  async openCollection<TItem extends JsonifiableObject>(id: StoreFileId): Promise<CollectionReference<TItem>> {
+  async openCollection<TItem extends JsonObject>(id: StoreFileId): Promise<CollectionReference<TItem>> {
     const id_ = getStoreId(id);
     logger.logMethodArgs?.('openCollection', id_);
 
@@ -441,7 +441,7 @@ export class AlwatrStore {
    * @param context The store file context. If not provided, it will be loaded from memory.
    * @param sync If true, the file will be written synchronously.
    */
-  protected async storeChanged_<T extends JsonifiableObject>(from: DocumentReference<T> | CollectionReference<T>): Promise<void> {
+  protected async storeChanged_<T extends JsonObject>(from: DocumentReference<T> | CollectionReference<T>): Promise<void> {
     logger.logMethodArgs?.('storeChanged__', from.id);
     const rev = from.getStoreMeta().rev;
     try {
