@@ -131,6 +131,12 @@ export type StoreFileStat = StoreFileId & {
   readonly changeDebounce?: number;
 
   /**
+   * The name of the migration process.
+   * This is used to migrate the store file to a new schema version.
+   */
+  readonly migrateName?: string;
+
+  /**
    * The time-to-live (TTL) of the store file in memory.
    */
   // readonly ttl?: number;
