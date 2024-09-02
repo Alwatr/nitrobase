@@ -1,5 +1,5 @@
 import {createLogger} from '@alwatr/logger';
-import {AlwatrStore, Region} from '@alwatr/store-engine';
+import {AlwatrStore, Region} from '@alwatr/store';
 import {waitForTimeout} from '@alwatr/wait';
 
 (async function () {
