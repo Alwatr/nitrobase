@@ -280,11 +280,11 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    *
    * @example
    * ```typescript
-   * const metadata = collectionRef.getStoreMetadata();
+   * const metadata = collectionRef.getStoreMeta();
    * ```
    */
-  getStoreMetadata(): Readonly<StoreFileMeta> {
-    this.logger__.logMethod?.('getStoreMetadata');
+  getStoreMeta(): Readonly<StoreFileMeta> {
+    this.logger__.logMethod?.('getStoreMeta');
     return this.context__.meta;
   }
 
@@ -297,7 +297,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   private item__(itemId: string | number): CollectionItem<TItem> {
     const item = this.context__.data[itemId];
     if (item === undefined) {
-      this.logger__.accident('item_', 'collection_item_not_found', {itemId});
+      this.logger__.accident('item__', 'collection_item_not_found', {itemId});
       throw new Error('collection_item_not_found', {cause: {itemId}});
     }
     return item;
@@ -310,12 +310,12 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    * @returns The metadata of the item with the given ID.
    * @example
    * ```typescript
-   * const itemMeta = collectionRef.getItemMetadata('item1');
+   * const itemMeta = collectionRef.getItemMeta('item1');
    * ```
    */
-  getItemMetadata(itemId: string | number): Readonly<CollectionItemMeta> {
+  getItemMeta(itemId: string | number): Readonly<CollectionItemMeta> {
     const meta = this.item__(itemId).meta;
-    this.logger__.logMethodFull?.('getItemMetadata', itemId, meta);
+    this.logger__.logMethodFull?.('getItemMeta', itemId, meta);
     return meta;
   }
 
@@ -368,7 +368,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   addItem(itemId: string | number, data: TItem): void {
     this.logger__.logMethodArgs?.('addItem', {itemId, data});
     if (this.itemExists(itemId)) {
-      this.logger__.accident('add', 'collection_item_exist', {itemId});
+      this.logger__.accident('addItem', 'collection_item_exist', {itemId});
       throw new Error('collection_item_exist', {cause: {itemId}});
     }
 
@@ -579,7 +579,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     this.logger__.logMethodArgs?.('updated__', {id, immediate, delayed: this.updateDelayed_});
 
     this.hasUnprocessedChanges_ = true;
-    if (id !== null) this.refreshMetadata_(id); // meta must updated per item
+    if (id !== null) this.refreshMeta_(id); // meta must updated per item
 
     if (immediate === false && this.updateDelayed_ === true) return;
     // else
@@ -596,7 +596,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     if (this.updateDelayed_ !== true) return; // another parallel update finished!
     this.updateDelayed_ = false;
 
-    if (id === null) this.refreshMetadata_(id); // root meta not updated for null
+    if (id === null) this.refreshMeta_(id); // root meta not updated for null
 
     if (this._freeze === true) return; // prevent save if frozen
     this.updatedCallback__.call(null, this);
@@ -607,8 +607,8 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    *
    * @param itemId - The ID of the item to update.
    */
-  protected refreshMetadata_(itemId: string | number | null): void {
-    this.logger__.logMethodArgs?.('refreshMetadata_', {id: itemId});
+  protected refreshMeta_(itemId: string | number | null): void {
+    this.logger__.logMethodArgs?.('refreshMeta_', {id: itemId});
     const now = Date.now();
     this.context__.meta.rev++;
     this.context__.meta.updated = now;
