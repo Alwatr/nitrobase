@@ -1,7 +1,7 @@
 import {definePackage} from '@alwatr/dedupe';
 
 import type {} from '@alwatr/nano-build';
-import type {Dictionary, JsonifiableObject} from '@alwatr/type-helper';
+import type {Dictionary, JsonObject} from '@alwatr/type-helper';
 
 definePackage('@alwatr/store-types', __package_version__);
 
@@ -170,16 +170,16 @@ export type StoreFileMeta = StoreFileStat & {
   /**
    * The extra metadata for the store file.
    */
-  extra: Dictionary;
+  extra: JsonObject;
 };
 
-export type StoreFileData<T extends JsonifiableObject = JsonifiableObject> = T;
+export type StoreFileData<T extends JsonObject = JsonObject> = T;
 
 /**
  * Represents the context of a store file.
  * @template TData The type of the data content in the store file.
  */
-export type StoreFileContext<TData extends JsonifiableObject = JsonifiableObject> = {
+export type StoreFileContext<TData extends JsonObject = JsonObject> = {
   /**
    * The status of the store file.
    *
@@ -209,7 +209,7 @@ export type StoreFileMetaOnlyContext = Omit<StoreFileContext<never>, 'data'>;
 /**
  * StoreFileContext for document type.
  */
-export type DocumentContext<T extends JsonifiableObject = JsonifiableObject> = StoreFileContext<T>;
+export type DocumentContext<T extends JsonObject = JsonObject> = StoreFileContext<T>;
 
 // *** Collections ***
 
@@ -243,7 +243,7 @@ export type CollectionItemMeta = {
 /**
  * Collection item context type.
  */
-export type CollectionItem<TData extends JsonifiableObject = JsonifiableObject> = {
+export type CollectionItem<TData extends JsonObject = JsonObject> = {
   /**
    * Collection item's metadata.
    */
@@ -258,4 +258,4 @@ export type CollectionItem<TData extends JsonifiableObject = JsonifiableObject> 
 /**
  * Collection item context type.
  */
-export type CollectionContext<T extends JsonifiableObject = JsonifiableObject> = StoreFileContext<Dictionary<CollectionItem<T>>>;
+export type CollectionContext<T extends JsonObject = JsonObject> = StoreFileContext<Dictionary<CollectionItem<T>>>;
