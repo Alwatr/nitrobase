@@ -12,13 +12,16 @@ import {waitForTimeout} from '@alwatr/wait';
     defaultChangeDebounce: 1000, // for test
   });
 
+  /**
+   * @type {import('@alwatr/store').StoreFileId}
+   */
   const colId = {
     name: 'junk',
     region: Region.Public,
   };
 
-  if (alwatrStore.exists(colId)) {
-    await alwatrStore.remove(colId);
+  if (alwatrStore.hasStore(colId)) {
+    await alwatrStore.removeStore(colId);
   }
 
   alwatrStore.newCollection(colId);
@@ -31,7 +34,7 @@ import {waitForTimeout} from '@alwatr/wait';
 
   const max = 10_000;
   for (let i = 0; i < max; i++) {
-    col.append({
+    col.appendItem({
       fname: Math.random().toString(36),
       lname: Math.random().toString(36),
     });
