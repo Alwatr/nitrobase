@@ -363,17 +363,17 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
     if (this.updateDelayed_ !== true) return; // another parallel update finished!
     this.updateDelayed_ = false;
 
-    this.updateMeta_();
+    this.refreshMetadata_();
 
     if (this._freeze === true) return; // prevent save if frozen
     this.updatedCallback__.call(null, this);
   }
 
   /**
-   * Updates the document's metadata.
+   * Refresh/recalculate the document's metadata timestamp and revision.
    */
-  updateMeta_(): void {
-    this.logger__.logMethod?.('updateMeta__');
+  protected refreshMetadata_(): void {
+    this.logger__.logMethod?.('refreshMetadata_');
     this.context__.meta.updated = Date.now();
     this.context__.meta.rev++;
   }
