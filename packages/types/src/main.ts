@@ -141,11 +141,6 @@ export type StoreFileStat = StoreFileId & {
  */
 export type StoreFileMeta = StoreFileStat & {
   /**
-   * The AlwatrStore engine version.
-   */
-  ver: string;
-
-  /**
    * Store file format version.
    */
   fv: number;
