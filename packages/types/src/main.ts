@@ -166,6 +166,11 @@ export type StoreFileMeta = StoreFileStat & {
    * Last auto increment id.
    */
   lastAutoId?: number;
+
+  /**
+   * The extra metadata for the store file.
+   */
+  extra: Dictionary;
 };
 
 export type StoreFileData<T extends JsonifiableObject = JsonifiableObject> = T;
