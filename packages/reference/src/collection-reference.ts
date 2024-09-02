@@ -444,11 +444,11 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    *
    * @example
    * ```typescript
-   * collectionRef.updatePartial(itemId, partialUpdate);
+   * collectionRef.mergeItemData(itemId, partialUpdate);
    * ```
    */
-  updatePartial(itemId: string | number, data: Partial<TItem>): void {
-    this.logger__.logMethodArgs?.('updatePartial', {itemId, data});
+  mergeItemData(itemId: string | number, data: Partial<TItem>): void {
+    this.logger__.logMethodArgs?.('mergeItemData', {itemId, data});
     Object.assign(this.item__(itemId).data, data);
     this.updated__(itemId);
   }
