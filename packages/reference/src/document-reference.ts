@@ -5,7 +5,7 @@ import {waitForImmediate, waitForTimeout} from '@alwatr/wait';
 import {logger} from './logger.js';
 import {getStoreId, getStorePath} from './util.js';
 
-import type {Dictionary, JsonifiableObject} from '@alwatr/type-helper';
+import type {Dictionary, JsonObject} from '@alwatr/type-helper';
 
 logger.logModule?.('document-reference');
 
@@ -13,7 +13,7 @@ logger.logModule?.('document-reference');
  * Represents a reference to a document of the AlwatrStore.
  * Provides methods to interact with the document, such as get, set, update and save.
  */
-export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObject> {
+export class DocumentReference<TDoc extends JsonObject = JsonObject> {
   /**
    * Alwatr store engine version string.
    */
@@ -33,7 +33,7 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
    * @template TDoc The document data type.
    * @returns A new document reference class.
    */
-  static newRefFromData<TDoc extends JsonifiableObject>(
+  static newRefFromData<TDoc extends JsonObject>(
     statId: StoreFileId,
     initialData: TDoc,
     updatedCallback: (from: DocumentReference<TDoc>) => unknown,
@@ -68,7 +68,7 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
    * @template TDoc The document data type.
    * @returns A new document reference class.
    */
-  static newRefFromContext<TDoc extends JsonifiableObject>(
+  static newRefFromContext<TDoc extends JsonObject>(
     context: DocumentContext<TDoc>,
     updatedCallback: (from: DocumentReference<TDoc>) => unknown,
     debugDomain?: string,
@@ -136,7 +136,7 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
       this.context__.meta.fv = 3;
     }
 
-    this.save();
+    this.updated__();
   }
 
   /**
@@ -150,7 +150,7 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
   readonly path: string;
 
   /**
-   * Indicates whether the collection has unsaved changes.
+   * Indicates whether the document has unsaved changes.
    */
   hasUnprocessedChanges_ = false;
 
@@ -198,22 +198,22 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
   set schemaVer(ver: number) {
     this.logger__.logMethodArgs?.('set schemaVer', {old: this.context__.meta.schemaVer, new: ver});
     this.context__.meta.schemaVer = ver;
-    this.save();
+    this.updated__();
   }
 
   /**
-   * Indicates whether the collection data is frozen and cannot be saved.
+   * Indicates whether the document data is frozen and cannot be saved.
    */
   private _freeze = false;
 
   /**
-   * Gets the freeze status of the collection data.
+   * Gets the freeze status of the document data.
    *
-   * @returns `true` if the collection data is frozen, `false` otherwise.
+   * @returns `true` if the document data is frozen, `false` otherwise.
    *
    * @example
    * ```typescript
-   * const isFrozen = collectionRef.freeze;
+   * const isFrozen = documentRef.freeze;
    * console.log(isFrozen); // Output: false
    * ```
    */
@@ -222,14 +222,14 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
   }
 
   /**
-   * Sets the freeze status of the collection data.
+   * Sets the freeze status of the document data.
    *
    * @param value - The freeze status to set.
    *
    * @example
    * ```typescript
-   * collectionRef.freeze = true;
-   * console.log(collectionRef.freeze); // Output: true
+   * documentRef.freeze = true;
+   * console.log(documentRef.freeze); // Output: true
    * ```
    */
   set freeze(value: boolean) {
@@ -274,11 +274,11 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
    *
    * @example
    * ```typescript
-   * documentRef.overwriteData({ a: 1, b: 2, c: 3 });
+   * documentRef.replaceData({ a: 1, b: 2, c: 3 });
    * ```
    */
   replaceData(data: TDoc): void {
-    this.logger__.logMethodArgs?.('overwriteData', data);
+    this.logger__.logMethodArgs?.('replaceData', data);
     (this.context__.data as unknown) = data;
     this.updated__();
   }
@@ -310,7 +310,7 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
    */
   save(): void {
     this.logger__.logMethod?.('save');
-    this.updated__(false);
+    this.updated__();
   }
 
   /**
@@ -323,7 +323,7 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
    */
   saveImmediate(): void {
     this.logger__.logMethod?.('saveImmediate');
-    this.updated__(true);
+    this.updated__(/* immediate: */ true);
   }
 
   /**

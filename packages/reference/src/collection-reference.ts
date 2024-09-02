@@ -13,7 +13,7 @@ import {waitForImmediate, waitForTimeout} from '@alwatr/wait';
 import {logger} from './logger.js';
 import {getStoreId, getStorePath} from './util.js';
 
-import type {Dictionary, JsonifiableObject} from '@alwatr/type-helper';
+import type {Dictionary, JsonObject} from '@alwatr/type-helper';
 
 logger.logModule?.('collection-reference');
 
@@ -23,7 +23,7 @@ logger.logModule?.('collection-reference');
  *
  * @template TItem - The data type of the collection items.
  */
-export class CollectionReference<TItem extends JsonifiableObject = JsonifiableObject> {
+export class CollectionReference<TItem extends JsonObject = JsonObject> {
   /**
    * Alwatr store engine version string.
    */
@@ -43,7 +43,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    * @template TItem The collection item data type.
    * @returns A new collection reference class.
    */
-  static newRefFromData<TItem extends JsonifiableObject>(
+  static newRefFromData<TItem extends JsonObject>(
     stat: StoreFileId,
     initialData: CollectionContext<TItem>['data'] | null,
     updatedCallback: (from: CollectionReference<TItem>) => void,
@@ -79,7 +79,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    * @template TItem The collection item data type.
    * @returns A new collection reference class.
    */
-  static newRefFromContext<TItem extends JsonifiableObject>(
+  static newRefFromContext<TItem extends JsonObject>(
     context: CollectionContext<TItem>,
     updatedCallback: (from: CollectionReference<TItem>) => void,
     debugDomain?: string,
@@ -147,7 +147,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
       this.context__.meta.fv = 3;
     }
 
-    this.save();
+    this.updated__();
   }
 
   /**
@@ -214,7 +214,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   set schemaVer(ver: number) {
     this.logger__.logMethodArgs?.('set schemaVer', {old: this.context__.meta.schemaVer, new: ver});
     this.context__.meta.schemaVer = ver;
-    this.save();
+    this.updated__();
   }
 
   /**
@@ -420,7 +420,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   removeItem(itemId: string | number): void {
     this.logger__.logMethodArgs?.('removeItem', itemId);
     delete this.context__.data[itemId];
-    this.updated__(null);
+    this.updated__();
   }
 
   /**
@@ -574,13 +574,13 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    * Update the document metadata and invoke the updated callback.
    * This method is throttled to prevent multiple updates in a short time.
    *
-   * @param id - The ID of the item to update.
+   * @param itemId - The ID of the item to update.
    */
-  private async updated__(id: string | number | null, immediate = false): Promise<void> {
-    this.logger__.logMethodArgs?.('updated__', {id, immediate, delayed: this.updateDelayed_});
+  private async updated__(itemId: string | number | null = null, immediate = false): Promise<void> {
+    this.logger__.logMethodArgs?.('updated__', {id: itemId, immediate, delayed: this.updateDelayed_});
 
     this.hasUnprocessedChanges_ = true;
-    if (id !== null) this.refreshMeta_(id); // meta must updated per item
+    if (itemId !== null) this.refreshMeta_(itemId); // meta must updated per item
 
     if (immediate === false && this.updateDelayed_ === true) return;
     // else
@@ -597,7 +597,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     if (this.updateDelayed_ !== true) return; // another parallel update finished!
     this.updateDelayed_ = false;
 
-    if (id === null) this.refreshMeta_(id); // root meta not updated for null
+    if (itemId === null) this.refreshMeta_(itemId); // root meta not updated for null
 
     if (this._freeze === true) return; // prevent save if frozen
     this.updatedCallback__.call(null, this);
