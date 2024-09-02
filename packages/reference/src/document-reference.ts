@@ -286,11 +286,11 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
    *
    * @example
    * ```typescript
-   * documentRef.updatePartial({ c: 4 });
+   * documentRef.mergeData({ c: 4 });
    * ```
    */
-  updatePartial(data: Partial<TDoc>): void {
-    this.logger__.logMethodArgs?.('updatePartial', data);
+  mergeData(data: Partial<TDoc>): void {
+    this.logger__.logMethodArgs?.('mergeData', data);
     Object.assign(this.context__.data, data);
     this.updated__();
   }
