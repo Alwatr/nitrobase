@@ -13,7 +13,7 @@ import {waitForImmediate, waitForTimeout} from '@alwatr/wait';
 import {logger} from './logger.js';
 import {getStoreId, getStorePath} from './util.js';
 
-import type {Dictionary, JsonifiableObject} from '@alwatr/type-helper';
+import type {Dictionary, JsonObject} from '@alwatr/type-helper';
 
 logger.logModule?.('collection-reference');
 
@@ -23,7 +23,7 @@ logger.logModule?.('collection-reference');
  *
  * @template TItem - The data type of the collection items.
  */
-export class CollectionReference<TItem extends JsonifiableObject = JsonifiableObject> {
+export class CollectionReference<TItem extends JsonObject = JsonObject> {
   /**
    * Alwatr store engine version string.
    */
@@ -43,7 +43,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    * @template TItem The collection item data type.
    * @returns A new collection reference class.
    */
-  static newRefFromData<TItem extends JsonifiableObject>(
+  static newRefFromData<TItem extends JsonObject>(
     stat: StoreFileId,
     initialData: CollectionContext<TItem>['data'] | null,
     updatedCallback: (from: CollectionReference<TItem>) => void,
@@ -63,6 +63,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
         type: StoreFileType.Collection,
         extension: StoreFileExtension.Json,
         fv: CollectionReference.fileFormatVersion,
+        extra: {},
       },
       data: initialData ?? {},
     };
@@ -78,7 +79,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    * @template TItem The collection item data type.
    * @returns A new collection reference class.
    */
-  static newRefFromContext<TItem extends JsonifiableObject>(
+  static newRefFromContext<TItem extends JsonObject>(
     context: CollectionContext<TItem>,
     updatedCallback: (from: CollectionReference<TItem>) => void,
     debugDomain?: string,
@@ -139,13 +140,14 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     if (this.context__.meta.fv === 2) {
       // migrate from v1 to v3
       if (this.context__.meta.schemaVer === undefined || this.context__.meta.schemaVer === 0) {
-        this.context__.meta.schemaVer = 1
+        this.context__.meta.schemaVer = 1;
       }
       delete (this.context__.meta as Dictionary)['ver'];
+      this.context__.meta.extra ??= {};
       this.context__.meta.fv = 3;
     }
 
-    this.save();
+    this.updated__();
   }
 
   /**
@@ -212,9 +214,8 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   set schemaVer(ver: number) {
     this.logger__.logMethodArgs?.('set schemaVer', {old: this.context__.meta.schemaVer, new: ver});
     this.context__.meta.schemaVer = ver;
-    this.save();
+    this.updated__();
   }
-
 
   /**
    * Indicates whether the collection data is frozen and cannot be saved.
@@ -248,7 +249,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    * ```
    */
   set freeze(value: boolean) {
-    this.logger__.logMethodArgs?.('freeze changed', { value });
+    this.logger__.logMethodArgs?.('freeze changed', {value});
     this._freeze = value;
   }
 
@@ -419,7 +420,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   removeItem(itemId: string | number): void {
     this.logger__.logMethodArgs?.('removeItem', itemId);
     delete this.context__.data[itemId];
-    this.updated__(null);
+    this.updated__();
   }
 
   /**
@@ -573,13 +574,13 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    * Update the document metadata and invoke the updated callback.
    * This method is throttled to prevent multiple updates in a short time.
    *
-   * @param id - The ID of the item to update.
+   * @param itemId - The ID of the item to update.
    */
-  private async updated__(id: string | number | null, immediate = false): Promise<void> {
-    this.logger__.logMethodArgs?.('updated__', {id, immediate, delayed: this.updateDelayed_});
+  private async updated__(itemId: string | number | null = null, immediate = false): Promise<void> {
+    this.logger__.logMethodArgs?.('updated__', {id: itemId, immediate, delayed: this.updateDelayed_});
 
     this.hasUnprocessedChanges_ = true;
-    if (id !== null) this.refreshMeta_(id); // meta must updated per item
+    if (itemId !== null) this.refreshMeta_(itemId); // meta must updated per item
 
     if (immediate === false && this.updateDelayed_ === true) return;
     // else
@@ -596,7 +597,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     if (this.updateDelayed_ !== true) return; // another parallel update finished!
     this.updateDelayed_ = false;
 
-    if (id === null) this.refreshMeta_(id); // root meta not updated for null
+    if (itemId === null) this.refreshMeta_(itemId); // root meta not updated for null
 
     if (this._freeze === true) return; // prevent save if frozen
     this.updatedCallback__.call(null, this);
@@ -635,5 +636,52 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
       meta.lastAutoId++;
     } while (meta.lastAutoId in this.context__.data);
     return meta.lastAutoId;
+  }
+
+  /**
+   * Retrieves the collection's extra metadata.
+   *
+   * @returns The collection's extra metadata.
+   *
+   * @example
+   * ```typescript
+   * const colExtraMeta = collectionRef.getExtraMeta();
+   * ```
+   */
+  getExtraMeta<T extends JsonObject>(): T {
+    this.logger__.logMethod?.('getExtraMeta');
+    return this.context__.meta.extra as T;
+  }
+
+  /**
+   * Sets/replace the collection's extra metadata.
+   *
+   * @param extraMeta The new collection's extra metadata.
+   *
+   * @example
+   * ```typescript
+   * collectionRef.replaceExtraMeta({ a: 1, b: 2, c: 3 });
+   * ```
+   */
+  replaceExtraMeta<T extends JsonObject>(extraMeta: T): void {
+    this.logger__.logMethodArgs?.('replaceExtraMeta', extraMeta);
+    this.context__.meta.extra = extraMeta;
+    this.updated__();
+  }
+
+  /**
+   * Updates collection's extra metadata by merging a partial update.
+   *
+   * @param extraMeta The part of extra metadata to merge into the collection's extra metadata.
+   *
+   * @example
+   * ```typescript
+   * collectionRef.mergeExtraMeta({ c: 4 });
+   * ```
+   */
+  mergeExtraMeta<T extends JsonObject>(extraMeta: Partial<T>): void {
+    this.logger__.logMethodArgs?.('mergeExtraMeta', extraMeta);
+    Object.assign(this.context__.meta.extra, extraMeta);
+    this.updated__();
   }
 }

@@ -5,7 +5,7 @@ import {waitForImmediate, waitForTimeout} from '@alwatr/wait';
 import {logger} from './logger.js';
 import {getStoreId, getStorePath} from './util.js';
 
-import type {Dictionary, JsonifiableObject} from '@alwatr/type-helper';
+import type {Dictionary, JsonObject} from '@alwatr/type-helper';
 
 logger.logModule?.('document-reference');
 
@@ -13,7 +13,7 @@ logger.logModule?.('document-reference');
  * Represents a reference to a document of the AlwatrStore.
  * Provides methods to interact with the document, such as get, set, update and save.
  */
-export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObject> {
+export class DocumentReference<TDoc extends JsonObject = JsonObject> {
   /**
    * Alwatr store engine version string.
    */
@@ -33,7 +33,7 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
    * @template TDoc The document data type.
    * @returns A new document reference class.
    */
-  static newRefFromData<TDoc extends JsonifiableObject>(
+  static newRefFromData<TDoc extends JsonObject>(
     statId: StoreFileId,
     initialData: TDoc,
     updatedCallback: (from: DocumentReference<TDoc>) => unknown,
@@ -52,6 +52,7 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
         type: StoreFileType.Document,
         extension: StoreFileExtension.Json,
         fv: DocumentReference.fileFormatVersion,
+        extra: {},
       },
       data: initialData,
     };
@@ -67,7 +68,7 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
    * @template TDoc The document data type.
    * @returns A new document reference class.
    */
-  static newRefFromContext<TDoc extends JsonifiableObject>(
+  static newRefFromContext<TDoc extends JsonObject>(
     context: DocumentContext<TDoc>,
     updatedCallback: (from: DocumentReference<TDoc>) => unknown,
     debugDomain?: string,
@@ -128,13 +129,14 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
     if (this.context__.meta.fv === 2) {
       // migrate from v1 to v3
       if (this.context__.meta.schemaVer === undefined || this.context__.meta.schemaVer === 0) {
-        this.context__.meta.schemaVer = 1
+        this.context__.meta.schemaVer = 1;
       }
       delete (this.context__.meta as Dictionary)['ver'];
+      this.context__.meta.extra ??= {};
       this.context__.meta.fv = 3;
     }
 
-    this.save();
+    this.updated__();
   }
 
   /**
@@ -148,7 +150,7 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
   readonly path: string;
 
   /**
-   * Indicates whether the collection has unsaved changes.
+   * Indicates whether the document has unsaved changes.
    */
   hasUnprocessedChanges_ = false;
 
@@ -196,23 +198,22 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
   set schemaVer(ver: number) {
     this.logger__.logMethodArgs?.('set schemaVer', {old: this.context__.meta.schemaVer, new: ver});
     this.context__.meta.schemaVer = ver;
-    this.save();
+    this.updated__();
   }
 
-
   /**
-   * Indicates whether the collection data is frozen and cannot be saved.
+   * Indicates whether the document data is frozen and cannot be saved.
    */
   private _freeze = false;
 
   /**
-   * Gets the freeze status of the collection data.
+   * Gets the freeze status of the document data.
    *
-   * @returns `true` if the collection data is frozen, `false` otherwise.
+   * @returns `true` if the document data is frozen, `false` otherwise.
    *
    * @example
    * ```typescript
-   * const isFrozen = collectionRef.freeze;
+   * const isFrozen = documentRef.freeze;
    * console.log(isFrozen); // Output: false
    * ```
    */
@@ -221,18 +222,18 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
   }
 
   /**
-   * Sets the freeze status of the collection data.
+   * Sets the freeze status of the document data.
    *
    * @param value - The freeze status to set.
    *
    * @example
    * ```typescript
-   * collectionRef.freeze = true;
-   * console.log(collectionRef.freeze); // Output: true
+   * documentRef.freeze = true;
+   * console.log(documentRef.freeze); // Output: true
    * ```
    */
   set freeze(value: boolean) {
-    this.logger__.logMethodArgs?.('freeze changed', { value });
+    this.logger__.logMethodArgs?.('freeze changed', {value});
     this._freeze = value;
   }
 
@@ -273,11 +274,11 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
    *
    * @example
    * ```typescript
-   * documentRef.overwriteData({ a: 1, b: 2, c: 3 });
+   * documentRef.replaceData({ a: 1, b: 2, c: 3 });
    * ```
    */
   replaceData(data: TDoc): void {
-    this.logger__.logMethodArgs?.('overwriteData', data);
+    this.logger__.logMethodArgs?.('replaceData', data);
     (this.context__.data as unknown) = data;
     this.updated__();
   }
@@ -309,7 +310,7 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
    */
   save(): void {
     this.logger__.logMethod?.('save');
-    this.updated__(false);
+    this.updated__();
   }
 
   /**
@@ -322,7 +323,7 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
    */
   saveImmediate(): void {
     this.logger__.logMethod?.('saveImmediate');
-    this.updated__(true);
+    this.updated__(/* immediate: */ true);
   }
 
   /**
@@ -379,5 +380,53 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
     this.logger__.logMethod?.('refreshMetadata_');
     this.context__.meta.updated = Date.now();
     this.context__.meta.rev++;
+  }
+
+
+  /**
+   * Retrieves the document's extra metadata.
+   *
+   * @returns The document's extra metadata.
+   *
+   * @example
+   * ```typescript
+   * const colExtraMeta = documentRef.getExtraMeta();
+   * ```
+   */
+  getExtraMeta<T extends JsonObject>(): T {
+    this.logger__.logMethod?.('getExtraMeta');
+    return this.context__.meta.extra as T;
+  }
+
+  /**
+   * Sets/replace the document's extra metadata.
+   *
+   * @param extraMeta The new document's extra metadata.
+   *
+   * @example
+   * ```typescript
+   * documentRef.replaceExtraMeta({ a: 1, b: 2, c: 3 });
+   * ```
+   */
+  replaceExtraMeta<T extends JsonObject>(extraMeta: T): void {
+    this.logger__.logMethodArgs?.('replaceExtraMeta', extraMeta);
+    this.context__.meta.extra = extraMeta;
+    this.updated__();
+  }
+
+  /**
+   * Updates document's extra metadata by merging a partial update.
+   *
+   * @param extraMeta The part of extra metadata to merge into the document's extra metadata.
+   *
+   * @example
+   * ```typescript
+   * documentRef.mergeExtraMeta({ c: 4 });
+   * ```
+   */
+  mergeExtraMeta<T extends JsonObject>(extraMeta: Partial<T>): void {
+    this.logger__.logMethodArgs?.('mergeExtraMeta', extraMeta);
+    Object.assign(this.context__.meta.extra, extraMeta);
+    this.updated__();
   }
 }
