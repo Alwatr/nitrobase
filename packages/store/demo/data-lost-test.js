@@ -1,6 +1,6 @@
 import {createLogger} from '@alwatr/logger';
 
-import {AlwatrStore, Region} from '@alwatr/store-engine';
+import {AlwatrStore, Region} from '@alwatr/store';
 
 const logger = createLogger('AlwatrStore/Demo', true);
 logger.banner('AlwatrStore/Demo');
@@ -10,6 +10,9 @@ const alwatrStore = new AlwatrStore({
   defaultChangeDebounce: 250, // for demo
 });
 
+/**
+ * @type {import('@alwatr/store').CollectionReference[]}
+ */
 const list = [];
 
 for (let i = 0; i < 10; i++) {
@@ -22,7 +25,7 @@ for (let i = 0; i < 10; i++) {
     ownerId: `u${i}-hash-126789`,
   };
 
-  if (!alwatrStore.exists(docId)) {
+  if (!alwatrStore.hasStore(docId)) {
     alwatrStore.newCollection(docId);
   }
 
@@ -32,14 +35,14 @@ for (let i = 0; i < 10; i++) {
 function insertData() {
   const collection = list[Math.floor(Math.random() * list.length)];
 
-  let itemId = collection.append({
+  let itemId = collection.appendItem({
     name: (Math.random() * 10000).toString(36),
     age: Math.floor(Math.random() * 80) + 10,
   });
 
   console.log('Collection: %s, itemId:', collection.id, itemId);
 
-  itemId = list[0].append({
+  itemId = list[0].appendItem({
     name: (Math.random() * 10000).toString(36),
     age: 15,
   });

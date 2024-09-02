@@ -1,6 +1,6 @@
 import {createLogger} from '@alwatr/logger';
 
-import {AlwatrStore, Region} from '@alwatr/store-engine';
+import {AlwatrStore, Region} from '@alwatr/store';
 
 const logger = createLogger('AlwatrStore/Demo', true);
 logger.banner('AlwatrStore/Demo');
@@ -20,7 +20,7 @@ async function quickstart() {
   logger.logProperty?.('docId', docId);
 
   // Check the document exist?
-  const exists = alwatrStore.exists(docId);
+  const exists = alwatrStore.hasStore(docId);
   logger.logProperty?.('exists', exists);
 
   if (!exists) {
@@ -35,10 +35,10 @@ async function quickstart() {
   const myPost = await alwatrStore.openDocument(docId);
 
   // Read the document meta information.
-  logger.logProperty?.('doc.meta', myPost.getStoreMetadata());
+  logger.logProperty?.('doc.meta', myPost.getStoreMeta());
 
   // Enter new data into the document.
-  myPost.update({
+  myPost.replaceData({
     title: 'Welcome to Alwatr Store',
     body: 'This is a amazing content',
   });
@@ -47,17 +47,17 @@ async function quickstart() {
   logger.logProperty?.('context', myPost.getData());
 
   // Update an existing document.
-  myPost.update({
+  myPost.mergeData({
     body: 'My first AlwatrStore Document',
   });
   logger.logProperty?.('context', myPost.getData());
 
-  logger.logProperty?.('doc.meta', myPost.getStoreMetadata());
+  logger.logProperty?.('doc.meta', myPost.getStoreMeta());
 
   await new Promise((resolve) => setTimeout(resolve, 1_000));
 
   // Unload the document from memory.
-  alwatrStore.unload(docId);
+  alwatrStore.unloadStore(docId);
   logger.logOther?.('The document unloaded from ram');
 
   // Delete the document store file.
