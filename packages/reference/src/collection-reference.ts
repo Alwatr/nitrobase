@@ -576,7 +576,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     this.logger__.logMethodArgs?.('updated__', {id, immediate, delayed: this.updateDelayed_});
 
     this.hasUnprocessedChanges_ = true;
-    if (id !== null) this.updateMetadata_(id); // meta must updated per item
+    if (id !== null) this.refreshMetadata_(id); // meta must updated per item
 
     if (immediate === false && this.updateDelayed_ === true) return;
     // else
@@ -593,19 +593,19 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     if (this.updateDelayed_ !== true) return; // another parallel update finished!
     this.updateDelayed_ = false;
 
-    if (id === null) this.updateMetadata_(id); // root meta not updated for null
+    if (id === null) this.refreshMetadata_(id); // root meta not updated for null
 
     if (this._freeze === true) return; // prevent save if frozen
     this.updatedCallback__.call(null, this);
   }
 
   /**
-   * Updates the collection's metadata.
+   * Refresh/recalculate the collection's metadata timestamp and revision.
    *
    * @param itemId - The ID of the item to update.
    */
-  updateMetadata_(itemId: string | number | null): void {
-    this.logger__.logMethodArgs?.('updateMetadata_', {id: itemId});
+  protected refreshMetadata_(itemId: string | number | null): void {
+    this.logger__.logMethodArgs?.('refreshMetadata_', {id: itemId});
     const now = Date.now();
     this.context__.meta.rev++;
     this.context__.meta.updated = now;
