@@ -270,11 +270,11 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
    *
    * @example
    * ```typescript
-   * documentRef.update({ a: 1, b: 2, c: 3 });
+   * documentRef.overwriteData({ a: 1, b: 2, c: 3 });
    * ```
    */
-  update(data: TDoc): void {
-    this.logger__.logMethodArgs?.('update', data);
+  replaceData(data: TDoc): void {
+    this.logger__.logMethodArgs?.('overwriteData', data);
     (this.context__.data as unknown) = data;
     this.updated__();
   }
