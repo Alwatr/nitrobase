@@ -261,16 +261,16 @@ export class CollectionReference<TItem extends JsonObject = JsonObject> {
    *
    * @example
    * ```typescript
-   * const doesExist = collectionRef.itemExists('item1');
+   * const doesExist = collectionRef.hasItem('item1');
    *
    * if (doesExist) {
-   *    collectionRef.create('item1', { key: 'value' });
+   *    collectionRef.addItem('item1', { key: 'value' });
    * }
    * ```
    */
-  itemExists(itemId: string | number): boolean {
+  hasItem(itemId: string | number): boolean {
     const exists = Object.hasOwn(this.context__.data, itemId);
-    this.logger__.logMethodFull?.('itemExists', itemId, exists);
+    this.logger__.logMethodFull?.('hasItem', itemId, exists);
     return exists;
   }
 
@@ -368,7 +368,7 @@ export class CollectionReference<TItem extends JsonObject = JsonObject> {
    */
   addItem(itemId: string | number, data: TItem): void {
     this.logger__.logMethodArgs?.('addItem', {itemId, data});
-    if (this.itemExists(itemId)) {
+    if (this.hasItem(itemId)) {
       this.logger__.accident('addItem', 'collection_item_exist', {itemId});
       throw new Error('collection_item_exist', {cause: {itemId}});
     }
@@ -414,7 +414,7 @@ export class CollectionReference<TItem extends JsonObject = JsonObject> {
    * @example
    * ```typescript
    * collectionRef.removeItem('item1');
-   * collectionRef.itemExists('item1'); // Output: false
+   * collectionRef.hasItem('item1'); // Output: false
    * ```
    */
   removeItem(itemId: string | number): void {
