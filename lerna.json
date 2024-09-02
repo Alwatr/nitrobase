@@ -89,9 +89,7 @@
       "signGitTag": true,
       "signGitCommit": true,
       "push": true,
-      "createRelease": "github",
-      "conventionalPrerelease": true,
-      "preid": "beta"
+      "createRelease": "github"
     },
     "run": {
       "stream": true
