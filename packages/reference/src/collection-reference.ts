@@ -140,7 +140,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     if (this.context__.meta.fv === 2) {
       // migrate from v1 to v3
       if (this.context__.meta.schemaVer === undefined || this.context__.meta.schemaVer === 0) {
-        this.context__.meta.schemaVer = 1
+        this.context__.meta.schemaVer = 1;
       }
       delete (this.context__.meta as Dictionary)['ver'];
       this.context__.meta.extra ??= {};
@@ -217,7 +217,6 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     this.save();
   }
 
-
   /**
    * Indicates whether the collection data is frozen and cannot be saved.
    */
@@ -250,7 +249,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    * ```
    */
   set freeze(value: boolean) {
-    this.logger__.logMethodArgs?.('freeze changed', { value });
+    this.logger__.logMethodArgs?.('freeze changed', {value});
     this._freeze = value;
   }
 
