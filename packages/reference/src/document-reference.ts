@@ -5,7 +5,7 @@ import {waitForImmediate, waitForTimeout} from '@alwatr/wait';
 import {logger} from './logger.js';
 import {getStoreId, getStorePath} from './util.js';
 
-import type {JsonifiableObject} from '@alwatr/type-helper';
+import type {Dictionary, JsonifiableObject} from '@alwatr/type-helper';
 
 logger.logModule?.('document-reference');
 
@@ -22,7 +22,7 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
   /**
    * Alwatr store engine file format version number.
    */
-  static readonly fileFormatVersion = 2;
+  static readonly fileFormatVersion = 3;
 
   /**
    * Creates new DocumentReference instance from stat and initial data.
@@ -51,7 +51,6 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
         created: now,
         type: StoreFileType.Document,
         extension: StoreFileExtension.Json,
-        ver: DocumentReference.version,
         fv: DocumentReference.fileFormatVersion,
       },
       data: initialData,
@@ -79,63 +78,63 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
 
   /**
    * Validates the document context and try to migrate it to the latest version.
-   *
-   * @param context document context
    */
-  private static validateContext__(context: DocumentContext<JsonifiableObject>): void {
-    logger.logMethodArgs?.('doc.validateContext__', {name: context.meta?.name});
+  private validateContext__(): void {
+    this.logger__.logMethod?.('validateContext__');
 
-    if (context.ok !== true) {
-      logger.accident?.('doc.validateContext__', 'store_not_ok', context);
-      throw new Error('store_not_ok', {cause: context});
+    if (this.context__.ok !== true) {
+      this.logger__.accident?.('validateContext__', 'store_not_ok');
+      throw new Error('store_not_ok', {cause: {context: this.context__}});
     }
 
-    if (context.meta === undefined) {
-      logger.accident?.('doc.validateContext__', 'store_meta_undefined', context);
-      throw new Error('store_meta_undefined', {cause: context});
+    if (this.context__.meta === undefined) {
+      this.logger__.accident?.('validateContext__', 'store_meta_undefined');
+      throw new Error('store_meta_undefined', {cause: {context: this.context__}});
     }
 
-    if (context.meta.type !== StoreFileType.Document) {
-      logger.accident?.('doc.validateContext__', 'document_type_invalid', context.meta);
-      throw new Error('document_type_invalid', {cause: context.meta});
+    if (this.context__.meta.type !== StoreFileType.Document) {
+      this.logger__.accident?.('validateContext__', 'document_type_invalid', this.context__.meta);
+      throw new Error('document_type_invalid', {cause: this.context__.meta});
     }
 
-    if (context.meta.ver !== DocumentReference.version) {
-      logger.incident?.('doc.validateContext__', 'store_version_incompatible', {
-        fileVersion: context.meta.ver,
-        currentVersion: DocumentReference.version,
+    if (this.context__.meta.fv !== DocumentReference.fileFormatVersion) {
+      this.logger__.incident?.('validateContext__', 'store_file_version_incompatible', {
+        old: this.context__.meta.fv,
+        new: DocumentReference.fileFormatVersion,
       });
-
-      DocumentReference.migrateContext__(context);
+      this.migrateContext__();
     }
   }
 
   /**
    * Migrate the document context to the latest.
-   *
-   * @param context document context
    */
-  private static migrateContext__(context: DocumentContext<JsonifiableObject>): void {
-    if (context.meta.ver === DocumentReference.version) return;
+  private migrateContext__(): void {
+    if (this.context__.meta.fv === DocumentReference.fileFormatVersion) return;
 
-    logger.logMethodArgs?.('doc.migrateContext__', {
-      name: context.meta.name,
-      ver: context.meta.ver,
-      fv: context.meta.fv,
-    });
+    this.logger__.logMethod?.('migrateContext__');
 
-    if (context.meta.fv > DocumentReference.fileFormatVersion) {
-      logger.accident('doc.migrateContext__', 'store_version_incompatible', context.meta);
-      throw new Error('store_version_incompatible', {cause: context.meta});
+    if (this.context__.meta.fv > DocumentReference.fileFormatVersion) {
+      this.logger__.accident('migrateContext__', 'store_version_incompatible', this.context__.meta);
+      throw new Error('store_version_incompatible', {cause: this.context__.meta});
     }
 
-    if (context.meta.fv === 1) {
+    if (this.context__.meta.fv === 1) {
       // migrate from v1 to v2
-      // context.meta.schemaVer = 0;
-      context.meta.fv = 2;
+      // this.context__.meta.schemaVer = 0
+      this.context__.meta.fv = 2;
     }
 
-    context.meta.ver = DocumentReference.version;
+    if (this.context__.meta.fv === 2) {
+      // migrate from v1 to v3
+      if (this.context__.meta.schemaVer === undefined || this.context__.meta.schemaVer === 0) {
+        this.context__.meta.schemaVer = 1
+      }
+      delete (this.context__.meta as Dictionary)['ver'];
+      this.context__.meta.fv = 3;
+    }
+
+    this.save();
   }
 
   /**
@@ -171,8 +170,6 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
     private readonly updatedCallback__: (from: DocumentReference<TDoc>) => unknown,
     debugDomain?: string,
   ) {
-    DocumentReference.validateContext__(this.context__);
-
     this.id = getStoreId(this.context__.meta);
     this.path = getStorePath(this.context__.meta);
 
@@ -180,6 +177,8 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
     this.logger__ = createLogger(`doc:${debugDomain}`);
 
     this.logger__.logMethodArgs?.('new', {path: this.path});
+
+    this.validateContext__();
   }
 
   /**
@@ -259,11 +258,11 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
    *
    * @example
    * ```typescript
-   * const documentMeta = documentRef.gerStoreMetadata();
+   * const documentMeta = documentRef.getStoreMeta();
    * ```
    */
-  getStoreMetadata(): Readonly<StoreFileMeta> {
-    this.logger__.logMethod?.('getStoreMetadata');
+  getStoreMeta(): Readonly<StoreFileMeta> {
+    this.logger__.logMethod?.('getStoreMeta');
     return this.context__.meta;
   }
 
@@ -274,11 +273,11 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
    *
    * @example
    * ```typescript
-   * documentRef.update({ a: 1, b: 2, c: 3 });
+   * documentRef.overwriteData({ a: 1, b: 2, c: 3 });
    * ```
    */
-  update(data: TDoc): void {
-    this.logger__.logMethodArgs?.('update', data);
+  replaceData(data: TDoc): void {
+    this.logger__.logMethodArgs?.('overwriteData', data);
     (this.context__.data as unknown) = data;
     this.updated__();
   }
@@ -290,11 +289,11 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
    *
    * @example
    * ```typescript
-   * documentRef.updatePartial({ c: 4 });
+   * documentRef.mergeData({ c: 4 });
    * ```
    */
-  updatePartial(data: Partial<TDoc>): void {
-    this.logger__.logMethodArgs?.('updatePartial', data);
+  mergeData(data: Partial<TDoc>): void {
+    this.logger__.logMethodArgs?.('mergeData', data);
     Object.assign(this.context__.data, data);
     this.updated__();
   }
@@ -367,17 +366,17 @@ export class DocumentReference<TDoc extends JsonifiableObject = JsonifiableObjec
     if (this.updateDelayed_ !== true) return; // another parallel update finished!
     this.updateDelayed_ = false;
 
-    this.updateMeta_();
+    this.refreshMetadata_();
 
     if (this._freeze === true) return; // prevent save if frozen
     this.updatedCallback__.call(null, this);
   }
 
   /**
-   * Updates the document's metadata.
+   * Refresh/recalculate the document's metadata timestamp and revision.
    */
-  updateMeta_(): void {
-    this.logger__.logMethod?.('updateMeta__');
+  protected refreshMetadata_(): void {
+    this.logger__.logMethod?.('refreshMetadata_');
     this.context__.meta.updated = Date.now();
     this.context__.meta.rev++;
   }

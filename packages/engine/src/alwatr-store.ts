@@ -103,19 +103,19 @@ export class AlwatrStore {
   /**
    * Checks if a store file with the given ID exists.
    *
-   * @param id - The ID of the store file to check.
+   * @param storeId - The ID of the store file to check.
    * @returns `true` if the store file exists, `false` otherwise.
    * @example
    * ```typescript
-   * if (!alwatrStore.exists('user1/profile')) {
+   * if (!alwatrStore.hasStore('user1/profile')) {
    *  alwatrStore.defineDocument(...)
    * }
    * ```
    */
-  exists(id: StoreFileId): boolean {
-    const id_ = getStoreId(id);
-    const exists = this.rootDb__.exists(id_);
-    logger.logMethodFull?.('exists', id_, exists);
+  hasStore(storeId: StoreFileId): boolean {
+    const id_ = getStoreId(storeId);
+    const exists = this.rootDb__.itemExists(id_);
+    logger.logMethodFull?.('hasStore', id_, exists);
     return exists;
   }
 
@@ -214,12 +214,12 @@ export class AlwatrStore {
       throw new Error('store_file_type_not_supported', {cause: stat});
     }
 
-    if (this.rootDb__.exists(fileStoreRef.id)) {
+    if (this.rootDb__.itemExists(fileStoreRef.id)) {
       logger.accident('newStoreFile_', 'store_file_already_defined', stat);
       throw new Error('store_file_already_defined', {cause: stat});
     }
 
-    this.rootDb__.add(fileStoreRef.id, stat);
+    this.rootDb__.addItem(fileStoreRef.id, stat);
     this.cacheReferences__[fileStoreRef.id] = fileStoreRef;
 
     // fileStoreRef.save();
@@ -256,12 +256,12 @@ export class AlwatrStore {
       return this.cacheReferences__[id_] as unknown as DocumentReference<TDoc>;
     }
 
-    if (!this.rootDb__.exists(id_)) {
+    if (!this.rootDb__.itemExists(id_)) {
       logger.accident('openDocument', 'document_not_found', id_);
       throw new Error('document_not_found', {cause: id_});
     }
 
-    const storeStat = this.rootDb__.getItem(id_);
+    const storeStat = this.rootDb__.getItemData(id_);
 
     if (storeStat.type != StoreFileType.Document) {
       logger.accident('openDocument', 'document_wrong_type', id_);
@@ -306,12 +306,12 @@ export class AlwatrStore {
     }
 
     // load and create new collection reference
-    if (!this.rootDb__.exists(id_)) {
+    if (!this.rootDb__.itemExists(id_)) {
       logger.accident('openCollection', 'collection_not_found', id_);
       throw new Error('collection_not_found', {cause: id_});
     }
 
-    const storeStat = this.rootDb__.getItem(id_);
+    const storeStat = this.rootDb__.getItemData(id_);
 
     if (storeStat.type != StoreFileType.Collection) {
       logger.accident('openCollection', 'collection_wrong_type', id_);
@@ -330,13 +330,13 @@ export class AlwatrStore {
    * @param id_ The unique identifier of the store file.
    * @example
    * ```typescript
-   * alwatrStore.unload({name: 'user-list', region: Region.Secret});
-   * alwatrStore.exists({name: 'user-list', region: Region.Secret}); // true
+   * alwatrStore.unloadStore({name: 'user-list', region: Region.Secret});
+   * alwatrStore.hasStore({name: 'user-list', region: Region.Secret}); // true
    * ```
    */
-  unload(id: StoreFileId): void {
-    const id_ = getStoreId(id);
-    logger.logMethodArgs?.('unload', id_);
+  unloadStore(storeId: StoreFileId): void {
+    const id_ = getStoreId(storeId);
+    logger.logMethodArgs?.('unloadStore', id_);
     const ref = this.cacheReferences__[id_];
     if (ref === undefined) return;
     if (ref.hasUnprocessedChanges_ === true) {
@@ -352,19 +352,19 @@ export class AlwatrStore {
    * If the file is not unloaded, it will be unloaded first.
    * You don't need to await this method to complete unless you want to make sure the file is deleted on disk.
    *
-   * @param id_ The ID of the file to delete.
+   * @param storeId The ID of the file to delete.
    * @returns A Promise that resolves when the file is deleted.
    * @example
    * ```typescript
-   * alwatrStore.remove({name: 'user-list', region: Region.Secret});
-   * alwatrStore.exists({name: 'user-list', region: Region.Secret}); // false
+   * alwatrStore.removeStore({name: 'user-list', region: Region.Secret});
+   * alwatrStore.hasStore({name: 'user-list', region: Region.Secret}); // false
    * ```
    */
-  async remove(id: StoreFileId): Promise<void> {
-    const id_ = getStoreId(id);
-    logger.logMethodArgs?.('remove', id_);
-    if (!this.rootDb__.exists(id_)) {
-      logger.accident('doc', 'document_not_found', id_);
+  async removeStore(storeId: StoreFileId): Promise<void> {
+    const id_ = getStoreId(storeId);
+    logger.logMethodArgs?.('removeStore', id_);
+    if (!this.rootDb__.itemExists(id_)) {
+      logger.accident('removeStore', 'document_not_found', id_);
       throw new Error('document_not_found', {cause: id_});
     }
     const ref = this.cacheReferences__[id_];
@@ -375,14 +375,14 @@ export class AlwatrStore {
       ref.hasUnprocessedChanges_ = false;
       delete this.cacheReferences__[id_]; // unload
     }
-    const path = getStorePath(this.rootDb__.getItem(id_));
-    this.rootDb__.remove(id_);
+    const path = getStorePath(this.rootDb__.getItemData(id_));
+    this.rootDb__.removeItem(id_);
     await waitForTimeout(0);
     try {
       await unlink(resolve(this.config__.rootPath, path));
     }
     catch (error) {
-      logger.error('deleteFile', 'remove_file_failed', error, {id, path});
+      logger.error('removeStore', 'remove_file_failed', error, {id: storeId, path});
     }
   }
 
@@ -443,10 +443,10 @@ export class AlwatrStore {
    */
   protected async storeChanged_<T extends JsonifiableObject>(from: DocumentReference<T> | CollectionReference<T>): Promise<void> {
     logger.logMethodArgs?.('storeChanged__', from.id);
-    const rev = from.getStoreMetadata().rev;
+    const rev = from.getStoreMeta().rev;
     try {
       await this.writeContext__(from.path, from.getFullContext_());
-      if (rev === from.getStoreMetadata().rev) {
+      if (rev === from.getStoreMeta().rev) {
         // Context not changed during saving
         from.hasUnprocessedChanges_ = false;
       }

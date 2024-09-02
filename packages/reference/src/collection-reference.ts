@@ -13,7 +13,7 @@ import {waitForImmediate, waitForTimeout} from '@alwatr/wait';
 import {logger} from './logger.js';
 import {getStoreId, getStorePath} from './util.js';
 
-import type {JsonifiableObject} from '@alwatr/type-helper';
+import type {Dictionary, JsonifiableObject} from '@alwatr/type-helper';
 
 logger.logModule?.('collection-reference');
 
@@ -32,7 +32,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   /**
    * Alwatr store engine file format version number.
    */
-  static readonly fileFormatVersion = 2;
+  static readonly fileFormatVersion = 3;
 
   /**
    * Creates new CollectionReference instance from stat.
@@ -62,7 +62,6 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
         lastAutoId: 0,
         type: StoreFileType.Collection,
         extension: StoreFileExtension.Json,
-        ver: CollectionReference.version,
         fv: CollectionReference.fileFormatVersion,
       },
       data: initialData ?? {},
@@ -90,63 +89,63 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
 
   /**
    * Validates the collection context and try to migrate it to the latest version.
-   *
-   * @param context collection context
    */
-  private static validateContext__(context: CollectionContext<JsonifiableObject>): void {
-    logger.logMethodArgs?.('col.validateContext__', {name: context.meta?.name});
+  private validateContext__(): void {
+    this.logger__.logMethod?.('validateContext__');
 
-    if (context.ok !== true) {
-      logger.accident?.('col.validateContext__', 'store_not_ok', context);
-      throw new Error('store_not_ok', {cause: context});
+    if (this.context__.ok !== true) {
+      this.logger__.accident?.('validateContext__', 'store_not_ok');
+      throw new Error('store_not_ok', {cause: {context: this.context__}});
     }
 
-    if (context.meta === undefined) {
-      logger.accident?.('col.validateContext__', 'store_meta_undefined', context);
-      throw new Error('store_meta_undefined', {cause: context});
+    if (this.context__.meta === undefined) {
+      this.logger__.accident?.('validateContext__', 'store_meta_undefined');
+      throw new Error('store_meta_undefined', {cause: {context: this.context__}});
     }
 
-    if (context.meta.type !== StoreFileType.Collection) {
-      logger.accident?.('col.validateContext__', 'collection_type_invalid', context.meta);
-      throw new Error('collection_type_invalid', {cause: context.meta});
+    if (this.context__.meta.type !== StoreFileType.Collection) {
+      this.logger__.accident?.('validateContext__', 'collection_type_invalid', this.context__.meta);
+      throw new Error('collection_type_invalid', {cause: this.context__.meta});
     }
 
-    if (context.meta.ver !== CollectionReference.version) {
-      logger.incident?.('col.validateContext__', 'store_version_incompatible', {
-        fileVersion: context.meta.ver,
-        currentVersion: CollectionReference.version,
+    if (this.context__.meta.fv !== CollectionReference.fileFormatVersion) {
+      this.logger__.incident?.('validateContext__', 'store_file_version_incompatible', {
+        old: this.context__.meta.fv,
+        new: CollectionReference.fileFormatVersion,
       });
-
-      CollectionReference.migrateContext__(context);
+      this.migrateContext__();
     }
   }
 
   /**
    * Migrate the collection context to the latest.
-   *
-   * @param context collection context
    */
-  private static migrateContext__(context: CollectionContext<JsonifiableObject>): void {
-    if (context.meta.ver === CollectionReference.version) return;
+  private migrateContext__(): void {
+    if (this.context__.meta.fv === CollectionReference.fileFormatVersion) return;
 
-    logger.logMethodArgs?.('coll.migrateContext__', {
-      name: context.meta.name,
-      ver: context.meta.ver,
-      fv: context.meta.fv,
-    });
+    this.logger__.logMethod?.('migrateContext__');
 
-    if (context.meta.fv > CollectionReference.fileFormatVersion) {
-      logger.accident('coll.migrateContext__', 'store_version_incompatible', context.meta);
-      throw new Error('store_version_incompatible', {cause: context.meta});
+    if (this.context__.meta.fv > CollectionReference.fileFormatVersion) {
+      this.logger__.accident('migrateContext__', 'store_version_incompatible', this.context__.meta);
+      throw new Error('store_version_incompatible', {cause: this.context__.meta});
     }
 
-    if (context.meta.fv === 1) {
+    if (this.context__.meta.fv === 1) {
       // migrate from v1 to v2
-      // context.meta.schemaVer = 0;
-      context.meta.fv = 2;
+      // this.context__.meta.schemaVer = 0
+      this.context__.meta.fv = 2;
     }
 
-    context.meta.ver = CollectionReference.version;
+    if (this.context__.meta.fv === 2) {
+      // migrate from v1 to v3
+      if (this.context__.meta.schemaVer === undefined || this.context__.meta.schemaVer === 0) {
+        this.context__.meta.schemaVer = 1
+      }
+      delete (this.context__.meta as Dictionary)['ver'];
+      this.context__.meta.fv = 3;
+    }
+
+    this.save();
   }
 
   /**
@@ -187,8 +186,6 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     private updatedCallback__: (from: CollectionReference<TItem>) => void,
     debugDomain?: string,
   ) {
-    CollectionReference.validateContext__(this.context__);
-
     this.id = getStoreId(this.context__.meta);
     this.path = getStorePath(this.context__.meta);
 
@@ -196,6 +193,8 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     this.logger__ = createLogger(`col:${debugDomain}`);
 
     this.logger__.logMethodArgs?.('new', {id: this.id});
+
+    this.validateContext__();
   }
 
   /**
@@ -261,16 +260,16 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    *
    * @example
    * ```typescript
-   * const doesExist = collectionRef.exists('item1');
+   * const doesExist = collectionRef.itemExists('item1');
    *
    * if (doesExist) {
    *    collectionRef.create('item1', { key: 'value' });
    * }
    * ```
    */
-  exists(itemId: string | number): boolean {
+  itemExists(itemId: string | number): boolean {
     const exists = Object.hasOwn(this.context__.data, itemId);
-    this.logger__.logMethodFull?.('exists', itemId, exists);
+    this.logger__.logMethodFull?.('itemExists', itemId, exists);
     return exists;
   }
 
@@ -281,11 +280,11 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    *
    * @example
    * ```typescript
-   * const metadata = collectionRef.getStoreMetadata();
+   * const metadata = collectionRef.getStoreMeta();
    * ```
    */
-  getStoreMetadata(): Readonly<StoreFileMeta> {
-    this.logger__.logMethod?.('getStoreMetadata');
+  getStoreMeta(): Readonly<StoreFileMeta> {
+    this.logger__.logMethod?.('getStoreMeta');
     return this.context__.meta;
   }
 
@@ -298,7 +297,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
   private item__(itemId: string | number): CollectionItem<TItem> {
     const item = this.context__.data[itemId];
     if (item === undefined) {
-      this.logger__.accident('item_', 'collection_item_not_found', {itemId});
+      this.logger__.accident('item__', 'collection_item_not_found', {itemId});
       throw new Error('collection_item_not_found', {cause: {itemId}});
     }
     return item;
@@ -311,12 +310,12 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    * @returns The metadata of the item with the given ID.
    * @example
    * ```typescript
-   * const itemMeta = collectionRef.getItemMetadata('item1');
+   * const itemMeta = collectionRef.getItemMeta('item1');
    * ```
    */
-  getItemMetadata(itemId: string | number): Readonly<CollectionItemMeta> {
+  getItemMeta(itemId: string | number): Readonly<CollectionItemMeta> {
     const meta = this.item__(itemId).meta;
-    this.logger__.logMethodFull?.('getItemMetadata', itemId, meta);
+    this.logger__.logMethodFull?.('getItemMeta', itemId, meta);
     return meta;
   }
 
@@ -328,11 +327,11 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    *
    * @example
    * ```typescript
-   * const itemData = collectionRef.getItem('item1');
+   * const itemData = collectionRef.getItemData('item1');
    * ```
    */
-  getItem(itemId: string | number): TItem {
-    this.logger__.logMethodArgs?.('getItem', itemId);
+  getItemData(itemId: string | number): TItem {
+    this.logger__.logMethodArgs?.('getItemData', itemId);
     return this.item__(itemId).data;
   }
 
@@ -363,13 +362,13 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    *
    * @example
    * ```typescript
-   * collectionRef.add('item1', { key: 'value' });
+   * collectionRef.addItem('item1', { key: 'value' });
    * ```
    */
-  add(itemId: string | number, data: TItem): void {
-    this.logger__.logMethodArgs?.('add', {itemId, data});
-    if (this.exists(itemId)) {
-      this.logger__.accident('add', 'collection_item_exist', {itemId});
+  addItem(itemId: string | number, data: TItem): void {
+    this.logger__.logMethodArgs?.('addItem', {itemId, data});
+    if (this.itemExists(itemId)) {
+      this.logger__.accident('addItem', 'collection_item_exist', {itemId});
       throw new Error('collection_item_exist', {cause: {itemId}});
     }
 
@@ -396,13 +395,13 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    *
    * @example
    * ```typescript
-   * const newId = collectionRef.append({ key: 'value' });
+   * const newId = collectionRef.appendItem({ key: 'value' });
    * ```
    */
-  append(data: TItem): string | number {
-    this.logger__.logMethodArgs?.('append', data);
+  appendItem(data: TItem): string | number {
+    this.logger__.logMethodArgs?.('appendItem', data);
     const id = this.nextAutoIncrementId__();
-    this.add(id, data);
+    this.addItem(id, data);
     return id;
   }
 
@@ -413,11 +412,12 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    *
    * @example
    * ```typescript
-   * collectionRef.remove('item1');
+   * collectionRef.removeItem('item1');
+   * collectionRef.itemExists('item1'); // Output: false
    * ```
    */
-  remove(itemId: string | number): void {
-    this.logger__.logMethodArgs?.('remove', itemId);
+  removeItem(itemId: string | number): void {
+    this.logger__.logMethodArgs?.('removeItem', itemId);
     delete this.context__.data[itemId];
     this.updated__(null);
   }
@@ -430,11 +430,11 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    *
    * @example
    * ```typescript
-   * collectionRef.update('item1', { a: 1, b: 2, c: 3 });
+   * collectionRef.replaceItemData('item1', { a: 1, b: 2, c: 3 });
    * ```
    */
-  update(itemId: string | number, data: TItem): void {
-    this.logger__.logMethodArgs?.('update', {itemId, data});
+  replaceItemData(itemId: string | number, data: TItem): void {
+    this.logger__.logMethodArgs?.('replaceItemData', {itemId, data});
     (this.item__(itemId).data as unknown) = data;
     this.updated__(itemId);
   }
@@ -447,11 +447,11 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
    *
    * @example
    * ```typescript
-   * collectionRef.updatePartial(itemId, partialUpdate);
+   * collectionRef.mergeItemData(itemId, partialUpdate);
    * ```
    */
-  updatePartial(itemId: string | number, data: Partial<TItem>): void {
-    this.logger__.logMethodArgs?.('updatePartial', {itemId, data});
+  mergeItemData(itemId: string | number, data: Partial<TItem>): void {
+    this.logger__.logMethodArgs?.('mergeItemData', {itemId, data});
     Object.assign(this.item__(itemId).data, data);
     this.updated__(itemId);
   }
@@ -579,7 +579,7 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     this.logger__.logMethodArgs?.('updated__', {id, immediate, delayed: this.updateDelayed_});
 
     this.hasUnprocessedChanges_ = true;
-    if (id !== null) this.updateMetadata_(id); // meta must updated per item
+    if (id !== null) this.refreshMeta_(id); // meta must updated per item
 
     if (immediate === false && this.updateDelayed_ === true) return;
     // else
@@ -596,19 +596,19 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
     if (this.updateDelayed_ !== true) return; // another parallel update finished!
     this.updateDelayed_ = false;
 
-    if (id === null) this.updateMetadata_(id); // root meta not updated for null
+    if (id === null) this.refreshMeta_(id); // root meta not updated for null
 
     if (this._freeze === true) return; // prevent save if frozen
     this.updatedCallback__.call(null, this);
   }
 
   /**
-   * Updates the collection's metadata.
+   * Refresh/recalculate the collection's metadata timestamp and revision.
    *
    * @param itemId - The ID of the item to update.
    */
-  updateMetadata_(itemId: string | number | null): void {
-    this.logger__.logMethodArgs?.('updateMetadata_', {id: itemId});
+  protected refreshMeta_(itemId: string | number | null): void {
+    this.logger__.logMethodArgs?.('refreshMeta_', {id: itemId});
     const now = Date.now();
     this.context__.meta.rev++;
     this.context__.meta.updated = now;
