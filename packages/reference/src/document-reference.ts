@@ -381,4 +381,52 @@ export class DocumentReference<TDoc extends JsonObject = JsonObject> {
     this.context__.meta.updated = Date.now();
     this.context__.meta.rev++;
   }
+
+
+  /**
+   * Retrieves the document's extra metadata.
+   *
+   * @returns The document's extra metadata.
+   *
+   * @example
+   * ```typescript
+   * const colExtraMeta = documentRef.getExtraMeta();
+   * ```
+   */
+  getExtraMeta<T extends JsonObject>(): T {
+    this.logger__.logMethod?.('getExtraMeta');
+    return this.context__.meta.extra as T;
+  }
+
+  /**
+   * Sets/replace the document's extra metadata.
+   *
+   * @param extraMeta The new document's extra metadata.
+   *
+   * @example
+   * ```typescript
+   * documentRef.replaceExtraMeta({ a: 1, b: 2, c: 3 });
+   * ```
+   */
+  replaceExtraMeta<T extends JsonObject>(extraMeta: T): void {
+    this.logger__.logMethodArgs?.('replaceExtraMeta', extraMeta);
+    this.context__.meta.extra = extraMeta;
+    this.updated__();
+  }
+
+  /**
+   * Updates document's extra metadata by merging a partial update.
+   *
+   * @param extraMeta The part of extra metadata to merge into the document's extra metadata.
+   *
+   * @example
+   * ```typescript
+   * documentRef.mergeExtraMeta({ c: 4 });
+   * ```
+   */
+  mergeExtraMeta<T extends JsonObject>(extraMeta: Partial<T>): void {
+    this.logger__.logMethodArgs?.('mergeExtraMeta', extraMeta);
+    Object.assign(this.context__.meta.extra, extraMeta);
+    this.updated__();
+  }
 }
