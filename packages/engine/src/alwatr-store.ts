@@ -115,7 +115,7 @@ export class AlwatrStore {
    */
   hasStore(storeId: StoreFileId): boolean {
     const id_ = getStoreId(storeId);
-    const exists = this.rootDb__.itemExists(id_);
+    const exists = this.rootDb__.hasItem(id_);
     logger.logMethodFull?.('hasStore', id_, exists);
     return exists;
   }
@@ -215,7 +215,7 @@ export class AlwatrStore {
       throw new Error('store_file_type_not_supported', {cause: stat});
     }
 
-    if (this.rootDb__.itemExists(fileStoreRef.id)) {
+    if (this.rootDb__.hasItem(fileStoreRef.id)) {
       logger.accident('newStoreFile_', 'store_file_already_defined', stat);
       throw new Error('store_file_already_defined', {cause: stat});
     }
@@ -257,7 +257,7 @@ export class AlwatrStore {
       return this.cacheReferences__[id] as unknown as DocumentReference<TDoc>;
     }
 
-    if (!this.rootDb__.itemExists(id)) {
+    if (!this.rootDb__.hasItem(id)) {
       logger.accident('openDocument', 'document_not_found', id);
       throw new Error('document_not_found', {cause: id});
     }
@@ -307,7 +307,7 @@ export class AlwatrStore {
     }
 
     // load and create new collection reference
-    if (!this.rootDb__.itemExists(id)) {
+    if (!this.rootDb__.hasItem(id)) {
       logger.accident('openCollection', 'collection_not_found', id);
       throw new Error('collection_not_found', {cause: id});
     }
@@ -364,7 +364,7 @@ export class AlwatrStore {
   async removeStore(storeId: StoreFileId): Promise<void> {
     const id_ = getStoreId(storeId);
     logger.logMethodArgs?.('removeStore', id_);
-    if (!this.rootDb__.itemExists(id_)) {
+    if (!this.rootDb__.hasItem(id_)) {
       logger.accident('removeStore', 'document_not_found', id_);
       throw new Error('document_not_found', {cause: id_});
     }
