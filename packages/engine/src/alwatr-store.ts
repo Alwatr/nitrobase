@@ -231,7 +231,7 @@ export class AlwatrStore {
    * If the document not exists or its not a document, an error is thrown.
    *
    * @template TDoc document data type
-   * @param id_ document id
+   * @param documentId document id {@link StoreFileId}
    * @returns document reference {@link DocumentReference}
    * @example
    * ```typescript
@@ -243,34 +243,34 @@ export class AlwatrStore {
    * userProfile.update({name: 'ali'});
    * ```
    */
-  async openDocument<TDoc extends JsonObject>(id: StoreFileId): Promise<DocumentReference<TDoc>> {
-    const id_ = getStoreId(id);
-    logger.logMethodArgs?.('openDocument', id_);
+  async openDocument<TDoc extends JsonObject>(documentId: StoreFileId): Promise<DocumentReference<TDoc>> {
+    const id = getStoreId(documentId);
+    logger.logMethodArgs?.('openDocument', id);
 
-    if (Object.hasOwn(this.cacheReferences__, id_)) {
-      const ref = this.cacheReferences__[id_];
+    if (Object.hasOwn(this.cacheReferences__, id)) {
+      const ref = this.cacheReferences__[id];
       if (!(ref instanceof DocumentReference)) {
-        logger.accident('openDocument', 'document_wrong_type', id_);
-        throw new Error('document_wrong_type', {cause: id_});
+        logger.accident('openDocument', 'document_wrong_type', id);
+        throw new Error('document_wrong_type', {cause: id});
       }
-      return this.cacheReferences__[id_] as unknown as DocumentReference<TDoc>;
+      return this.cacheReferences__[id] as unknown as DocumentReference<TDoc>;
     }
 
-    if (!this.rootDb__.itemExists(id_)) {
-      logger.accident('openDocument', 'document_not_found', id_);
-      throw new Error('document_not_found', {cause: id_});
+    if (!this.rootDb__.itemExists(id)) {
+      logger.accident('openDocument', 'document_not_found', id);
+      throw new Error('document_not_found', {cause: id});
     }
 
-    const storeStat = this.rootDb__.getItemData(id_);
+    const storeStat = this.rootDb__.getItemData(id);
 
     if (storeStat.type != StoreFileType.Document) {
-      logger.accident('openDocument', 'document_wrong_type', id_);
-      throw new Error('document_wrong_type', {cause: id_});
+      logger.accident('openDocument', 'document_wrong_type', id);
+      throw new Error('document_wrong_type', {cause: id});
     }
 
     const context = await this.readContext__<DocumentContext<TDoc>>(storeStat);
     const docRef = DocumentReference.newRefFromContext(context, this.storeChanged_.bind(this));
-    this.cacheReferences__[id_] = docRef as unknown as DocumentReference;
+    this.cacheReferences__[id] = docRef as unknown as DocumentReference;
     return docRef;
   }
 
@@ -279,7 +279,7 @@ export class AlwatrStore {
    * If the collection not exists or its not a collection, an error is thrown.
    *
    * @template TItem collection item data type
-   * @param id_ collection id
+   * @param collectionId collection id {@link StoreFileId}
    * @returns collection reference {@link CollectionReference}
    * @example
    * ```typescript
@@ -291,43 +291,43 @@ export class AlwatrStore {
    * orders.append({name: 'order 1'});
    * ```
    */
-  async openCollection<TItem extends JsonObject>(id: StoreFileId): Promise<CollectionReference<TItem>> {
-    const id_ = getStoreId(id);
-    logger.logMethodArgs?.('openCollection', id_);
+  async openCollection<TItem extends JsonObject>(collectionId: StoreFileId): Promise<CollectionReference<TItem>> {
+    const id = getStoreId(collectionId);
+    logger.logMethodArgs?.('openCollection', id);
 
     // try to get from cache
-    if (Object.hasOwn(this.cacheReferences__, id_)) {
-      const ref = this.cacheReferences__[id_];
+    if (Object.hasOwn(this.cacheReferences__, id)) {
+      const ref = this.cacheReferences__[id];
       if (!(ref instanceof CollectionReference)) {
-        logger.accident('openCollection', 'collection_wrong_type', id_);
-        throw new Error('collection_wrong_type', {cause: id_});
+        logger.accident('openCollection', 'collection_wrong_type', id);
+        throw new Error('collection_wrong_type', {cause: id});
       }
-      return this.cacheReferences__[id_] as unknown as CollectionReference<TItem>;
+      return this.cacheReferences__[id] as unknown as CollectionReference<TItem>;
     }
 
     // load and create new collection reference
-    if (!this.rootDb__.itemExists(id_)) {
-      logger.accident('openCollection', 'collection_not_found', id_);
-      throw new Error('collection_not_found', {cause: id_});
+    if (!this.rootDb__.itemExists(id)) {
+      logger.accident('openCollection', 'collection_not_found', id);
+      throw new Error('collection_not_found', {cause: id});
     }
 
-    const storeStat = this.rootDb__.getItemData(id_);
+    const storeStat = this.rootDb__.getItemData(id);
 
     if (storeStat.type != StoreFileType.Collection) {
-      logger.accident('openCollection', 'collection_wrong_type', id_);
-      throw new Error('collection_not_found', {cause: id_});
+      logger.accident('openCollection', 'collection_wrong_type', id);
+      throw new Error('collection_not_found', {cause: id});
     }
 
     const context = await this.readContext__<CollectionContext<TItem>>(storeStat);
     const colRef = CollectionReference.newRefFromContext(context, this.storeChanged_.bind(this));
-    this.cacheReferences__[id_] = colRef as unknown as CollectionReference;
+    this.cacheReferences__[id] = colRef as unknown as CollectionReference;
     return colRef;
   }
 
   /**
    * Unloads the store file with the given id from memory.
    *
-   * @param id_ The unique identifier of the store file.
+   * @param storeId The unique identifier of the store file. {@link StoreFileId}
    * @example
    * ```typescript
    * alwatrStore.unloadStore({name: 'user-list', region: Region.Secret});
@@ -352,7 +352,7 @@ export class AlwatrStore {
    * If the file is not unloaded, it will be unloaded first.
    * You don't need to await this method to complete unless you want to make sure the file is deleted on disk.
    *
-   * @param storeId The ID of the file to delete.
+   * @param storeId The ID of the file to delete. {@link StoreFileId}
    * @returns A Promise that resolves when the file is deleted.
    * @example
    * ```typescript
@@ -388,6 +388,7 @@ export class AlwatrStore {
 
   /**
    * Saves all changes in the store.
+   *
    * @returns A Promise that resolves when all changes are saved.
    * @example
    * ```typescript
@@ -437,9 +438,8 @@ export class AlwatrStore {
   /**
    * Write store file context.
    *
-   * @param id The unique identifier of the store file.
-   * @param context The store file context. If not provided, it will be loaded from memory.
-   * @param sync If true, the file will be written synchronously.
+   * @param from store file reference
+   * @returns A promise that resolves when the write operation is complete.
    */
   protected async storeChanged_<T extends JsonObject>(from: DocumentReference<T> | CollectionReference<T>): Promise<void> {
     logger.logMethodArgs?.('storeChanged__', from.id);
