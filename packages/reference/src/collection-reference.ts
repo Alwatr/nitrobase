@@ -132,12 +132,15 @@ export class CollectionReference<TItem extends JsonifiableObject = JsonifiableOb
 
     if (this.context__.meta.fv === 1) {
       // migrate from v1 to v2
+      // this.context__.meta.schemaVer = 0
       this.context__.meta.fv = 2;
     }
 
     if (this.context__.meta.fv === 2) {
       // migrate from v1 to v3
-      this.context__.meta.schemaVer ??= 1
+      if (this.context__.meta.schemaVer === undefined || this.context__.meta.schemaVer === 0) {
+        this.context__.meta.schemaVer = 1
+      }
       delete (this.context__.meta as Dictionary)['ver'];
       this.context__.meta.fv = 3;
     }
