@@ -10,6 +10,7 @@ import {
   type CollectionContext,
   type DocumentContext,
   type StoreFileId,
+  type CollectionItem,
 } from '@alwatr/store-types';
 import {waitForTimeout} from '@alwatr/wait';
 
@@ -488,5 +489,21 @@ export class AlwatrStore {
         ref.hasUnprocessedChanges_ = false;
       }
     }
+  }
+
+  /**
+   * Get all store files.
+   *
+   * @returns all store files.
+   * @example
+   * ```typescript
+   * const storeList = alwatrStore.getStoreList();
+   * for (const store of storeList) {
+   *   console.log(store.meta.id, store.data);
+   * }
+   */
+  getStoreList(): CollectionItem<Omit<StoreFileStat, 'schemaVer'>>[] {
+    logger.logMethod?.('getStoreList');
+    return this.rootDb__.values();
   }
 }
