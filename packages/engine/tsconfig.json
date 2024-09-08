@@ -7,5 +7,5 @@
     "composite": true
   },
   "include": ["src/**/*.ts"],
-  "references": [{"path": "../types"}, {"path": "../reference"}]
+  "references": [{"path": "../types"}, {"path": "../reference"}, {"path": "../helper"}]
 }
