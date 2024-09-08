@@ -1,9 +1,9 @@
 import {createLogger} from '@alwatr/logger';
+import {getStoreId, getStorePath} from '@alwatr/store-helper';
 import {StoreFileType, StoreFileExtension, type StoreFileId, type DocumentContext, type StoreFileMeta} from '@alwatr/store-types';
 import {waitForImmediate, waitForTimeout} from '@alwatr/wait';
 
 import {logger} from './logger.js';
-import {getStoreId, getStorePath} from './util.js';
 
 import type {Dictionary, JsonObject} from '@alwatr/type-helper';
 
