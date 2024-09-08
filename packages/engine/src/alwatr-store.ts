@@ -1,6 +1,7 @@
 import {exitHook} from '@alwatr/exit-hook';
 import {existsSync, readJson, resolve, unlink, writeJson} from '@alwatr/node-fs';
-import {CollectionReference, DocumentReference, getStoreId, getStorePath} from '@alwatr/store-reference';
+import {getStoreId, getStorePath} from '@alwatr/store-helper';
+import {CollectionReference, DocumentReference} from '@alwatr/store-reference';
 import {
   StoreFileType,
   StoreFileExtension,
@@ -57,8 +58,6 @@ export class AlwatrStore {
    * Use for store file format version for check compatibility.
    */
   static readonly version = __package_version__;
-
-  static getStoreId = getStoreId;
 
   /**
    * The root store file stat.
