@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.1.0](https://github.com/Alwatr/store/compare/v7.0.0...v7.1.0) (2024-09-08)
+
+### Features
+
+* **engine:** add @alwatr/store-helper package ([66bca93](https://github.com/Alwatr/store/commit/66bca93e46f344b54b6f9eb57f4a680247e36157)) by @AliMD
+* **helper:** add @alwatr/store-helper package ([158377c](https://github.com/Alwatr/store/commit/158377c69a2fe9ead17fa8160f95298fbbae19ec)) by @AliMD
+* **reference:** add @alwatr/store-helper package ([a9077ae](https://github.com/Alwatr/store/commit/a9077aeff62c8c06ad2ac9eed1f2e637a1ba0b9b)) by @AliMD
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump the development-dependencies group with 2 updates ([f6d8374](https://github.com/Alwatr/store/commit/f6d837417886ccf3719100570194434455fda365)) by @dependabot[bot]
+* **deps:** bump github/codeql-action in the github-actions group ([38c8fea](https://github.com/Alwatr/store/commit/38c8feac66c235d90c975090f05206fb37fd1e7f)) by @dependabot[bot]
+* **vscode:** update settings.json ([ad90759](https://github.com/Alwatr/store/commit/ad90759468c9a710a330ff50cfefd58b121c6af9)) by @AliMD
+
+### Dependencies update
+
+* update ([09c86a3](https://github.com/Alwatr/store/commit/09c86a3f6149feff6ab2abef218d16d631a8c8db)) by @AliMD
+
 ## [7.0.0](https://github.com/Alwatr/store/compare/v7.0.0-beta.1...v7.0.0) (2024-09-02)
 
 ### ⚠ BREAKING CHANGES

@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.1.0](https://github.com/Alwatr/store/compare/v7.0.0...v7.1.0) (2024-09-08)
+
+### Features
+
+* **engine:** add @alwatr/store-helper package ([66bca93](https://github.com/Alwatr/store/commit/66bca93e46f344b54b6f9eb57f4a680247e36157)) by @AliMD
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump the development-dependencies group with 2 updates ([f6d8374](https://github.com/Alwatr/store/commit/f6d837417886ccf3719100570194434455fda365)) by @dependabot[bot]
+
 ## [7.0.0](https://github.com/Alwatr/store/compare/v7.0.0-beta.1...v7.0.0) (2024-09-02)
 
 ### Features
