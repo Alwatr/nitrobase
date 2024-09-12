@@ -72,6 +72,6 @@
     "@alwatr/tsconfig-base": "^1.2.0",
     "@alwatr/type-helper": "^1.2.5",
     "@types/node": "^22.5.4",
-    "typescript": "^5.5.4"
+    "typescript": "^5.6.2"
   }
 }
