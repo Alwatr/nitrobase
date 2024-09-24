@@ -21,7 +21,7 @@ ENV NGINX_DOCUMENT_ROOT=/data \
     NGINX_LIMIT_REQ_BURST=1000 \
     NGINX_DISABLE_SYMLINKS=if_not_owner
 
-ENV storeApiPrefix="/api/s6" \
+ENV storeApiPrefix="/api/s7" \
     storeDebugPath="/debug-info-110" \
     storeRegionPublic="p" \
     storeRegionSecret=".s" \
