@@ -10,7 +10,7 @@ import type {Dictionary, JsonObject} from '@alwatr/type-helper';
 logger.logModule?.('document-reference');
 
 /**
- * Represents a reference to a document of the AlwatrStore.
+ * Represents a reference to a document of the AlwatrNitrobase.
  * Provides methods to interact with the document, such as get, set, update and save.
  */
 export class DocumentReference<TDoc extends JsonObject = JsonObject> {
@@ -161,7 +161,7 @@ export class DocumentReference<TDoc extends JsonObject = JsonObject> {
 
   /**
    * Create a new document reference.
-   * Document reference have methods to get, set, update and save the AlwatrStore Document.
+   * Document reference have methods to get, set, update and save the AlwatrNitrobase Document.
    *
    * @param context__ Document's context filled from the Alwatr Nitrobase (parent).
    * @param updatedCallback__ updated callback to invoke when the document is updated from the Alwatr Nitrobase (parent).

@@ -1,5 +1,4 @@
 import {exitHook} from '@alwatr/exit-hook';
-import {existsSync, readJson, resolve, unlink, writeJson} from '@alwatr/node-fs';
 import {getStoreId, getStorePath} from '@alwatr/nitrobase-helper';
 import {CollectionReference, DocumentReference} from '@alwatr/nitrobase-reference';
 import {
@@ -13,6 +12,7 @@ import {
   type StoreFileId,
   type CollectionItem,
 } from '@alwatr/nitrobase-types';
+import {existsSync, readJson, resolve, unlink, writeJson} from '@alwatr/node-fs';
 import {waitForTimeout} from '@alwatr/wait';
 
 import {logger} from './logger.js';
@@ -22,12 +22,12 @@ import type {Dictionary, JsonObject} from '@alwatr/type-helper';
 logger.logModule?.('alwatr-nitrobase');
 
 /**
- * AlwatrStore configuration.
+ * AlwatrNitrobase configuration.
  */
-export interface AlwatrStoreConfig {
+export interface AlwatrNitrobaseConfig {
   /**
    * The root path of the storage.
-   * This is where the AlwatrStore will nitrobase its data.
+   * This is where the AlwatrNitrobase will nitrobase its data.
    */
   rootPath: string;
 
@@ -46,12 +46,12 @@ export interface AlwatrStoreConfig {
 }
 
 /**
- * AlwatrStore engine.
+ * AlwatrNitrobase engine.
  *
  * It provides methods to read, write, validate, and manage nitrobase files.
  * It also provides methods to interact with `documents` and `collections` in the nitrobase.
  */
-export class AlwatrStore {
+export class AlwatrNitrobase {
   /**
    * The Alwatr Nitrobase version string.
    *
@@ -82,18 +82,18 @@ export class AlwatrStore {
   private cacheReferences__: Dictionary<DocumentReference | CollectionReference> = {};
 
   /**
-   * Constructs an AlwatrStore instance with the provided configuration.
+   * Constructs an AlwatrNitrobase instance with the provided configuration.
    *
-   * @param config__ The configuration of the AlwatrStore engine.
+   * @param config__ The configuration of the AlwatrNitrobase engine.
    * @example
    * ```typescript
-   * const alwatrStore = new AlwatrStore({
+   * const alwatrStore = new AlwatrNitrobase({
    *   rootPath: './db',
    *   saveDebounce: 40,
    * });
    * ```
    */
-  constructor(private readonly config__: AlwatrStoreConfig) {
+  constructor(private readonly config__: AlwatrNitrobaseConfig) {
     logger.logMethodArgs?.('new', config__);
     this.config__.defaultChangeDebounce ??= 40;
     this.rootDb__ = this.loadRootDb__();
@@ -188,7 +188,7 @@ export class AlwatrStore {
   }
 
   /**
-   * Defines a AlwatrStoreFile with the given configuration and initial data.
+   * Defines a AlwatrNitrobaseFile with the given configuration and initial data.
    *
    * @param stat nitrobase file stat
    * @param initialData initial data for the document
@@ -461,14 +461,14 @@ export class AlwatrStore {
    */
   private loadRootDb__(): CollectionReference<StoreFileStat> {
     logger.logMethod?.('loadRootDb__');
-    const fullPath = resolve(this.config__.rootPath, getStorePath(AlwatrStore.rootDbStat__));
+    const fullPath = resolve(this.config__.rootPath, getStorePath(AlwatrNitrobase.rootDbStat__));
     if (!existsSync(fullPath)) {
       if (this.config__.errorWhenNotInitialized === true) {
         throw new Error('store_not_found', {cause: 'Nitrobase not initialized'});
       }
 
       logger.banner('Initialize new alwatr-nitrobase');
-      return CollectionReference.newRefFromData(AlwatrStore.rootDbStat__, null, this.storeChanged_.bind(this));
+      return CollectionReference.newRefFromData(AlwatrNitrobase.rootDbStat__, null, this.storeChanged_.bind(this));
     }
     // else
     const context = readJson<CollectionContext<StoreFileStat>>(fullPath, true);

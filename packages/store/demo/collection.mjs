@@ -1,12 +1,12 @@
 import {createLogger} from '@alwatr/logger';
 
-import {AlwatrStore, Region} from '@alwatr/nitrobase';
+import {AlwatrNitrobase, Region} from '@alwatr/nitrobase';
 
-const logger = createLogger('AlwatrStore/Demo', true);
-logger.banner('AlwatrStore/Demo');
+const logger = createLogger('AlwatrNitrobase/Demo', true);
+logger.banner('AlwatrNitrobase/Demo');
 
 // Create a new storage instance
-const alwatrStore = new AlwatrStore({
+const alwatrStore = new AlwatrNitrobase({
   rootPath: './db',
   defaultChangeDebounce: 2_000, // for demo
 });
@@ -59,7 +59,7 @@ async function quickstart() {
 
   // Update an existing collection item.
   postsCollection.mergeItemData(post1Id, {
-    body: 'My first AlwatrStore Collection',
+    body: 'My first AlwatrNitrobase Collection',
   });
   logger.logProperty?.('context', postsCollection.getItemData(post1Id));
 

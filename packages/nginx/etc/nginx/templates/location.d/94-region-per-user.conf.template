@@ -1,7 +1,7 @@
 # PerUser region
 # Nitrobase file location specific to each user id. Can be accessed using the user token.
 
-location ~ ^/($storeRegionPerUser/[A-z0-9_=-]+/[A-z0-9_=-]+)/ {
+location ~ ^/($nitrobaseRegionPerUser/[A-z0-9_=-]+/[A-z0-9_=-]+)/ {
   if (!-f $document_root/$userLocation/.token/$authUserToken.asn) {
     return 403;
     break;

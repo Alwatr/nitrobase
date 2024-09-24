@@ -61,7 +61,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * Add `extra` meta for `collection-reference.ts` and `document-reference.ts` with migrate old versions ([8182369](https://github.com/Alwatr/nitrobase/commit/81823692edacacb95a53d55218c2c818c9fa13cb)) by @AliMD
 * add `extra` property to StoreFileMeta ([5cdb573](https://github.com/Alwatr/nitrobase/commit/5cdb5735c2faf888a3fcea466ec3fd848e60148e)) by @AliMD
 * Add Alwatr Nitrobase package ([a77a71b](https://github.com/Alwatr/nitrobase/commit/a77a71b883e861d7e26e058bbbc9b513770eb970)) by @AliMD
-* Add getStoreList method to AlwatrStore ([25ace2a](https://github.com/Alwatr/nitrobase/commit/25ace2aa4e32d9ad99d6ac2e63ac783462b9f4e5)) by @AliMD
+* Add getStoreList method to AlwatrNitrobase ([25ace2a](https://github.com/Alwatr/nitrobase/commit/25ace2aa4e32d9ad99d6ac2e63ac783462b9f4e5)) by @AliMD
 * Add methods for managing extra metadata in DocumentReference ([5c0ae83](https://github.com/Alwatr/nitrobase/commit/5c0ae83980ba863b99f3d53ee7c7b91c31bf61c0)) by @AliMD
 * Add migrateName property to StoreFileStat ([f5b4f39](https://github.com/Alwatr/nitrobase/commit/f5b4f3904cec69ad96089daa800ed4243bd0f33e)) by @AliMD
 * Update type imports in alwatr-nitrobase.ts ([68064c4](https://github.com/Alwatr/nitrobase/commit/68064c4430c5aad8bca49d1f2a9270d6e64b051e)) by @AliMD
@@ -93,7 +93,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * Rename update method to replaceData in DocumentReference ([367257c](https://github.com/Alwatr/nitrobase/commit/367257c13255a1537d87d948ed0f303368b2ae2d)) by @AliMD
 * Rename updatePartial method to mergeData in DocumentReference ([cbc1194](https://github.com/Alwatr/nitrobase/commit/cbc119410b3a58d554c30dfc01eafbdb91b4c49a)) by @AliMD
 * Rename updatePartial method to mergeItemData in CollectionReference ([e091900](https://github.com/Alwatr/nitrobase/commit/e09190062e9387d7abad0d395a921b94b4efea18)) by @AliMD
-* Replace id_ with documentId and collectionId in AlwatrStore ([e58d0fd](https://github.com/Alwatr/nitrobase/commit/e58d0fd905722352238e11ed4e308907485f8ff5)) by @AliMD
+* Replace id_ with documentId and collectionId in AlwatrNitrobase ([e58d0fd](https://github.com/Alwatr/nitrobase/commit/e58d0fd905722352238e11ed4e308907485f8ff5)) by @AliMD
 * Replace update method with replaceItemData in CollectionReference ([45a9309](https://github.com/Alwatr/nitrobase/commit/45a9309887ed6db4ac452b6dbc48a8cb4b38c7c7)) by @AliMD
 * Update migrate process in CollectionReference and DocumentReference ([5a25ae2](https://github.com/Alwatr/nitrobase/commit/5a25ae2674dfa3eda78b6995b0af3beb4ab885c5)) by @AliMD
 * Update type imports in alwatr-nitrobase.ts ([d6f02ad](https://github.com/Alwatr/nitrobase/commit/d6f02ad5b779d04aa1b484bff96369483393af15)) by @AliMD
@@ -175,8 +175,8 @@ Co-authored-by: Mohammad Honarvar <honarvar.info@gmail.com>
 
 ### Features
 
-* Add newDocument and newCollection methods to AlwatrStore ([363f820](https://github.com/Alwatr/nitrobase/commit/363f820a104e49a49746c95e7f303982d3ecb481)) by @AliMD
-* Open document and collection with given id in AlwatrStore ([5041a20](https://github.com/Alwatr/nitrobase/commit/5041a20bbf6dc3a26499aac4649e8c0d17c23537)) by @AliMD
+* Add newDocument and newCollection methods to AlwatrNitrobase ([363f820](https://github.com/Alwatr/nitrobase/commit/363f820a104e49a49746c95e7f303982d3ecb481)) by @AliMD
+* Open document and collection with given id in AlwatrNitrobase ([5041a20](https://github.com/Alwatr/nitrobase/commit/5041a20bbf6dc3a26499aac4649e8c0d17c23537)) by @AliMD
 * Rename `meta` method to `getStoreMetadata` in CollectionReference ([44ee78e](https://github.com/Alwatr/nitrobase/commit/44ee78eaf50d8529aa6362f6dfa13804081a0f7d)) by @AliMD
 
 ### Bug Fixes
@@ -186,7 +186,7 @@ Co-authored-by: Mohammad Honarvar <honarvar.info@gmail.com>
 
 ### Code Refactoring
 
-* **AlwatrStore:** compatible with new api ([42c30f2](https://github.com/Alwatr/nitrobase/commit/42c30f2c7a066305eaba5e6fae50bfa5dc4502c8)) by @AliMD
+* **AlwatrNitrobase:** compatible with new api ([42c30f2](https://github.com/Alwatr/nitrobase/commit/42c30f2c7a066305eaba5e6fae50bfa5dc4502c8)) by @AliMD
 * **CollectionReference:** Rename `item__` method parameter from `id` to `itemId` ([c0cde18](https://github.com/Alwatr/nitrobase/commit/c0cde18b1ac456e29118132ee88c9f115cc44442)) by @AliMD
 * **CollectionReference:** Rename `metaItem` method to `getItemMetadata` in CollectionReference ([3c9cfdb](https://github.com/Alwatr/nitrobase/commit/3c9cfdb741312aa626538a795f7980a140b12f6e)) by @AliMD
 * **CollectionReference:** Rename `set` method to `update` in CollectionReference ([258d739](https://github.com/Alwatr/nitrobase/commit/258d739e2f00b4f2f548de6158dcdcbfdf6ddf63)) by @AliMD
@@ -332,7 +332,7 @@ Co-authored-by: Mohammad Honarvar <honarvar.info@gmail.com>
 
 ### ⚠ BREAKING CHANGES
 
-* **nginx:** default `storeApiPrefix` change to `/api/s6`
+* **nginx:** default `nitrobaseApiPrefix` change to `/api/s6`
 * **nginx:** Add authentication requirement for all location
 * **nginx:** new authorization method
 * **types:** `PerDevice` and `PerToken` in Region removed
@@ -360,8 +360,9 @@ Co-authored-by: Mohammad Honarvar <honarvar.info@gmail.com>
 ### Code Refactoring
 
 * **nginx:** Add authentication requirement for all location ([0f52f8c](https://github.com/Alwatr/nitrobase/commit/0f52f8cc5173e797bc5faba363277cc64af9724a)) by @AliMD
-* **nginx:** Add rewrite rule to remove storeApiPrefix from URL ([c0a5a69](https://github.com/Alwatr/nitrobase/commit/c0a5a6910a2244f3a8eeffef0351f5390ebf8e69)) by @AliMD
-* **nginx:** Add storeDebugPath and change storeRegionPerDevice to storeRegionPerOwner ([4dcdd61](https://github.com/Alwatr/nitrobase/commit/4dcdd61cc40b5127a5fe4c6196c98f4321e7a4dc)) by @AliMD
+
+* **nginx:** Add rewrite rule to remove nitrobaseApiPrefix from URL ([c0a5a69](https://github.com/Alwatr/nitrobase/commit/c0a5a6910a2244f3a8eeffef0351f5390ebf8e69)) by @AliMD
+* **nginx:** Add nitrobaseDebugPath and change nitrobaseRegionPerDevice to nitrobaseRegionPerOwner ([4dcdd61](https://github.com/Alwatr/nitrobase/commit/4dcdd61cc40b5127a5fe4c6196c98f4321e7a4dc)) by @AliMD
 * **nginx:** Authenticated region location ([ebb91c6](https://github.com/Alwatr/nitrobase/commit/ebb91c66fcf937ef9c7c2666b340ca817e0cb5f2)) by @AliMD
 * **nginx:** home page JSON response ([fb7f70c](https://github.com/Alwatr/nitrobase/commit/fb7f70c424c0c6c0234d6728869d1a24eb436e06)) by @AliMD
 * **nginx:** Managers region location ([a2568cf](https://github.com/Alwatr/nitrobase/commit/a2568cf0d88cfc9d6b0e9d3795fe7907ec03d999)) by @AliMD
@@ -401,7 +402,7 @@ Co-authored-by: Mohammad Honarvar <honarvar.info@gmail.com>
 
 ### Code Refactoring
 
-* Update storeRegionSecret value in Dockerfile and types file ([a0b13c6](https://github.com/Alwatr/nitrobase/commit/a0b13c6ff07599a425fa666437c0ebf167ccf6c8)) by @AliMD
+* Update nitrobaseRegionSecret value in Dockerfile and types file ([a0b13c6](https://github.com/Alwatr/nitrobase/commit/a0b13c6ff07599a425fa666437c0ebf167ccf6c8)) by @AliMD
 
 # [5.0.0](https://github.com/Alwatr/nitrobase/compare/v5.0.0-beta...v5.0.0) (2024-01-12)
 
@@ -433,6 +434,7 @@ Co-authored-by: Mohammad Honarvar <honarvar.info@gmail.com>
 ### Bug Fixes
 
 * **demo:** import path ([13dfd4c](https://github.com/Alwatr/nitrobase/commit/13dfd4c379351bade418cb7bc24fdc652d34280f)) by @njfamirm
+
 * **deps:** dev deps ([b129567](https://github.com/Alwatr/nitrobase/commit/b12956768b9d60a75c0fdc43774512b86b655f78)) by @AliMD
 * **engin5:** Fix import paths in alwatr-nitrobase and collection-reference ([4bb206a](https://github.com/Alwatr/nitrobase/commit/4bb206a1899befeba8d01ec1af777bef9fe7fb10)) by @AliMD
 * **engine/demo:** benchmark ([48b4456](https://github.com/Alwatr/nitrobase/commit/48b4456cd09bf610bfe718c843e55ff0db2a9e5a)) by @njfamirm
@@ -449,7 +451,7 @@ Co-authored-by: Mohammad Honarvar <honarvar.info@gmail.com>
 * **engine:** make last auto id optional ([0e80d55](https://github.com/Alwatr/nitrobase/commit/0e80d55f28067b0ccd06cbcbf12030e82d6744d5)) by @njfamirm
 * **engine:** Remove StoreFileStatModel class ([d47b680](https://github.com/Alwatr/nitrobase/commit/d47b680d54b8bd9a0b8926653a69cb59c8f36398)) by @AliMD
 * **engine:** unsaved data lost issues ([fec0bef](https://github.com/Alwatr/nitrobase/commit/fec0bef78ac67ddd669012d8804588883f39affa)) by @AliMD
-* **engine:** Update defaultChangeDebounce value in AlwatrStore ([63edd08](https://github.com/Alwatr/nitrobase/commit/63edd08c87c675edb91b8f7aa61b901a6d1db111)) by @AliMD
+* **engine:** Update defaultChangeDebounce value in AlwatrNitrobase ([63edd08](https://github.com/Alwatr/nitrobase/commit/63edd08c87c675edb91b8f7aa61b901a6d1db111)) by @AliMD
 * **engine:** Update imports and refactor util.ts ([2b1f962](https://github.com/Alwatr/nitrobase/commit/2b1f9628f4578f707996fe5e6d5d92c7d093b615)) by @AliMD
 * **nginx:** device id variable ([7e58911](https://github.com/Alwatr/nitrobase/commit/7e5891137a095b28fd6cd5388073212f73441225)) by @njfamirm
 * **nginx:** header map regex ([3e16b69](https://github.com/Alwatr/nitrobase/commit/3e16b6946c7f07b76af7a3af299339899ac4b6fa)) by @njfamirm
@@ -474,9 +476,9 @@ Co-authored-by: Mohammad Honarvar <honarvar.info@gmail.com>
 * **engin5:** Add owner ID validation for PerUser, PerToken, and PerDevice regions ([79b2ec7](https://github.com/Alwatr/nitrobase/commit/79b2ec7cd0927bc0c5b985894e4f9e877954f6fe)) by @AliMD
 * **engin5:** Add support for auto-incrementing IDs in CollectionReference ([e883af6](https://github.com/Alwatr/nitrobase/commit/e883af67318708df032af06df02db7dd45fde248)) by @AliMD
 * **engin5:** add utility functions for reading and writing JSON files ([71f8037](https://github.com/Alwatr/nitrobase/commit/71f8037f13c3479c74f5ff533d7a2b81229213a2)) by @AliMD
-* **engin5:** Enhance AlwatrStore read and write methods ([2bca22a](https://github.com/Alwatr/nitrobase/commit/2bca22a2050458c89581b8aeca32499f92e098b0)) by @AliMD
+* **engin5:** Enhance AlwatrNitrobase read and write methods ([2bca22a](https://github.com/Alwatr/nitrobase/commit/2bca22a2050458c89581b8aeca32499f92e098b0)) by @AliMD
 * **engin5:** fix issues to improve performance and readability ([64b47fc](https://github.com/Alwatr/nitrobase/commit/64b47fcdf9794e32f55aa2322140301a01bf3dd4)) by @AliMD
-* **engin5:** refactor AlwatrStore with root db as collection, and handle save and syncLoad context ([efe9a1d](https://github.com/Alwatr/nitrobase/commit/efe9a1d72dfc381f02b033ce78f1c0b944692c83)) by @AliMD
+* **engin5:** refactor AlwatrNitrobase with root db as collection, and handle save and syncLoad context ([efe9a1d](https://github.com/Alwatr/nitrobase/commit/efe9a1d72dfc381f02b033ce78f1c0b944692c83)) by @AliMD
 * **engin5:** Refactor collection and document demo ([0bb2fd4](https://github.com/Alwatr/nitrobase/commit/0bb2fd46b4b8d6ed0f4bbdf7b9c75e9126462039)) by @AliMD
 * **engin5:** Refactor error handling in collection and document references ([1044c29](https://github.com/Alwatr/nitrobase/commit/1044c29e3ca3254f840d3c53ff5821e0e5f8838e)) by @AliMD
 * **engin5:** Refactor logging statements in collection and document references ([636175f](https://github.com/Alwatr/nitrobase/commit/636175f93958d3c66dd64069720dd02418ce2f22)) by @AliMD
@@ -488,7 +490,7 @@ Co-authored-by: Mohammad Honarvar <honarvar.info@gmail.com>
 * **engine/demo:** collection with new api ([f603e86](https://github.com/Alwatr/nitrobase/commit/f603e86d2827c66219321f9df400049e76b78c21)) by @AliMD
 * **engine5:** add exists and refactor stat ([9e6e4d2](https://github.com/Alwatr/nitrobase/commit/9e6e4d21d702272f83bfcf8b9b587299a250c754)) by @AliMD
 * **engine5:** Add global variable for package version in logger.ts ([eca7f69](https://github.com/Alwatr/nitrobase/commit/eca7f698d89560af88990c0765b1592db168c5ed)) by @AliMD
-* **engine5:** AlwatrStore class with complete new api ([c5e4009](https://github.com/Alwatr/nitrobase/commit/c5e40099df81e7584d86e21bb8f3e327fd66ab17)) by @AliMD
+* **engine5:** AlwatrNitrobase class with complete new api ([c5e4009](https://github.com/Alwatr/nitrobase/commit/c5e40099df81e7584d86e21bb8f3e327fd66ab17)) by @AliMD
 * **engine5:** design final demo api ([8a9477a](https://github.com/Alwatr/nitrobase/commit/8a9477a20c7219e166360999860db4beb679024e)) by @AliMD
 * **engine5:** design new concept ([552e96f](https://github.com/Alwatr/nitrobase/commit/552e96f592abc0f9c245d02c010baa5a1dd51f44)) by @AliMD
 * **engine5:** design new data types ([1c0be8b](https://github.com/Alwatr/nitrobase/commit/1c0be8b9901b6e7ed5703aace29379ee04432cf2)) by @AliMD
@@ -525,7 +527,7 @@ Co-authored-by: Mohammad Honarvar <honarvar.info@gmail.com>
 * **nginx:** Update home page JSON response ([0da2f5e](https://github.com/Alwatr/nitrobase/commit/0da2f5e1673a96a1bc329a9e7e6968c73312394f)) by @AliMD
 * **nginx:** Update nginx version and add default error JSON file ([5213c65](https://github.com/Alwatr/nitrobase/commit/5213c652977e5a9db4c2f88aeec8da6a07b1f626)) by @AliMD
 * **nginx:** Update nginx-json base image version and add environment variables ([2269f67](https://github.com/Alwatr/nitrobase/commit/2269f67f07bfd0eb0207584a27a3fc8663cece8c)) by @AliMD
-* **nginx:** Update storeRegionSecret env value in nginx Dockerfile ([15b3595](https://github.com/Alwatr/nitrobase/commit/15b35954fc972fdd648584f1b71fdad550699b70)) by @AliMD
+* **nginx:** Update nitrobaseRegionSecret env value in nginx Dockerfile ([15b3595](https://github.com/Alwatr/nitrobase/commit/15b35954fc972fdd648584f1b71fdad550699b70)) by @AliMD
 * **node-fs:** Update logger method arguments to include truncated path ([8c6f49a](https://github.com/Alwatr/nitrobase/commit/8c6f49ad56d5667ba1280a5d28b7a39b21c3a11a)) by @AliMD
 * **reference:** add debugDomain ([83dd29a](https://github.com/Alwatr/nitrobase/commit/83dd29ad07e0a80ae1882f0a459402cf671708ef)) by @AliMD
 * **reference:** Add hasUnprocessedChanges\_ flag to CollectionReference and DocumentReference ([dff3553](https://github.com/Alwatr/nitrobase/commit/dff35530732cce20d21337cb14df9b4ada9022b6)) by @AliMD

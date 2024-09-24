@@ -28,7 +28,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* Add getStoreList method to AlwatrStore ([25ace2a](https://github.com/Alwatr/nitrobase/commit/25ace2aa4e32d9ad99d6ac2e63ac783462b9f4e5)) by @AliMD
+* Add getStoreList method to AlwatrNitrobase ([25ace2a](https://github.com/Alwatr/nitrobase/commit/25ace2aa4e32d9ad99d6ac2e63ac783462b9f4e5)) by @AliMD
 
 ### Bug Fixes
 
@@ -40,7 +40,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **engine:** use  `hasItem` ([e17afa7](https://github.com/Alwatr/nitrobase/commit/e17afa7ef050cbf9f349dd6919739a01764aa24f)) by @mohammadhonarvar
 * move all demo from engine to srore package ([e34fc49](https://github.com/Alwatr/nitrobase/commit/e34fc49c71703cd287559ca4fb23f9f13842b2d0)) by @AliMD
 * Remove unused "ALWATR_DEBUG" environment variable from build script ([26e7642](https://github.com/Alwatr/nitrobase/commit/26e764280e0a2827904762ed3de21a9966ddfc63)) by @AliMD
-* Replace id_ with documentId and collectionId in AlwatrStore ([e58d0fd](https://github.com/Alwatr/nitrobase/commit/e58d0fd905722352238e11ed4e308907485f8ff5)) by @AliMD
+* Replace id_ with documentId and collectionId in AlwatrNitrobase ([e58d0fd](https://github.com/Alwatr/nitrobase/commit/e58d0fd905722352238e11ed4e308907485f8ff5)) by @AliMD
 * Update type imports in alwatr-nitrobase.ts ([d6f02ad](https://github.com/Alwatr/nitrobase/commit/d6f02ad5b779d04aa1b484bff96369483393af15)) by @AliMD
 * Update type imports in alwatr-nitrobase.ts ([274d234](https://github.com/Alwatr/nitrobase/commit/274d234e6653cade2288288a4894feb7314987a2)) by @AliMD
 
@@ -64,8 +64,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* Add newDocument and newCollection methods to AlwatrStore ([363f820](https://github.com/Alwatr/nitrobase/commit/363f820a104e49a49746c95e7f303982d3ecb481)) by @AliMD
-* Open document and collection with given id in AlwatrStore ([5041a20](https://github.com/Alwatr/nitrobase/commit/5041a20bbf6dc3a26499aac4649e8c0d17c23537)) by @AliMD
+* Add newDocument and newCollection methods to AlwatrNitrobase ([363f820](https://github.com/Alwatr/nitrobase/commit/363f820a104e49a49746c95e7f303982d3ecb481)) by @AliMD
+* Open document and collection with given id in AlwatrNitrobase ([5041a20](https://github.com/Alwatr/nitrobase/commit/5041a20bbf6dc3a26499aac4649e8c0d17c23537)) by @AliMD
 
 ### Bug Fixes
 
@@ -73,7 +73,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Code Refactoring
 
-* **AlwatrStore:** compatible with new api ([42c30f2](https://github.com/Alwatr/nitrobase/commit/42c30f2c7a066305eaba5e6fae50bfa5dc4502c8)) by @AliMD
+* **AlwatrNitrobase:** compatible with new api ([42c30f2](https://github.com/Alwatr/nitrobase/commit/42c30f2c7a066305eaba5e6fae50bfa5dc4502c8)) by @AliMD
 * **demo:** compatible with new api ([a76cc74](https://github.com/Alwatr/nitrobase/commit/a76cc7403610661c42099aae254ca5989bda1bff)) by @AliMD
 * Remove unnecessary debug flag from yarn script ([7f21798](https://github.com/Alwatr/nitrobase/commit/7f217981fb9c53c01f469a1a0b2761d856dc7337)) by @AliMD
 * rename `deleteFile` method to `remove` ([7356079](https://github.com/Alwatr/nitrobase/commit/735607933f78424ff7bdb6728f0e7b6eb18ca8a1)) by @AliMD
@@ -179,7 +179,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **engine:** import type ([9f67871](https://github.com/Alwatr/nitrobase/commit/9f67871dba8528a5393ea372f136865c952a102c)) by @njfamirm
 * **engine:** Remove StoreFileStatModel class ([d47b680](https://github.com/Alwatr/nitrobase/commit/d47b680d54b8bd9a0b8926653a69cb59c8f36398)) by @AliMD
 * **engine:** unsaved data lost issues ([fec0bef](https://github.com/Alwatr/nitrobase/commit/fec0bef78ac67ddd669012d8804588883f39affa)) by @AliMD
-* **engine:** Update defaultChangeDebounce value in AlwatrStore ([63edd08](https://github.com/Alwatr/nitrobase/commit/63edd08c87c675edb91b8f7aa61b901a6d1db111)) by @AliMD
+* **engine:** Update defaultChangeDebounce value in AlwatrNitrobase ([63edd08](https://github.com/Alwatr/nitrobase/commit/63edd08c87c675edb91b8f7aa61b901a6d1db111)) by @AliMD
 * **engine:** Update imports and refactor util.ts ([2b1f962](https://github.com/Alwatr/nitrobase/commit/2b1f9628f4578f707996fe5e6d5d92c7d093b615)) by @AliMD
 
 ### Features

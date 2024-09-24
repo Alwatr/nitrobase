@@ -37,7 +37,8 @@ export enum Region {
   PerOwner = 'o',
 
   /**
-   * Private nitrobase file location. Cannot be accessed publicly and must be directly accessed by the admin API only. e.g. User secret data.
+   * Private nitrobase file location. Cannot be accessed publicly and must be directly accessed by the admin API only.
+   * e.g. User secret data.
    */
   Secret = '.s',
 }
@@ -67,7 +68,7 @@ export enum StoreFileType {
  */
 export enum StoreFileExtension {
   /**
-   * AlwatrStore JSON format.
+   * AlwatrNitrobase JSON format.
    */
   Json = 'asj',
 }
@@ -126,7 +127,7 @@ export type StoreFileStat = StoreFileId & {
    * The save debounce timeout in milliseconds for minimal disk I/O usage.
    * This is used to limit the frequency of disk writes for performance reasons.
    * The recommended value is `40`.
-   * If not specified, the default value get from AlwatrStore `defaultChangeDebounce`.
+   * If not specified, the default value get from AlwatrNitrobase `defaultChangeDebounce`.
    */
   readonly changeDebounce?: number;
 

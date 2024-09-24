@@ -18,7 +18,7 @@ import type {Dictionary, JsonObject} from '@alwatr/type-helper';
 logger.logModule?.('collection-reference');
 
 /**
- * Represents a reference to a collection of the AlwatrStore.
+ * Represents a reference to a collection of the AlwatrNitrobase.
  * Provides methods to interact with the collection, such as retrieving, creating, updating, and deleting items.
  *
  * @template TItem - The data type of the collection items.

@@ -1,12 +1,12 @@
 import {createLogger} from '@alwatr/logger';
 
-import {AlwatrStore, Region} from '@alwatr/nitrobase';
+import {AlwatrNitrobase, Region} from '@alwatr/nitrobase';
 
-const logger = createLogger('AlwatrStore/Demo', true);
-logger.banner('AlwatrStore/Demo');
+const logger = createLogger('AlwatrNitrobase/Demo', true);
+logger.banner('AlwatrNitrobase/Demo');
 
 // Create a new nitrobase instance
-const alwatrStore = new AlwatrStore({
+const alwatrStore = new AlwatrNitrobase({
   rootPath: './db',
   defaultChangeDebounce: 2_000, // for demo
 });
@@ -48,7 +48,7 @@ async function quickstart() {
 
   // Update an existing document.
   myPost.mergeData({
-    body: 'My first AlwatrStore Document',
+    body: 'My first AlwatrNitrobase Document',
   });
   logger.logProperty?.('context', myPost.getData());
 

@@ -1,11 +1,11 @@
 import {createLogger} from '@alwatr/logger';
 
-import {AlwatrStore, Region} from '@alwatr/nitrobase';
+import {AlwatrNitrobase, Region} from '@alwatr/nitrobase';
 
-const logger = createLogger('AlwatrStore/Demo', true);
-logger.banner('AlwatrStore/Demo');
+const logger = createLogger('AlwatrNitrobase/Demo', true);
+logger.banner('AlwatrNitrobase/Demo');
 
-const alwatrStore = new AlwatrStore({
+const alwatrStore = new AlwatrNitrobase({
   rootPath: './db',
   defaultChangeDebounce: 250, // for demo
 });

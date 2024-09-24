@@ -3,7 +3,7 @@
   "statusCode": <!--# echo var="status" default="500" -->,
   "errorCode": "serve_error",
   "meta": {
-    "server": "AlwatrStore",
+    "server": "AlwatrNitrobase",
     "status": "<!--# echo var="status_text" default="Something goes wrong." -->"
   }
 }

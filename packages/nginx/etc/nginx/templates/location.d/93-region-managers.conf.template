@@ -1,7 +1,7 @@
 # Managers region
 # Nitrobase file location that can be accessed by admin and managers only.
 
-location /$storeRegionManagers/ {
+location /$nitrobaseRegionManagers/ {
   if (!-f $document_root/$userLocation/.token/$authUserToken.asn) {
     return 403;
     break;
