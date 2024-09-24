@@ -1,19 +1,19 @@
 import {createLogger} from '@alwatr/logger';
 
-import {AlwatrStore, Region} from '@alwatr/store';
+import {AlwatrNitrobase, Region} from '@alwatr/nitrobase';
 
-const logger = createLogger('AlwatrStore/Demo', true);
-logger.banner('AlwatrStore/Demo');
+const logger = createLogger('AlwatrNitrobase/Demo', true);
+logger.banner('AlwatrNitrobase/Demo');
 
-// Create a new store instance
-const alwatrStore = new AlwatrStore({
+// Create a new nitrobase instance
+const alwatrStore = new AlwatrNitrobase({
   rootPath: './db',
   defaultChangeDebounce: 2_000, // for demo
 });
 
 async function quickstart() {
   const docId = {
-    name: 'posts/intro-to-alwatr-store',
+    name: 'posts/intro-to-alwatr-nitrobase',
     region: Region.Authenticated,
   };
 
@@ -24,7 +24,7 @@ async function quickstart() {
   logger.logProperty?.('exists', exists);
 
   if (!exists) {
-    // Define a new document store file.
+    // Define a new document nitrobase file.
     alwatrStore.newDocument(docId, {
       title: 'new title',
       body: '',
@@ -39,7 +39,7 @@ async function quickstart() {
 
   // Enter new data into the document.
   myPost.replaceData({
-    title: 'Welcome to Alwatr Store',
+    title: 'Welcome to Alwatr Nitrobase',
     body: 'This is a amazing content',
   });
 
@@ -48,7 +48,7 @@ async function quickstart() {
 
   // Update an existing document.
   myPost.mergeData({
-    body: 'My first AlwatrStore Document',
+    body: 'My first AlwatrNitrobase Document',
   });
   logger.logProperty?.('context', myPost.getData());
 
@@ -60,9 +60,9 @@ async function quickstart() {
   alwatrStore.unloadStore(docId);
   logger.logOther?.('The document unloaded from ram');
 
-  // Delete the document store file.
+  // Delete the document nitrobase file.
   // alwatrStore.deleteFile(docId);
-  logger.logOther?.('The document store file deleted');
+  logger.logOther?.('The document nitrobase file deleted');
 }
 
 quickstart();

@@ -1,19 +1,19 @@
 import {createLogger} from '@alwatr/logger';
 
-import {AlwatrStore, Region} from '@alwatr/store';
+import {AlwatrNitrobase, Region} from '@alwatr/nitrobase';
 
-const logger = createLogger('AlwatrStore/Demo', true);
-logger.banner('AlwatrStore/Demo');
+const logger = createLogger('AlwatrNitrobase/Demo', true);
+logger.banner('AlwatrNitrobase/Demo');
 
 // Create a new storage instance
-const alwatrStore = new AlwatrStore({
+const alwatrStore = new AlwatrNitrobase({
   rootPath: './db',
   defaultChangeDebounce: 2_000, // for demo
 });
 
 async function quickstart() {
   /**
-   * @type {import('@alwatr/store').StoreFileId}
+   * @type {import('@alwatr/nitrobase').StoreFileId}
    */
   const postsCollectionId = {
     name: 'post',
@@ -29,9 +29,9 @@ async function quickstart() {
   logger.logProperty?.('exists', exists);
 
   if (exists) {
-    // Delete the collection store file.
+    // Delete the collection nitrobase file.
     alwatrStore.removeStore(postsCollectionId);
-    logger.logOther?.('The collection store file deleted');
+    logger.logOther?.('The collection nitrobase file deleted');
   }
 
   // Create a new collection.
@@ -42,12 +42,12 @@ async function quickstart() {
 
   logger.logProperty?.('collection.schemaVer', postsCollection.schemaVer);
 
-  const post1Id = 'intro-to-alwatr-store';
+  const post1Id = 'intro-to-alwatr-nitrobase';
   const post2Id = 'intro-to-alwatr-collections';
 
   // Create new new post (new item in the collection).
   postsCollection.addItem(post1Id, {
-    title: 'Welcome to Alwatr Store',
+    title: 'Welcome to Alwatr Nitrobase',
     body: 'This is a amazing content',
   });
 
@@ -59,7 +59,7 @@ async function quickstart() {
 
   // Update an existing collection item.
   postsCollection.mergeItemData(post1Id, {
-    body: 'My first AlwatrStore Collection',
+    body: 'My first AlwatrNitrobase Collection',
   });
   logger.logProperty?.('context', postsCollection.getItemData(post1Id));
 
@@ -78,9 +78,9 @@ async function quickstart() {
   alwatrStore.unloadStore(postsCollectionId);
   logger.logOther?.('The collection unloaded from ram');
 
-  // Delete the collection store file.
+  // Delete the collection nitrobase file.
   // alwatrStore.deleteFile(postsCollectionId);
-  logger.logOther?.('The collection store file deleted');
+  logger.logOther?.('The collection nitrobase file deleted');
 }
 
 quickstart();

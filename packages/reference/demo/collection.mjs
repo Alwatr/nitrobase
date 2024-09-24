@@ -1,5 +1,5 @@
 import {createLogger} from '@alwatr/logger';
-import {Region, StoreFileExtension} from '@alwatr/store-types';
+import {Region, StoreFileExtension} from '@alwatr/nitrobase-types';
 
 import {CollectionReference} from '../dist/main.mjs';
 

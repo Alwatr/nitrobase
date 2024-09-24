@@ -12,10 +12,10 @@ command="${1:-help}"
 sshPort=404
 deployHost=mci2.alwatr.ir
 deployUser=root
-deployPath=/tmp/alwatr-store-nginx
+deployPath=/tmp/alwatr-nitrobase-nginx
 deployPort="8585"
-containerName=alwatr-store-nginx-debug
-imageName=alwatr/store-nginx:debug
+containerName=alwatr-nitrobase-nginx-debug
+imageName=alwatr/nitrobase-nginx:debug
 remoteHost="$deployUser@$deployHost"
 remotePath="$remoteHost:$deployPath"
 
@@ -93,10 +93,10 @@ function command_test() {
   command_request $prefixUri/p/post-list.col.asj
 
   echoStep "Test Secret..."
-  command_request $prefixUri/.s/.store.col.asj
+  command_request $prefixUri/.s/.nitrobase.col.asj
 
   echoStep "Test Authentificated..."
-  command_request $prefixUri/a/posts/intro-to-alwatr-store.doc.asj
+  command_request $prefixUri/a/posts/intro-to-alwatr-nitrobase.doc.asj
 
   echoStep "Test Managers..."
   command_request $prefixUri/m/user-list.col.asj
@@ -127,7 +127,7 @@ function command_ps() {
 
 function command_help() {
   echo "
-  Alwatr Store Nginx Debug and test.
+  Alwatr Nitrobase Nginx Debug and test.
 
   Usage: ./debug.sh COMMAND [OPTIONS]
 

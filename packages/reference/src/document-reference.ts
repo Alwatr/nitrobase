@@ -1,6 +1,6 @@
 import {createLogger} from '@alwatr/logger';
-import {getStoreId, getStorePath} from '@alwatr/store-helper';
-import {StoreFileType, StoreFileExtension, type StoreFileId, type DocumentContext, type StoreFileMeta} from '@alwatr/store-types';
+import {getStoreId, getStorePath} from '@alwatr/nitrobase-helper';
+import {StoreFileType, StoreFileExtension, type StoreFileId, type DocumentContext, type StoreFileMeta} from '@alwatr/nitrobase-types';
 import {waitForImmediate, waitForTimeout} from '@alwatr/wait';
 
 import {logger} from './logger.js';
@@ -10,17 +10,17 @@ import type {Dictionary, JsonObject} from '@alwatr/type-helper';
 logger.logModule?.('document-reference');
 
 /**
- * Represents a reference to a document of the AlwatrStore.
+ * Represents a reference to a document of the AlwatrNitrobase.
  * Provides methods to interact with the document, such as get, set, update and save.
  */
 export class DocumentReference<TDoc extends JsonObject = JsonObject> {
   /**
-   * Alwatr store engine version string.
+   * Alwatr nitrobase engine version string.
    */
   static readonly version = __package_version__;
 
   /**
-   * Alwatr store engine file format version number.
+   * Alwatr nitrobase engine file format version number.
    */
   static readonly fileFormatVersion = 3;
 
@@ -140,12 +140,12 @@ export class DocumentReference<TDoc extends JsonObject = JsonObject> {
   }
 
   /**
-   * The ID of the document store file.
+   * The ID of the document nitrobase file.
    */
   readonly id: string;
 
   /**
-   * The location path of the document store file.
+   * The location path of the document nitrobase file.
    */
   readonly path: string;
 
@@ -161,10 +161,10 @@ export class DocumentReference<TDoc extends JsonObject = JsonObject> {
 
   /**
    * Create a new document reference.
-   * Document reference have methods to get, set, update and save the AlwatrStore Document.
+   * Document reference have methods to get, set, update and save the AlwatrNitrobase Document.
    *
-   * @param context__ Document's context filled from the Alwatr Store (parent).
-   * @param updatedCallback__ updated callback to invoke when the document is updated from the Alwatr Store (parent).
+   * @param context__ Document's context filled from the Alwatr Nitrobase (parent).
+   * @param updatedCallback__ updated callback to invoke when the document is updated from the Alwatr Nitrobase (parent).
    * @template TDoc The document data type.
    */
   constructor(
@@ -184,16 +184,16 @@ export class DocumentReference<TDoc extends JsonObject = JsonObject> {
   }
 
   /**
-   * Get store schema version
+   * Get nitrobase schema version
    *
-   * @returns store schema version
+   * @returns nitrobase schema version
    */
   get schemaVer(): number {
     return this.context__.meta.schemaVer ?? 1;
   }
 
   /**
-   * Set store schema version for migrate
+   * Set nitrobase schema version for migrate
    */
   set schemaVer(ver: number) {
     this.logger__.logMethodArgs?.('set schemaVer', {old: this.context__.meta.schemaVer, new: ver});
@@ -300,8 +300,8 @@ export class DocumentReference<TDoc extends JsonObject = JsonObject> {
   }
 
   /**
-   * Requests the Alwatr Store to save the document.
-   * Saving may take some time in Alwatr Store due to the use of throttling.
+   * Requests the Alwatr Nitrobase to save the document.
+   * Saving may take some time in Alwatr Nitrobase due to the use of throttling.
    *
    * @example
    * ```typescript
@@ -314,7 +314,7 @@ export class DocumentReference<TDoc extends JsonObject = JsonObject> {
   }
 
   /**
-   * Requests the Alwatr Store to save the document immediately.
+   * Requests the Alwatr Nitrobase to save the document immediately.
    *
    * @example
    * ```typescript

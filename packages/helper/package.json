@@ -1,5 +1,5 @@
 {
-  "name": "@alwatr/store-helper",
+  "name": "@alwatr/nitrobase-helper",
   "version": "7.1.1",
   "description": "Extremely fast and compact JSON-based database that operates in memory, includes a JSON file backup, and serve over the highly accelerated Nginx.",
   "author": "S. Ali Mihandoost <ali.mihandoost@gmail.com>",
@@ -37,12 +37,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Alwatr/store",
+    "url": "https://github.com/Alwatr/nitrobase",
     "directory": "packages/helper"
   },
-  "homepage": "https://github.com/Alwatr/store#readme",
+  "homepage": "https://github.com/Alwatr/nitrobase#readme",
   "bugs": {
-    "url": "https://github.com/Alwatr/store/issues"
+    "url": "https://github.com/Alwatr/nitrobase/issues"
   },
   "prettier": "@alwatr/prettier-config",
   "scripts": {
@@ -61,7 +61,7 @@
   },
   "dependencies": {
     "@alwatr/flat-string": "^1.0.23",
-    "@alwatr/store-types": "workspace:^"
+    "@alwatr/nitrobase-types": "workspace:^"
   },
   "devDependencies": {
     "@alwatr/logger": "^3.2.14",

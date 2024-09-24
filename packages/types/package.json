@@ -1,7 +1,7 @@
 {
-  "name": "@alwatr/store-types",
+  "name": "@alwatr/nitrobase-types",
   "version": "7.1.1",
-  "description": "Extremely fast and compact JSON-based database that operates in memory, includes a JSON file backup, and serve over the highly accelerated Nginx.",
+  "description": "Nitrobase is a blazingly fast, lightweight database built on JSON. It stores data entirely in memory for lightning-quick access, while also providing a JSON file backup for persistence. You can easily serve your data over the web using the high-performance accelerated Nginx server.",
   "author": "S. Ali Mihandoost <ali.mihandoost@gmail.com>",
   "keywords": [
     "database",
@@ -37,12 +37,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Alwatr/store",
+    "url": "https://github.com/Alwatr/nitrobase",
     "directory": "packages/types"
   },
-  "homepage": "https://github.com/Alwatr/store#readme",
+  "homepage": "https://github.com/Alwatr/nitrobase#readme",
   "bugs": {
-    "url": "https://github.com/Alwatr/store/issues"
+    "url": "https://github.com/Alwatr/nitrobase/issues"
   },
   "prettier": "@alwatr/prettier-config",
   "scripts": {

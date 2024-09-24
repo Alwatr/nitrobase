@@ -1,19 +1,19 @@
 import {createLogger} from '@alwatr/logger';
-import {AlwatrStore, Region} from '@alwatr/store';
+import {AlwatrNitrobase, Region} from '@alwatr/nitrobase';
 import {waitForTimeout} from '@alwatr/wait';
 
 (async function () {
-  const logger = createLogger('AlwatrStore/Demo', true);
-  logger.banner('AlwatrStore/Demo');
+  const logger = createLogger('AlwatrNitrobase/Demo', true);
+  logger.banner('AlwatrNitrobase/Demo');
 
   // Create a new storage instance
-  const alwatrStore = new AlwatrStore({
+  const alwatrStore = new AlwatrNitrobase({
     rootPath: './db',
     defaultChangeDebounce: 1000, // for test
   });
 
   /**
-   * @type {import('@alwatr/store').StoreFileId}
+   * @type {import('@alwatr/nitrobase').StoreFileId}
    */
   const colId = {
     name: 'junk',
