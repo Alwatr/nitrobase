@@ -1,3 +1,3 @@
-export * from '@alwatr/store-engine';
-export * from '@alwatr/store-reference';
-export * from '@alwatr/store-types';
+export * from '@alwatr/nitrobase-engine';
+export * from '@alwatr/nitrobase-reference';
+export * from '@alwatr/nitrobase-types';

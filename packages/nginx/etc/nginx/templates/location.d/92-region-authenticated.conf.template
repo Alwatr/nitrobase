@@ -1,5 +1,5 @@
 # Authenticated region
-# Store file location that can be accessed by authenticated users.
+# Nitrobase file location that can be accessed by authenticated users.
 
 location /$storeRegionAuthenticated/ {
   if (!-f $document_root/$userLocation/.token/$authUserToken.asn) {

@@ -1,6 +1,6 @@
 import {createLogger} from '@alwatr/logger';
 
-import {AlwatrStore, Region} from '@alwatr/store';
+import {AlwatrStore, Region} from '@alwatr/nitrobase';
 
 const logger = createLogger('AlwatrStore/Demo', true);
 logger.banner('AlwatrStore/Demo');
@@ -11,7 +11,7 @@ const alwatrStore = new AlwatrStore({
 });
 
 /**
- * @type {import('@alwatr/store').CollectionReference[]}
+ * @type {import('@alwatr/nitrobase').CollectionReference[]}
  */
 const list = [];
 

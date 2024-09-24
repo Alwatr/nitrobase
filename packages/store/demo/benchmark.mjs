@@ -1,5 +1,5 @@
 import {createLogger} from '@alwatr/logger';
-import {AlwatrStore, Region} from '@alwatr/store';
+import {AlwatrStore, Region} from '@alwatr/nitrobase';
 import {waitForTimeout} from '@alwatr/wait';
 
 (async function () {
@@ -13,7 +13,7 @@ import {waitForTimeout} from '@alwatr/wait';
   });
 
   /**
-   * @type {import('@alwatr/store').StoreFileId}
+   * @type {import('@alwatr/nitrobase').StoreFileId}
    */
   const colId = {
     name: 'junk',

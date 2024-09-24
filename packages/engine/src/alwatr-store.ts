@@ -1,7 +1,7 @@
 import {exitHook} from '@alwatr/exit-hook';
 import {existsSync, readJson, resolve, unlink, writeJson} from '@alwatr/node-fs';
-import {getStoreId, getStorePath} from '@alwatr/store-helper';
-import {CollectionReference, DocumentReference} from '@alwatr/store-reference';
+import {getStoreId, getStorePath} from '@alwatr/nitrobase-helper';
+import {CollectionReference, DocumentReference} from '@alwatr/nitrobase-reference';
 import {
   StoreFileType,
   StoreFileExtension,
@@ -12,14 +12,14 @@ import {
   type DocumentContext,
   type StoreFileId,
   type CollectionItem,
-} from '@alwatr/store-types';
+} from '@alwatr/nitrobase-types';
 import {waitForTimeout} from '@alwatr/wait';
 
 import {logger} from './logger.js';
 
 import type {Dictionary, JsonObject} from '@alwatr/type-helper';
 
-logger.logModule?.('alwatr-store');
+logger.logModule?.('alwatr-nitrobase');
 
 /**
  * AlwatrStore configuration.
@@ -27,7 +27,7 @@ logger.logModule?.('alwatr-store');
 export interface AlwatrStoreConfig {
   /**
    * The root path of the storage.
-   * This is where the AlwatrStore will store its data.
+   * This is where the AlwatrStore will nitrobase its data.
    */
   rootPath: string;
 
@@ -39,7 +39,7 @@ export interface AlwatrStoreConfig {
   defaultChangeDebounce?: number;
 
   /**
-   * If true, an error will be thrown when trying to read or write to a store file that is not initialized (new storage).
+   * If true, an error will be thrown when trying to read or write to a nitrobase file that is not initialized (new storage).
    * The default value is `false` but highly recommended to set it to `true` in production to prevent data loss.
    */
   errorWhenNotInitialized?: boolean;
@@ -48,22 +48,22 @@ export interface AlwatrStoreConfig {
 /**
  * AlwatrStore engine.
  *
- * It provides methods to read, write, validate, and manage store files.
- * It also provides methods to interact with `documents` and `collections` in the store.
+ * It provides methods to read, write, validate, and manage nitrobase files.
+ * It also provides methods to interact with `documents` and `collections` in the nitrobase.
  */
 export class AlwatrStore {
   /**
-   * The Alwatr Store version string.
+   * The Alwatr Nitrobase version string.
    *
-   * Use for store file format version for check compatibility.
+   * Use for nitrobase file format version for check compatibility.
    */
   static readonly version = __package_version__;
 
   /**
-   * The root store file stat.
+   * The root nitrobase file stat.
    */
   private static readonly rootDbStat__: StoreFileStat = {
-    name: '.store',
+    name: '.nitrobase',
     region: Region.Secret,
     type: StoreFileType.Collection,
     extension: StoreFileExtension.Json,
@@ -72,12 +72,12 @@ export class AlwatrStore {
 
   /**
    * `collectionReference` of all `storeFileStat`s.
-   * This is the root store collection.
+   * This is the root nitrobase collection.
    */
   private rootDb__;
 
   /**
-   * Keep all loaded store file context loaded in memory.
+   * Keep all loaded nitrobase file context loaded in memory.
    */
   private cacheReferences__: Dictionary<DocumentReference | CollectionReference> = {};
 
@@ -101,10 +101,10 @@ export class AlwatrStore {
   }
 
   /**
-   * Checks if a store file with the given ID exists.
+   * Checks if a nitrobase file with the given ID exists.
    *
-   * @param storeId - The ID of the store file to check.
-   * @returns `true` if the store file exists, `false` otherwise.
+   * @param storeId - The ID of the nitrobase file to check.
+   * @returns `true` if the nitrobase file exists, `false` otherwise.
    * @example
    * ```typescript
    * if (!alwatrStore.hasStore('user1/profile')) {
@@ -123,7 +123,7 @@ export class AlwatrStore {
    * Defines a new document with the given configuration and initial data.
    * If a document with the same ID already exists, an error is thrown.
    *
-   * @param stat store file stat
+   * @param stat nitrobase file stat
    * @param initialData initial data for the document
    * @template TDoc document data type
    * @example
@@ -159,7 +159,7 @@ export class AlwatrStore {
    * Defines a new collection with the given configuration and initial data.
    * If a collection with the same ID already exists, an error is thrown.
    *
-   * @param stat store file stat
+   * @param stat nitrobase file stat
    * @param initialData initial data for the collection
    * @template TItem collection item data type
    * @example
@@ -190,7 +190,7 @@ export class AlwatrStore {
   /**
    * Defines a AlwatrStoreFile with the given configuration and initial data.
    *
-   * @param stat store file stat
+   * @param stat nitrobase file stat
    * @param initialData initial data for the document
    * @template TDoc document data type
    */
@@ -325,9 +325,9 @@ export class AlwatrStore {
   }
 
   /**
-   * Unloads the store file with the given id from memory.
+   * Unloads the nitrobase file with the given id from memory.
    *
-   * @param storeId The unique identifier of the store file. {@link StoreFileId}
+   * @param storeId The unique identifier of the nitrobase file. {@link StoreFileId}
    * @example
    * ```typescript
    * alwatrStore.unloadStore({name: 'user-list', region: Region.Secret});
@@ -347,7 +347,7 @@ export class AlwatrStore {
   }
 
   /**
-   * Remove document or collection from store and delete the file from disk.
+   * Remove document or collection from nitrobase and delete the file from disk.
    * If the file is not found, an error is thrown.
    * If the file is not unloaded, it will be unloaded first.
    * You don't need to await this method to complete unless you want to make sure the file is deleted on disk.
@@ -387,7 +387,7 @@ export class AlwatrStore {
   }
 
   /**
-   * Saves all changes in the store.
+   * Saves all changes in the nitrobase.
    *
    * @returns A Promise that resolves when all changes are saved.
    * @example
@@ -436,9 +436,9 @@ export class AlwatrStore {
   }
 
   /**
-   * Write store file context.
+   * Write nitrobase file context.
    *
-   * @param from store file reference
+   * @param from nitrobase file reference
    * @returns A promise that resolves when the write operation is complete.
    */
   protected async storeChanged_<T extends JsonObject>(from: DocumentReference<T> | CollectionReference<T>): Promise<void> {
@@ -464,10 +464,10 @@ export class AlwatrStore {
     const fullPath = resolve(this.config__.rootPath, getStorePath(AlwatrStore.rootDbStat__));
     if (!existsSync(fullPath)) {
       if (this.config__.errorWhenNotInitialized === true) {
-        throw new Error('store_not_found', {cause: 'Store not initialized'});
+        throw new Error('store_not_found', {cause: 'Nitrobase not initialized'});
       }
 
-      logger.banner('Initialize new alwatr-store');
+      logger.banner('Initialize new alwatr-nitrobase');
       return CollectionReference.newRefFromData(AlwatrStore.rootDbStat__, null, this.storeChanged_.bind(this));
     }
     // else
@@ -476,7 +476,7 @@ export class AlwatrStore {
   }
 
   /**
-   * Save all store files.
+   * Save all nitrobase files.
    */
   private exitHook__(): void {
     logger.logMethod?.('exitHook__');
@@ -491,14 +491,14 @@ export class AlwatrStore {
   }
 
   /**
-   * Get all store files.
+   * Get all nitrobase files.
    *
-   * @returns all store files.
+   * @returns all nitrobase files.
    * @example
    * ```typescript
    * const storeList = alwatrStore.getStoreList();
-   * for (const store of storeList) {
-   *   console.log(store.meta.id, store.data);
+   * for (const nitrobase of storeList) {
+   *   console.log(nitrobase.meta.id, nitrobase.data);
    * }
    */
   getStoreList(): CollectionItem<Omit<StoreFileStat, 'schemaVer'>>[] {

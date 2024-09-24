@@ -1,5 +1,5 @@
 import {createLogger} from '@alwatr/logger';
-import {getStoreId, getStorePath} from '@alwatr/store-helper';
+import {getStoreId, getStorePath} from '@alwatr/nitrobase-helper';
 import {
   StoreFileType,
   StoreFileExtension,
@@ -8,7 +8,7 @@ import {
   type CollectionItem,
   type CollectionItemMeta,
   type StoreFileMeta,
-} from '@alwatr/store-types';
+} from '@alwatr/nitrobase-types';
 import {waitForImmediate, waitForTimeout} from '@alwatr/wait';
 
 import {logger} from './logger.js';
@@ -25,12 +25,12 @@ logger.logModule?.('collection-reference');
  */
 export class CollectionReference<TItem extends JsonObject = JsonObject> {
   /**
-   * Alwatr store engine version string.
+   * Alwatr nitrobase engine version string.
    */
   static readonly version = __package_version__;
 
   /**
-   * Alwatr store engine file format version number.
+   * Alwatr nitrobase engine file format version number.
    */
   static readonly fileFormatVersion = 3;
 
@@ -151,12 +151,12 @@ export class CollectionReference<TItem extends JsonObject = JsonObject> {
   }
 
   /**
-   * The ID of the collection store file.
+   * The ID of the collection nitrobase file.
    */
   readonly id: string;
 
   /**
-   * The location path of the collection store file.
+   * The location path of the collection nitrobase file.
    */
   readonly path: string;
 
@@ -171,12 +171,12 @@ export class CollectionReference<TItem extends JsonObject = JsonObject> {
   private logger__;
 
   /**
-   * Collection reference have methods to get, set, update and save the Alwatr Store Collection.
+   * Collection reference have methods to get, set, update and save the Alwatr Nitrobase Collection.
    * This class is dummy in saving and loading the collection from file.
-   * It's the responsibility of the Alwatr Store to save and load the collection.
+   * It's the responsibility of the Alwatr Nitrobase to save and load the collection.
    *
-   * @param context__ Collection's context filled from the Alwatr Store (parent).
-   * @param updatedCallback__ updated callback to invoke when the collection is updated from the Alwatr Store (parent).
+   * @param context__ Collection's context filled from the Alwatr Nitrobase (parent).
+   * @param updatedCallback__ updated callback to invoke when the collection is updated from the Alwatr Nitrobase (parent).
    * @template TItem - Items data type.
    * @example
    * ```typescript
@@ -200,16 +200,16 @@ export class CollectionReference<TItem extends JsonObject = JsonObject> {
   }
 
   /**
-   * Get store schema version
+   * Get nitrobase schema version
    *
-   * @returns store schema version
+   * @returns nitrobase schema version
    */
   get schemaVer(): number {
     return this.context__.meta.schemaVer ?? 1;
   }
 
   /**
-   * Set store schema version for migrate
+   * Set nitrobase schema version for migrate
    */
   set schemaVer(ver: number) {
     this.logger__.logMethodArgs?.('set schemaVer', {old: this.context__.meta.schemaVer, new: ver});
@@ -275,9 +275,9 @@ export class CollectionReference<TItem extends JsonObject = JsonObject> {
   }
 
   /**
-   * Retrieves the metadata of the store file.
+   * Retrieves the metadata of the nitrobase file.
    *
-   * @returns The metadata of the store file.
+   * @returns The metadata of the nitrobase file.
    *
    * @example
    * ```typescript
@@ -458,8 +458,8 @@ export class CollectionReference<TItem extends JsonObject = JsonObject> {
   }
 
   /**
-   * Requests the Alwatr Store to save the collection.
-   * Saving may take some time in Alwatr Store due to the use of throttling.
+   * Requests the Alwatr Nitrobase to save the collection.
+   * Saving may take some time in Alwatr Nitrobase due to the use of throttling.
    *
    * @example
    * ```typescript
@@ -472,7 +472,7 @@ export class CollectionReference<TItem extends JsonObject = JsonObject> {
   }
 
   /**
-   * Requests the Alwatr Store to save the collection immediately.
+   * Requests the Alwatr Nitrobase to save the collection immediately.
    *
    * @example
    * ```typescript

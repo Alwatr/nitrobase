@@ -1,5 +1,5 @@
 # PerOwner region
-# Store file location specific to each owner id.
+# Nitrobase file location specific to each owner id.
 
 location ~ ^/$storeRegionPerOwner/[A-z0-9_=-]+/[A-z0-9_=-]+/ {
   try_files $uri =404;

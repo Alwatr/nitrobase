@@ -29,10 +29,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: store-nginx
+          - name: nitrobase-nginx
             path: ./packages/nginx
             context: ./packages/nginx
-          # - name: store-api
+          # - name: nitrobase-api
           #   path: ./packages/api
           #   context: .
 
@@ -101,7 +101,7 @@ jobs:
           labels: |
             org.opencontainers.image.title="alwatr/${{matrix.name}}"
             org.opencontainers.image.vendor="Alwatr"
-            org.opencontainers.image.documentation="https://github.com/Alwatr/store"
+            org.opencontainers.image.documentation="https://github.com/Alwatr/nitrobase"
             org.opencontainers.image.authors="S. Ali Mihandoost <ali.mihandoost@gmail.com> (https://ali.mihandoost.com)"
 
       - name: 🚀 Build and export to docekr
