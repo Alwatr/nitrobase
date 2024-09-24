@@ -74,6 +74,12 @@ const myPost = await alwatrStore.openDocument(docId);
 
 Explore the provided demo code (`collection.mjs`, `document.mjs`, `benchmark.mjs`) to see Alwatr Nitrobase in action and gain a deeper understanding of its capabilities.
 
+## Sponsors
+
+The following companies, organizations, and individuals support Nitrobase ongoing maintenance and development. Become a Sponsor to get your logo on our README and website.
+
+[![Exir Studio](https://avatars.githubusercontent.com/u/181194967?s=200&v=4)](https://exirstudio.com)
+
 ## License
 
 This project is licensed under the AGPL-3.0 License.
