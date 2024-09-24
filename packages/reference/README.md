@@ -2,7 +2,7 @@
 
 **Extremely Fast and Compact JSON-Based In-Memory Database with Nginx Integration**
 
-Nitrobase is a blazingly fast, lightweight database built on JSON. It stores data entirely in memory for lightning-quick access, while also providing a JSON file backup for persistence. You can easily serve your data over the web using the high-performance accelerated Nginx server.
+Nitrobase is a blazingly fast, lightweight database built on JSON. It stores data entirely in memory for lightning-quick access, while also providing a JSON file backup for persistence. You can easily serve your data over the web using our high-performance accelerated Nginx server.
 
 ## Key Features
 
