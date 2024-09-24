@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.2.0](https://github.com/Alwatr/nitrobase/compare/v7.1.1...v7.2.0) (2024-09-24)
+
+### Code Refactoring
+
+* rename all store to nitrobase ([0928420](https://github.com/Alwatr/nitrobase/commit/0928420d8751e16ff1e8d91e1d3048a5895885a6)) by @AliMD
+* rename all store to nitrobase ([9e31765](https://github.com/Alwatr/nitrobase/commit/9e31765b63ecd94bcf600cb44cfd9e341dd11a4e)) by @AliMD
+* rename package reference from "store" to "nitrobase" ([9d19482](https://github.com/Alwatr/nitrobase/commit/9d19482cfb15ba1332cf6fa717b71627f2d600f8)) by @AliMD
+
 ## [7.1.1](https://github.com/Alwatr/nitrobase/compare/v7.1.0...v7.1.1) (2024-09-24)
 
 ### Bug Fixes
