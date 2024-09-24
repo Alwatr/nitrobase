@@ -81,5 +81,3 @@ This project is licensed under the AGPL-3.0 License.
 ## Contributing
 
 Contributions are welcome! Please feel free to submit issues and pull requests.
-
-Let me know if you'd like any modifications or additions to the README!
