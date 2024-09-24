@@ -60,20 +60,20 @@
     "clean": "rm -rfv dist *.tsbuildinfo"
   },
   "dependencies": {
-    "@alwatr/exit-hook": "^1.0.14",
-    "@alwatr/flat-string": "^1.0.21",
-    "@alwatr/logger": "^3.2.12",
-    "@alwatr/node-fs": "^1.0.11",
+    "@alwatr/exit-hook": "^1.0.15",
+    "@alwatr/flat-string": "^1.0.22",
+    "@alwatr/logger": "^3.2.13",
+    "@alwatr/node-fs": "^1.0.12",
     "@alwatr/store-helper": "workspace:^",
     "@alwatr/store-reference": "workspace:^",
     "@alwatr/store-types": "workspace:^",
-    "@alwatr/wait": "^1.1.14"
+    "@alwatr/wait": "^1.1.15"
   },
   "devDependencies": {
-    "@alwatr/nano-build": "^1.3.8",
+    "@alwatr/nano-build": "^1.3.9",
     "@alwatr/prettier-config": "^1.0.4",
     "@alwatr/tsconfig-base": "^1.2.0",
-    "@alwatr/type-helper": "^1.2.5",
+    "@alwatr/type-helper": "^1.2.6",
     "@types/node": "^22.5.4",
     "typescript": "^5.5.4"
   }
