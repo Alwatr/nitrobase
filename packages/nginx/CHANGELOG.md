@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.1.1](https://github.com/Alwatr/nitrobase/compare/v7.1.0...v7.1.1) (2024-09-24)
+
+### Bug Fixes
+
+* **nginx:** update store prefix to latest version ([679a14b](https://github.com/Alwatr/nitrobase/commit/679a14b4c3f96b58e8b3bcb90f7af4a2d6b99149)) by @njfamirm
+
 ## [7.0.0](https://github.com/Alwatr/store/compare/v7.0.0-beta.1...v7.0.0) (2024-09-02)
 
 **Note:** Version bump only for package @alwatr/store-nginx

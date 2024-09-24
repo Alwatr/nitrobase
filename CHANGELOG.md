@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.1.1](https://github.com/Alwatr/store/compare/v7.1.0...v7.1.1) (2024-09-24)
+
+### Bug Fixes
+
+* **nginx:** update store prefix to latest version ([679a14b](https://github.com/Alwatr/store/commit/679a14b4c3f96b58e8b3bcb90f7af4a2d6b99149)) by @njfamirm
+
+### Miscellaneous Chores
+
+* Delete old LICENSE ([0ac4a06](https://github.com/Alwatr/store/commit/0ac4a06d086a694782a62194c694c2e1ec778854)) by @AliMD
+* **deps-dev:** bump the development-dependencies group across 1 directory with 3 updates ([122251c](https://github.com/Alwatr/store/commit/122251c315c422b7e9c2d5aba827f27b321194bb)) by @dependabot[bot]
+* **deps:** bump github/codeql-action in the github-actions group ([840b91b](https://github.com/Alwatr/store/commit/840b91bdb8b8120711d0b31be03038a4e698cb31)) by @dependabot[bot]
+* **deps:** bump the alwatr-dependencies group with 9 updates ([2a94694](https://github.com/Alwatr/store/commit/2a94694b2ec12c2915aa77934023328751d13837)) by @dependabot[bot]
+* new LICENSE ([8b002a4](https://github.com/Alwatr/store/commit/8b002a48e4f997c19be9b570b294bb4f45499edc)) by @AliMD
+
+### Dependencies update
+
+* update ([82c475e](https://github.com/Alwatr/store/commit/82c475e29bd7f42ad03660556f40f180b3b6c9c6)) by @AliMD
+
 ## [7.1.0](https://github.com/Alwatr/store/compare/v7.0.0...v7.1.0) (2024-09-08)
 
 ### Features
