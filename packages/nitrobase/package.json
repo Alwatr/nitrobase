@@ -61,6 +61,7 @@
   },
   "dependencies": {
     "@alwatr/nitrobase-engine": "workspace:^",
+    "@alwatr/nitrobase-helper": "workspace:^",
     "@alwatr/nitrobase-reference": "workspace:^",
     "@alwatr/nitrobase-types": "workspace:^"
   },
