@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.2.1](https://github.com/Alwatr/nitrobase/compare/v7.2.0...v7.2.1) (2024-09-29)
+
+### Bug Fixes
+
+* **nitrobase:** export helper ([ca17b18](https://github.com/Alwatr/nitrobase/commit/ca17b18c37f5c78ec7d8afcee7affdeb31e9a946)) by @njfamirm
+
+### Miscellaneous Chores
+
+* change the license to AGPL-3.0 ([59a45c4](https://github.com/Alwatr/nitrobase/commit/59a45c4ae3791176f1b83fcbf087d212e8e4c641)) by @ArmanAsadian
+* **deps-dev:** bump @types/node in the development-dependencies group ([9b146d2](https://github.com/Alwatr/nitrobase/commit/9b146d2f6cf7d1d79a2a6f46a5e8f50e7fb2ac75)) by @dependabot[bot]
+* **deps:** bump the github-actions group with 3 updates ([e53e8fc](https://github.com/Alwatr/nitrobase/commit/e53e8fc54a63e5e6a23101368f99b68250cfeac6)) by @dependabot[bot]
+* **engine:** change the license to AGPL-3.0 ([f9d89d5](https://github.com/Alwatr/nitrobase/commit/f9d89d5de592b4df397c9b15156166aed90fa8d1)) by @ArmanAsadian
+* **helper:** change the license to AGPL-3.0 ([1fe19df](https://github.com/Alwatr/nitrobase/commit/1fe19dfdb234bf4510c1e62453beccb767d373e5)) by @ArmanAsadian
+* **nginx:** change the license to AGPL-3.0 ([e2cf692](https://github.com/Alwatr/nitrobase/commit/e2cf6922a6c403408d36e4a5b3eab147ce76dfa4)) by @ArmanAsadian
+* **nitrobase:** change the license to AGPL-3.0 ([15a9859](https://github.com/Alwatr/nitrobase/commit/15a98595ebf6c6f7cb8c30715c729b7994c2169f)) by @ArmanAsadian
+* **reference:** change the license to AGPL-3.0 ([44ff664](https://github.com/Alwatr/nitrobase/commit/44ff664e5bd5838ae773af1f3de5230df8378b19)) by @ArmanAsadian
+* **types:** change the license to AGPL-3.0 ([b45e0a4](https://github.com/Alwatr/nitrobase/commit/b45e0a417b5d00735bc893236e72111e4caac63d)) by @ArmanAsadian
+
+### Dependencies update
+
+* update ([90a0fe1](https://github.com/Alwatr/nitrobase/commit/90a0fe146eb703c183c116776d7c5748918282da)) by @
+
 ## [7.2.0](https://github.com/Alwatr/nitrobase/compare/v7.1.1...v7.2.0) (2024-09-24)
 
 ### Code Refactoring

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.2.1](https://github.com/Alwatr/nitrobase/compare/v7.2.0...v7.2.1) (2024-09-29)
+
+### Miscellaneous Chores
+
+* **nginx:** change the license to AGPL-3.0 ([e2cf692](https://github.com/Alwatr/nitrobase/commit/e2cf6922a6c403408d36e4a5b3eab147ce76dfa4)) by @ArmanAsadian
+
 ## [7.2.0](https://github.com/Alwatr/nitrobase/compare/v7.1.1...v7.2.0) (2024-09-24)
 
 ### Code Refactoring

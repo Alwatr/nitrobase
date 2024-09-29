@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.2.1](https://github.com/Alwatr/nitrobase/compare/v7.2.0...v7.2.1) (2024-09-29)
+
+### Bug Fixes
+
+* **nitrobase:** export helper ([ca17b18](https://github.com/Alwatr/nitrobase/commit/ca17b18c37f5c78ec7d8afcee7affdeb31e9a946)) by @njfamirm
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @types/node in the development-dependencies group ([9b146d2](https://github.com/Alwatr/nitrobase/commit/9b146d2f6cf7d1d79a2a6f46a5e8f50e7fb2ac75)) by @dependabot[bot]
+* **nitrobase:** change the license to AGPL-3.0 ([15a9859](https://github.com/Alwatr/nitrobase/commit/15a98595ebf6c6f7cb8c30715c729b7994c2169f)) by @ArmanAsadian
+
+### Dependencies update
+
+* update ([90a0fe1](https://github.com/Alwatr/nitrobase/commit/90a0fe146eb703c183c116776d7c5748918282da)) by @
+
 ## [7.2.0](https://github.com/Alwatr/nitrobase/compare/v7.1.1...v7.2.0) (2024-09-24)
 
 ### Code Refactoring
