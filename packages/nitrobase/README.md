@@ -80,10 +80,10 @@ The following companies, organizations, and individuals support Nitrobase ongoin
 
 [![Exir Studio](https://avatars.githubusercontent.com/u/181194967?s=200&v=4)](https://exirstudio.com)
 
-## License
+### Contributing
 
-This project is licensed under the AGPL-3.0 License.
+Contributions are welcome! Please read our [contribution guidelines](https://github.com/Alwatr/.github/blob/next/CONTRIBUTING.md) before submitting a pull request.
 
-## Contributing
+### License
 
-Contributions are welcome! Please feel free to submit issues and pull requests.
+This project is licensed under the [AGPL-3.0 License](LICENSE).
