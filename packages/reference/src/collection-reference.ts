@@ -1,4 +1,4 @@
-import {createLogger} from '@alwatr/logger';
+import {createLogger, delay} from '@alwatr/nanolib';
 import {getStoreId, getStorePath} from '@alwatr/nitrobase-helper';
 import {
   StoreFileType,
@@ -9,13 +9,10 @@ import {
   type CollectionItemMeta,
   type StoreFileMeta,
 } from '@alwatr/nitrobase-types';
-import {waitForImmediate, waitForTimeout} from '@alwatr/wait';
 
 import {logger} from './logger.js';
 
-import type {Dictionary, JsonObject} from '@alwatr/type-helper';
-
-logger.logModule?.('collection-reference');
+logger.logFileModule?.('collection-reference');
 
 /**
  * Represents a reference to a collection of the AlwatrNitrobase.
@@ -142,7 +139,7 @@ export class CollectionReference<TItem extends JsonObject = JsonObject> {
       if (this.context__.meta.schemaVer === undefined || this.context__.meta.schemaVer === 0) {
         this.context__.meta.schemaVer = 1;
       }
-      delete (this.context__.meta as Dictionary)['ver'];
+      delete (this.context__.meta as DictionaryOpt)['ver'];
       this.context__.meta.extra ??= {};
       this.context__.meta.fv = 3;
     }
@@ -588,10 +585,10 @@ export class CollectionReference<TItem extends JsonObject = JsonObject> {
     this.updateDelayed_ = true;
 
     if (immediate === true || this.context__.meta.changeDebounce === undefined) {
-      await waitForImmediate();
+      await delay.immediate();
     }
     else {
-      await waitForTimeout(this.context__.meta.changeDebounce);
+      await delay.by(this.context__.meta.changeDebounce);
     }
 
     if (this.updateDelayed_ !== true) return; // another parallel update finished!

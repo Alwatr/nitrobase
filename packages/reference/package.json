@@ -60,17 +60,15 @@
     "clean": "rm -rfv dist *.tsbuildinfo"
   },
   "dependencies": {
-    "@alwatr/flat-string": "^1.1.1",
-    "@alwatr/logger": "^4.0.1",
+    "@alwatr/nanolib": "^1.0.2",
     "@alwatr/nitrobase-helper": "workspace:^",
-    "@alwatr/nitrobase-types": "workspace:^",
-    "@alwatr/wait": "^1.1.16"
+    "@alwatr/nitrobase-types": "workspace:^"
   },
   "devDependencies": {
-    "@alwatr/nano-build": "^1.5.0",
+    "@alwatr/nano-build": "^1.6.0",
     "@alwatr/prettier-config": "^1.0.5",
-    "@alwatr/tsconfig-base": "^1.3.0",
-    "@alwatr/type-helper": "^2.0.0",
+    "@alwatr/tsconfig-base": "^1.3.1",
+    "@alwatr/type-helper": "^2.0.1",
     "@types/node": "^22.7.5",
     "typescript": "^5.6.3"
   }

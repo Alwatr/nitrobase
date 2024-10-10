@@ -1,4 +1,5 @@
 import {exitHook} from '@alwatr/exit-hook';
+import {delay} from '@alwatr/nanolib';
 import {getStoreId, getStorePath} from '@alwatr/nitrobase-helper';
 import {CollectionReference, DocumentReference} from '@alwatr/nitrobase-reference';
 import {
@@ -13,13 +14,10 @@ import {
   type CollectionItem,
 } from '@alwatr/nitrobase-types';
 import {existsSync, readJson, resolve, unlink, writeJson} from '@alwatr/node-fs';
-import {waitForTimeout} from '@alwatr/wait';
 
 import {logger} from './logger.js';
 
-import type {Dictionary, JsonObject} from '@alwatr/type-helper';
-
-logger.logModule?.('alwatr-nitrobase');
+logger.logFileModule?.('alwatr-nitrobase');
 
 /**
  * AlwatrNitrobase configuration.
@@ -79,7 +77,7 @@ export class AlwatrNitrobase {
   /**
    * Keep all loaded nitrobase file context loaded in memory.
    */
-  private cacheReferences__: Dictionary<DocumentReference | CollectionReference> = {};
+  private cacheReferences__: DictionaryReq<DocumentReference | CollectionReference> = {};
 
   /**
    * Constructs an AlwatrNitrobase instance with the provided configuration.
@@ -377,7 +375,7 @@ export class AlwatrNitrobase {
     }
     const path = getStorePath(this.rootDb__.getItemData(id_));
     this.rootDb__.removeItem(id_);
-    await waitForTimeout(0);
+    await delay.by(0);
     try {
       await unlink(resolve(this.config__.rootPath, path));
     }
