@@ -1,9 +1,6 @@
-import {definePackage} from '@alwatr/dedupe';
+import {packageTracer} from '@alwatr/nanolib';
 
-import type {} from '@alwatr/nano-build';
-import type {Dictionary, JsonObject} from '@alwatr/type-helper';
-
-definePackage('@alwatr/nitrobase-types', __package_version__);
+__dev_mode__: packageTracer.add(__package_name__, __package_version__);
 
 // *** Nitrobase File ***
 
@@ -265,4 +262,4 @@ export type CollectionItem<TData extends JsonObject = JsonObject> = {
 /**
  * Collection item context type.
  */
-export type CollectionContext<T extends JsonObject = JsonObject> = StoreFileContext<Dictionary<CollectionItem<T>>>;
+export type CollectionContext<T extends JsonObject = JsonObject> = StoreFileContext<DictionaryReq<CollectionItem<T>>>;

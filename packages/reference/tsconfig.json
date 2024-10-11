@@ -4,7 +4,8 @@
     "rootDir": "src",
     "outDir": "dist",
     "emitDeclarationOnly": true,
-    "composite": true
+    "composite": true,
+    "types": ["node", "@alwatr/nano-build", "@alwatr/type-helper"]
   },
   "include": ["src/**/*.ts", "src/util.ts"],
   "references": [{"path": "../types"}, {"path": "../helper"}]

@@ -1,5 +1,5 @@
-import {definePackage} from '@alwatr/logger';
+import {createLogger, packageTracer} from '@alwatr/nanolib';
 
-import type {} from '@alwatr/nano-build';
+__dev_mode__: packageTracer.add(__package_name__, __package_version__);
 
-export const logger = definePackage('@alwatr/nitrobase-engine', __package_version__);
+export const logger = /* #__PURE__ */ createLogger(__package_name__);
