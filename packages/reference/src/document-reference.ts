@@ -4,7 +4,7 @@ import {StoreFileType, StoreFileExtension, type StoreFileId, type DocumentContex
 
 import {logger} from './logger.js';
 
-logger.logFileModule?.('document-reference');
+__dev_mode__: logger.logFileModule?.('document-reference');
 
 /**
  * Represents a reference to a document of the AlwatrNitrobase.

@@ -12,7 +12,7 @@ import {
 
 import {logger} from './logger.js';
 
-logger.logFileModule?.('collection-reference');
+__dev_mode__: logger.logFileModule?.('collection-reference');
 
 /**
  * Represents a reference to a collection of the AlwatrNitrobase.

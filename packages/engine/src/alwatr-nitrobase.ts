@@ -1,5 +1,6 @@
-import {exitHook} from '@alwatr/exit-hook';
 import {delay} from '@alwatr/nanolib';
+import {exitHook} from '@alwatr/nanolib/exit-hook';
+import {existsSync, readJson, resolve, unlink, writeJson} from '@alwatr/nanolib/node-fs';
 import {getStoreId, getStorePath} from '@alwatr/nitrobase-helper';
 import {CollectionReference, DocumentReference} from '@alwatr/nitrobase-reference';
 import {
@@ -13,11 +14,10 @@ import {
   type StoreFileId,
   type CollectionItem,
 } from '@alwatr/nitrobase-types';
-import {existsSync, readJson, resolve, unlink, writeJson} from '@alwatr/node-fs';
 
 import {logger} from './logger.js';
 
-logger.logFileModule?.('alwatr-nitrobase');
+__dev_mode__: logger.logFileModule?.('alwatr-nitrobase');
 
 /**
  * AlwatrNitrobase configuration.
