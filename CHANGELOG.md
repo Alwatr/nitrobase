@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.3.0](https://github.com/Alwatr/nitrobase/compare/v7.2.1...v7.3.0) (2024-10-11)
+
+### Features
+
+* update `import`s & packages based on the latest changes of `nanolib` & prevent side-effects ([0d66f89](https://github.com/Alwatr/nitrobase/commit/0d66f894dc4ff615ab73ebd27c275f98dc384fbe)) by @mohammadhonarvar
+
+### Bug Fixes
+
+* **helper:** Update dependencies and packages for @alwatr/type-helper ([b57a97d](https://github.com/Alwatr/nitrobase/commit/b57a97da61af4217b6a0aeaa82190fbc132f61b7)) by @AliMD
+
+### Code Refactoring
+
+* update `import`s & packages based on the latest changes of `nanolib` ([ce990a2](https://github.com/Alwatr/nitrobase/commit/ce990a2fedc5545e971c3bb6e58b55bfba8c0bd9)) by @mohammadhonarvar
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump the development-dependencies group with 10 updates ([7bdcf3f](https://github.com/Alwatr/nitrobase/commit/7bdcf3f47ddb8e1376a1c7ae6e221811182bae58)) by @dependabot[bot]
+* **deps:** bump the alwatr-dependencies group with 10 updates ([60afdde](https://github.com/Alwatr/nitrobase/commit/60afdde98562f3023e6624ee0579d6bdee80bc32)) by @dependabot[bot]
+* **deps:** bump the alwatr-dependencies group with 6 updates ([1cf29b2](https://github.com/Alwatr/nitrobase/commit/1cf29b20055554945cd669ea9d022ab7c503d9fc)) by @dependabot[bot]
+* **deps:** bump the github-actions group with 2 updates ([1d8ab42](https://github.com/Alwatr/nitrobase/commit/1d8ab42a980bacda52df2250f7d39f4e64e12a69)) by @dependabot[bot]
+* **deps:** bump the github-actions group with 5 updates ([92522b8](https://github.com/Alwatr/nitrobase/commit/92522b8f28fa42aaa6c5640aa631cab57a9f5039)) by @dependabot[bot]
+
+### Dependencies update
+
+* cleanup dependencies ([91eab0b](https://github.com/Alwatr/nitrobase/commit/91eab0b0fc570b2493cccd5ccd891b01405450d7)) by @AliMD
+* update ([aac3f93](https://github.com/Alwatr/nitrobase/commit/aac3f937b50c7099495faa04492d5baa4af86b97)) by @AliMD
+* update ([051a098](https://github.com/Alwatr/nitrobase/commit/051a0989762b9c62a43002f99f2962b626ca7de0)) by @mohammadhonarvar
+
 ## [7.2.1](https://github.com/Alwatr/nitrobase/compare/v7.2.0...v7.2.1) (2024-09-29)
 
 ### Bug Fixes
