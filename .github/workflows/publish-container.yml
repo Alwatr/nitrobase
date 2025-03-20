@@ -61,21 +61,21 @@ jobs:
 
       - name: 🏗 Cache Docker Layers
         if: ${{ steps.file_change.outputs.container_folder != 'false' }}
-        uses: actions/cache@v4.2.2
+        uses: actions/cache@v4.2.3
         with:
           path: /tmp/.buildx-cache
           key: container/${{ matrix.name }}
 
       - name: 🏗 Log into docker hub registry
         if: ${{ github.event_name != 'pull_request' && steps.file_change.outputs.container_folder != 'false' }}
-        uses: docker/login-action@v3.3.0
+        uses: docker/login-action@v3.4.0
         with:
           username: ${{env.USER}}
           password: ${{secrets.DOCKER_HUB_TOKEN}}
 
       - name: 🏗 Log into ghcr.io registry
         if: ${{ github.event_name != 'pull_request' && steps.file_change.outputs.container_folder != 'false' }}
-        uses: docker/login-action@v3.3.0
+        uses: docker/login-action@v3.4.0
         with:
           registry: ghcr.io
           username: ${{env.USER}}
