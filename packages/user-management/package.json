@@ -62,7 +62,7 @@
     "clean": "rm -rfv dist *.tsbuildinfo"
   },
   "dependencies": {
-    "@alwatr/nanolib": "^5.5.0",
+    "@alwatr/nanolib": "^5.5.1",
     "@alwatr/nitrobase-engine": "workspace:^",
     "@alwatr/nitrobase-reference": "workspace:^",
     "@alwatr/nitrobase-types": "workspace:^"
