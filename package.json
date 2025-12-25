@@ -3,7 +3,7 @@
   "description": "Nitrobase is a blazingly fast, lightweight database built on JSON. It stores data entirely in memory for lightning-quick access, while also providing a JSON file backup for persistence. You can easily serve your data over the web using our high-performance accelerated Nginx server.",
   "author": "S. Ali Mihandoost <ali.mihandoost@gmail.com> (https://ali.mihandoost.com)",
   "devDependencies": {
-    "@alwatr/nanolib": "^7.3.4",
+    "@alwatr/nanolib": "^7.3.5",
     "@lerna-lite/changed": "^4.10.2",
     "@lerna-lite/cli": "^4.10.2",
     "@lerna-lite/diff": "^4.10.2",
