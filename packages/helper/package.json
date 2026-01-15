@@ -5,13 +5,13 @@
   "author": "S. Ali Mihandoost <ali.mihandoost@gmail.com>",
   "bugs": "https://github.com/Alwatr/nitrobase/issues",
   "dependencies": {
-    "@alwatr/flat-string": "^5.5.26",
-    "@alwatr/logger": "^6.0.15",
+    "@alwatr/flat-string": "^5.5.27",
+    "@alwatr/logger": "^6.0.16",
     "@alwatr/nitrobase-types": "workspace:^"
   },
   "devDependencies": {
-    "@alwatr/nanolib": "^7.3.4",
-    "@types/node": "^24.10.4",
+    "@alwatr/nanolib": "^7.3.5",
+    "@types/node": "^24.10.8",
     "typescript": "^5.9.3"
   },
   "exports": {
