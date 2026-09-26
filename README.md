@@ -1,5 +1,9 @@
 # Nitrobase
 
+> [!IMPORTANT]
+> **This repository has been moved!**
+> All packages in this repository have been migrated to the main [Alwatr monorepo](https://github.com/Alwatr/alwatr/). Please use the new location for the latest updates and contributions.
+
 **Extremely Fast and Compact JSON-Based In-Memory Database with Nginx Integration**
 
 Nitrobase is a blazingly fast, lightweight database built on JSON. It stores data entirely in memory for lightning-quick access, while also providing a JSON file backup for persistence. You can easily serve your data over the web using our high-performance accelerated Nginx server.
