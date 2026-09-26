@@ -1,7 +1,7 @@
 # Nitrobase
 
-> [!IMPORTANT]
-> **This repository has been moved!**
+> [!IMPORTANT]. 
+> **This repository has been moved!**  
 > All packages in this repository have been migrated to the main [Alwatr monorepo](https://github.com/Alwatr/alwatr/). Please use the new location for the latest updates and contributions.
 
 **Extremely Fast and Compact JSON-Based In-Memory Database with Nginx Integration**
